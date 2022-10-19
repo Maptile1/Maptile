@@ -2,9 +2,9 @@ import './App.css';
 
 function App() {
   return (
-    <div className="App">
-        <h1>Hello</h1>
-    </div>
+    <h1 className="text-3xl font-bold underline">
+      Maptile
+    </h1>
   );
 }
 export default App;
