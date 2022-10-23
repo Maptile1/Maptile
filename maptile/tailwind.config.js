@@ -2,7 +2,13 @@
 module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'maptile-green': '#7FFF00',
+        'maptile-green-highlight' : '#55ab00',
+        'maptile-purple': '#6A5ACD',
+      },
+    }
   },
   plugins: [],
 }
