@@ -22,7 +22,7 @@ router.post('/tileset/create', async (req, res) => {
 });
 
 // Delete Tileset
-router.delete('/tileset/delete/:id', async (req, res) => {
+router.post('/tileset/delete/:id', async (req, res) => {
     Tileset.findByIdAndDelete(req.params.id)
         .then(() => res.json('Tileset deleted.'))
         .catch(err => res.status(400).json('Error: ' + err));
