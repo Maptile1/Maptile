@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Comment = require('./schema/comment-schema.js')
+
 router.post('/comment/create', async (req, res) => {
     var comment = new Comment({
         commentId: new ObjectId(),
@@ -19,7 +20,6 @@ router.get('/comment/:id', async (req, res) => {
         .then(comments => res.json(comments))
         .catch(err => res.status(400).json('Error: ' + err));
 });
-
 
 // Get all tilesets
 router.get('/comment', async (req, res) => {

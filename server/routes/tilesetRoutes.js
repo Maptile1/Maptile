@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const Tileset = require('./schema/tileset-schema.js')
 
 // Create Tileset
 router.post('/tileset/create', async (req, res) => {

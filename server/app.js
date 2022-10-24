@@ -25,12 +25,22 @@ mongoose.connect(process.env.MONGO_URI, {
 app.use(morgan('dev'));
 app.use(cors({origin: true, credentials: true}));
 
-// routes
+
+// user routes
+const userRoutes = require("./routes/userRoutes");
+app.use("/", userRoutes);
+
+// tileset routes
 const tilesetRoutes = require("./routes/tilesetRoutes");
 app.use("/", tilesetRoutes);
 
-//tileset routes
+// map routes 
+const mapRoutes = require("./routes/mapRoutes");
+app.use("/", mapRoutes);
 
+// comment routes
+const commentRoutes = require("./routes/commentRoutes");
+app.use("/", commentRoutes);
 
 // port
 const port = process.env.PORT || 8080;
