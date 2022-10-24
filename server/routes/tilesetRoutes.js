@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const Tileset = require('../schema/tileset-schema');
+const ObjectId = require('mongodb').ObjectId;
 
 // Create Tileset
 router.post('/tileset/create', async (req, res) => {
-    var tileset = new TileSet({
-        tilesetId: new ObjectId(),
+    var tileset = new Tileset({
+        _id: new ObjectId(),
         tileset_data: [],
         name: req.body.name,
-        description: "",
+        description: req.body.description,
         likes: 0,
         dislikes: 0,
         comments: [],
@@ -21,7 +22,7 @@ router.post('/tileset/create', async (req, res) => {
 });
 
 // Delete Tileset
-router.delete('/tileset/:id', async (req, res) => {
+router.delete('/tileset/delete/:id', async (req, res) => {
     Tileset.findByIdAndDelete(req.params.id)
         .then(() => res.json('Tileset deleted.'))
         .catch(err => res.status(400).json('Error: ' + err));
@@ -31,13 +32,13 @@ router.delete('/tileset/:id', async (req, res) => {
 router.post('/tileset/update/:id', async (req, res) => {
     Tileset.findById(req.params.id)
         .then(tileset => {
-            tileset.tileset_data = req.body.tileset_data;
-            tileset.name = req.body.name;
-            tileset.description = req.body.description;
-            tileset.likes = req.body.likes;
-            tileset.dislikes = req.body.dislikes;
-            tileset.comments = req.body.comments;
-            tileset.public = req.body.public;
+            tileset.tileset_data = req.body.tileset_data || tileset.tileset_data;
+            tileset.name = req.body.name || tileset.name;
+            tileset.description = req.body.description || tileset.description;
+            tileset.likes = req.body.likes || tileset.likes;
+            tileset.dislikes = req.body.dislikes || tileset.dislikes;
+            tileset.comments = req.body.comments || tileset.comments;
+            tileset.public = req.body.public || tileset.public;
             tileset.save()
                 .then(() => res.json('Tileset updated!'))
                 .catch(err => res.status(400).json('Error: ' + err));
