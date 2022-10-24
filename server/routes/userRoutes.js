@@ -30,13 +30,14 @@ userRouter.route('/user/login').post(async (req, res) => {
         res.statusCode(400).json({payload: {errorMessage: "username password combination not found"}})
     }
     else{
-        req.session.id = user.userId
+        req.session.add = "add"
+        req.session._id = user._id.toString()
         res.json({payload: {userName: user.userName}})
     }
 })
 
 userRouter.route('/user/logout').post(async (req, res) => {
-    if (req.session.id == undefined){
+    if (req.session._id == undefined){
         res.statusCode(400).json({payload: {errorMessage: "not logged in"}})
     }
     else{
@@ -45,12 +46,12 @@ userRouter.route('/user/logout').post(async (req, res) => {
     }
 })
 
-userRouter.route('/user/loggedin').post(async (req, res) => {
-    if (req.session.id == undefined){
+userRouter.route('/user/loggedin').get(async (req, res) => {
+    if (req.session._id == undefined){
         res.json({payload: {loggedIn: false}})
     }
     else{
-        var user = await User.findById(req.session.id)
+        var user = await User.findById(req.session._id)
         if (user != null){
             res.json({payload: {userName: user.userName}})
         }
