@@ -1,12 +1,12 @@
 import React, { useState } 	from 'react';
 import SplashScreen from '../splash_screen/SplashScreen';
 import CreateAccount from '../createAccount/CreateAccount';
-import LogIn from '../login/LogIn';
+import Login from '../login/Login';
 
 const Homescreen = (props) => {
     const [createAccountView, toggleCreateAccountView] = useState(false)
     const [loginView, toggleLogInView] = useState(false)
-    const auth = props.user === null ? false : true
+    const auth = props.user === null ? false : true;
     console.log(createAccountView)
     return(
         <div>
@@ -18,7 +18,7 @@ const Homescreen = (props) => {
                 <CreateAccount toggleCreateAccount={toggleCreateAccountView}/>
                 :
                 auth === false && loginView === true?
-                <LogIn toggleLogIn={toggleLogInView}/>
+                <Login toggleLogIn={toggleLogInView}/>
                 :
                 <></>
                 
