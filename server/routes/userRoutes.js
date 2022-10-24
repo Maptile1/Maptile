@@ -15,7 +15,7 @@ userRouter.route('/user/register').post(async (req, res) => {
         shared_maps: [],
         likes: 0,
         dislikes: 0,
-        bio: req.body.bio,
+        bio: "bio",
         featured: [],
         accountCreated: Date.now()
     })
