@@ -33,4 +33,14 @@ userRouter.route('/user/login').post(async (req, res) => {
     }
 })
 
+userRouter.route('/user/logout').post(async (req, res) => {
+    if (req.session.id == undefined){
+        res.statusCode(400).json({payload: {errorMessage: "not logged in"}})
+    }
+    else{
+        req.session.destroy()
+        res.end()
+    }
+})
+
 module.exports = userRouter;
