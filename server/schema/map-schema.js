@@ -2,7 +2,7 @@ const { model, Schema, ObjectId } = require('mongoose');
 
 const mapSchema = new Schema(
     {
-        _id: {
+        mapId: {
             type: ObjectId,
             required: true
         },
@@ -66,6 +66,10 @@ const mapSchema = new Schema(
            type: Array,
            required: true,
            default: []
+        },
+        owner: {
+            type: ObjectId,
+            required: true
         }
     }
 )
