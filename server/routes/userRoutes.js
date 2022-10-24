@@ -62,4 +62,17 @@ userRouter.route('/user/loggedin').get(async (req, res) => {
     }
 })
 
+userRouter.route('/user/getuser').get(async (req, res) => {
+    var user = await User.findById(req.session._id)
+    if (req.session._id == undefined){
+        res.json({payload: {loggedIn: false}})
+    }
+    else{
+        var user = await User.findById(req.session._id)
+        if (user != null){
+            res.json({payload: {user: user}})
+        }
+    }
+})
+
 module.exports = userRouter;
