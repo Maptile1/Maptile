@@ -6,7 +6,7 @@ const tilesetSchema = new Schema(
             type: ObjectId,
             required: true
         },
-        tiles: {
+        tileset_data: {
             type: [String],
             required: true
         },
