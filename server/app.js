@@ -22,8 +22,8 @@ app.use(morgan('dev'));
 app.use(cors({origin: true, credentials: true}));
 
 // routes
-const routes = require("./routes/routes");
-app.use("/", routes);
+const tilesetRoutes = require("./routes/tilesetRoutes");
+app.use("/", tilesetRoutes);
 
 //tileset routes
 

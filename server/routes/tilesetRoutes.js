@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+
+// Tileset Routes
 router.post('/tileset/create', async (req, res) => {
     var tileset = new TileSet({
         tilesetId: new ObjectId(),
