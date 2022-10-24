@@ -21,4 +21,16 @@ userRouter.route('/user/register').post(async (req, res) => {
     res.json({payload: {userName: user.userName, email: user.email}})
 })
 
+userRouter.route('/user/login').post(async (req, res) => {
+    //hash password later bcrypt...
+    var user = await User.findOne({userName: req.body.userName, password: req.body.password})
+    if (user == null){
+        res.statusCode(400).json({payload: {errorMessage: "username password combination not found"}})
+    }
+    else{
+        req.session.id = user.userId
+        res.json({payload: {userName: user.userName}})
+    }
+})
+
 module.exports = userRouter;
