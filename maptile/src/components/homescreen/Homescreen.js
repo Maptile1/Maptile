@@ -1,7 +1,7 @@
 import React, { useState } 	from 'react';
 import SplashScreen from '../splash_screen/SplashScreen';
 import CreateAccount from '../createAccount/CreateAccount';
-import Login from '../login/Login';
+import Login from '../login/LogIn';
 
 const Homescreen = (props) => {
     const [createAccountView, toggleCreateAccountView] = useState(false)
