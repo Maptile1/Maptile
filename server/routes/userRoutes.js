@@ -1,10 +1,11 @@
 const express = require('express');
 const User = require('../schema/user-schema');
 const userRouter = express.Router();
+const ObjectId = require('mongodb').ObjectId;
 
 userRouter.route('/user/register').post(async (req, res) => {
     var user = new User({
-        userId: new ObjectId(),
+        _id: new ObjectId(),
         userName: req.body.userName,
         email: req.body.email,
         password: req.body.password, //hash later...
@@ -14,7 +15,7 @@ userRouter.route('/user/register').post(async (req, res) => {
         shared_maps: [],
         likes: 0,
         dislikes: 0,
-        bio: "",
+        bio: req.body.bio,
         featured: [],
         accountCreated: Date.now()
     })
