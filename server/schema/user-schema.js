@@ -57,5 +57,5 @@ const userSchema = new Schema(
     }
 )
 
-const TileSet = model('TileSet', tilesetSchema);
-module.exports = TileSet;
+const User = model('User', userSchema);
+module.exports = User;
