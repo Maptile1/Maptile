@@ -43,7 +43,7 @@ router.get('/map', async (req, res) => {
 });
 
 //Delete Map
-router.delete('/map/delete/:id', async (req, res) => {
+router.post('/map/delete/:id', async (req, res) => {
     Map.findByIdAndDelete(req.params.id)
         .then(() => res.json('Map deleted.'))
         .catch(err => res.status(400).json('Error: ' + err));

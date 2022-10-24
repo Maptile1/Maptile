@@ -46,7 +46,7 @@ router.get('/comment', async (req, res) => {
 });
 
 // Delete comment
-router.delete('/comment/:id', async (req, res) => {
+router.post('/comment/delete/:id', async (req, res) => {
     Comment.findByIdAndDelete(req.params.id)
         .then(() => res.json('Comment deleted.'))
         .catch(err => res.status(400).json('Error: ' + err));
