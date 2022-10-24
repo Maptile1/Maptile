@@ -4,10 +4,14 @@ const mongoose = require('mongoose');
 const morgan =  require('morgan');
 const cors = require('cors');
 require('dotenv').config();
-
 // app
 const app = express();
+app.use(express.json({limit: '10mb'}));
 
+const session = require('express-session')
+const MongoStore = require('connect-mongo');
+app.use(session({secret: 'dfgdfgdfgdfgsdf', saveUninitialized: false,
+  resave: false, sameSite: 'lax', store: MongoStore.create({ mongoUrl: process.env.MONGO_URI+ '/sessions'})}));
 // db
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,

@@ -7,7 +7,7 @@ const commentSchema = new Schema(
 			required: true
 		},
 		owner: {
-			type: String,
+			type: ObjectId,
 			required: true
 		},
 		comment_text: {
