@@ -37,6 +37,10 @@ const tilesetSchema = new Schema(
         tilesetCreated: {
             type: Date,
             required: true
+        },
+        owner: {
+            type: ObjectId,
+            required: true
         }
     }
 )
