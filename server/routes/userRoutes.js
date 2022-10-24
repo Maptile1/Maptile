@@ -1,4 +1,5 @@
 const express = require('express');
+const User = require('../schema/user-schema');
 const userRouter = express.Router();
 
 userRouter.route('/user/register').post(async (req, res) => {
@@ -40,6 +41,22 @@ userRouter.route('/user/logout').post(async (req, res) => {
     else{
         req.session.destroy()
         res.end()
+    }
+})
+
+userRouter.route('/user/loggedin').post(async (req, res) => {
+    if (req.session.id == undefined){
+        res.json({payload: {loggedIn: false}})
+    }
+    else{
+        var user = await User.findById(req.session.id)
+        if (user != null){
+            res.json({payload: {userName: user.userName}})
+        }
+        else{
+            req.session.destroy()
+            res.status(400).json({payload: {errorMessage: "couldnt find user???"}})
+        }
     }
 })
 
