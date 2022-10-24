@@ -8,10 +8,10 @@ const commentSchema = new Schema(
 		},
 		owner: {
 			type: ObjectId,
-			required: true
+			required: false
 		},
 		comment_text: {
-			type: String,
+			type: String,	
 			required: true
 		},
 		comment_date: {

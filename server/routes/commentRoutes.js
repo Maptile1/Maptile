@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const Comment = require('../schema/comment-schema.js')
+const Comment = require('../schema/comment-schema.js');
+const ObjectId = require('mongodb').ObjectId;
 
 router.post('/comment/create', async (req, res) => {
     var comment = new Comment({
-        commentId: new ObjectId(),
-        owner: req.session.id, //placeholder for when authentication is done
+        _id: new ObjectId(),
+        // owner: req.session.id, //placeholder for when authentication is done
         comment_text: req.body.comment_text,
         comment_date: new Date(),
         likes: 0,
