@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Map = require('./schema/map-schema.js')
+const Map = require('../schema/map-schema.js')
 
 router.post('/map/create', async (req, res) => {
     var map = new Map({

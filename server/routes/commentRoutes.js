@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Comment = require('./schema/comment-schema.js')
+const Comment = require('../schema/comment-schema.js')
 
 router.post('/comment/create', async (req, res) => {
     var comment = new Comment({
