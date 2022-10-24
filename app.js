@@ -45,6 +45,10 @@ app.use("/", commentRoutes);
 // port
 const port = process.env.PORT || 8080;
 
+if(process.env.NODE_ENV === 'production'){
+    app.use(express.static("../build"));
+}
+
 // listener
 const server = app.listen(port, () => 
 console.log(`Server is running on port ${port}`)
