@@ -61,7 +61,6 @@ const Homescreen = (props) => {
     toggleProfileView(false);
     toggleSearchView(true);
   };
-
   return (
     <div>
       {props.user === null &&

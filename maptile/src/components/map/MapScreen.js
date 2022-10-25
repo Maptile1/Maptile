@@ -1,5 +1,5 @@
 const MapScreen = (props) => {
-  return <div>This is the MapScreen</div>;
+  return <div class="pt-5 text-center text-4xl font-bold text-white">Map</div>;
 };
 
 export default MapScreen;

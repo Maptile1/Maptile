@@ -1,5 +1,5 @@
 const Home = (props) => {
-  return <div>This is the Homescreen</div>;
+  return <div class="pt-5 text-center text-4xl font-bold text-white">Home</div>;
 };
 
 export default Home;
