@@ -7,20 +7,26 @@ import {
   BsPower,
 } from "react-icons/bs";
 const Sidebar = (props) => {
+  const iconsize = 30;
   return (
-    <aside class="w-64" aria-label="Sidebar">
-      <div class="overflow-y-auto py-4 px-3 bg-maptile-green rounded dark:bg-maptile-green">
-        <ul class="space-y-2">
-          <li>
-            <span class="ml-3">Maptile ICON HERE</span>
+    <aside class="w-40" aria-label="Sidebar">
+      <div class="py-5 px-3 bg-maptile-green rounded dark:bg-maptile-green top-0 fixed bottom-0">
+        <ul class="space-y-5">
+          <li class="pb-5">
+            <span class="ml-3">ICON</span>
           </li>
           <li>
-            <button
-              class="hover:bg-green-200"
-              onClick={() => props.handleHomeView()}
+            <a
+              href="#"
+              class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
-              <AiFillHome />
-            </button>
+              <button
+                class="hover:bg-green-200"
+                onClick={() => props.handleHomeView()}
+              >
+                <AiFillHome size={iconsize} />
+              </button>
+            </a>
           </li>
           <li>
             <a
@@ -29,7 +35,7 @@ const Sidebar = (props) => {
             >
               <button onClick={() => props.handleTilesetView()}>
                 {" "}
-                <BsFillPuzzleFill />
+                <BsFillPuzzleFill size={iconsize} />
               </button>
             </a>
           </li>
@@ -39,7 +45,7 @@ const Sidebar = (props) => {
               class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <button onClick={() => props.handleMapView()}>
-                <BsMapFill />
+                <BsMapFill size={iconsize} />
               </button>
             </a>
           </li>
@@ -49,17 +55,17 @@ const Sidebar = (props) => {
               class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <button onClick={() => props.handleSearchView()}>
-                <BsSearch />
+                <BsSearch size={iconsize} />
               </button>
             </a>
           </li>
-          <li>
+          <li class="pt-20">
             <a
               href="#"
               class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <button onClick={() => props.handleProfileView()}>
-                <BsFillPersonBadgeFill />
+                <BsFillPersonBadgeFill size={iconsize} />
               </button>
             </a>
           </li>
@@ -70,7 +76,7 @@ const Sidebar = (props) => {
             >
               <button>
                 {" "}
-                <BsPower />
+                <BsPower size={iconsize} />
               </button>
             </a>
           </li>
