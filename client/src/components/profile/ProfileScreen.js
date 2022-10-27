@@ -1,26 +1,39 @@
 import { BsMapFill, BsFillPuzzleFill } from "react-icons/bs";
 import { BiLike } from "react-icons/bi";
+import TilesetDisplay from "../display/TilesetDisplay";
+
 const ProfileScreen = (props) => {
   return (
-    <div class="grid grid-cols-10 gap-4">
-      <div class="col-start-2 col-span-2 row-start-2 text-white text-center">
-        Joe Schmo
+    <div class="grid grid-cols-10 grid-rows-10 gap-4">
+      <div class="col-start-2 col-span-2 row-start-3 text-white text-center">
+        <div class="text-6xl mb-8">  @Joe Schmo</div>
+
         <img
-          class="lg:h-48 md:h-36 w-full object-cover object-center"
+          class="lg:h-56 md:h-36 w-full object-cover object-center"
           src="https://dummyimage.com/720x400"
           alt="blog"
         />
-        Hi my name is Joe Schmo, I like making games!
+        <div class="mt-5">Hi my name is Joe Schmo, I like making games!</div>
       </div>
-      <div class="col-start-5 row-start-2 mt-10 text-6xl justify-self-center text-white">
+      <div class="col-start-5 row-start-3 mt-10 text-6xl justify-self-center text-white">
         <BsMapFill />8 Maps
       </div>
-      <div class="col-start-7 row-start-2 mt-10 text-6xl justify-self-center text-white">
+      <div class="col-start-7 row-start-3 mt-10 text-6xl justify-self-center text-white">
         <BsFillPuzzleFill />8 Tilesets
       </div>
-      <div class="col-start-9 row-start-2 mt-10 text-6xl justify-self-center text-white">
+      <div class="col-start-9 row-start-3 mt-10 text-6xl justify-self-center text-white">
         <BiLike />8 Likes
       </div>
+      <div class="mt-20 grid grid-cols-4 col-span-10 col-start-2 row-start-4 gap-5">
+        <TilesetDisplay
+          tilename="nice tileset"
+          description="awesome tiles for your games"
+        />
+        <TilesetDisplay tilename="Ice Tiles" description="perfect tiles for 2D winter theme" />
+        <TilesetDisplay tilename="Fire Tiles" description="perfect tiles for 2D fire theme" />
+        <TilesetDisplay tilename="Space Tiles" description="perfect tiles for 2D space theme" />
+      </div>
+
     </div>
   );
 };
