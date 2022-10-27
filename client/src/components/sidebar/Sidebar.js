@@ -17,69 +17,51 @@ const Sidebar = (props) => {
             <GiReptileTail size={iconsize} />
           </li>
           <li>
-            <a
-              href="#"
-              class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
+            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
               <button
                 class="hover:bg-green-200"
                 onClick={() => props.handleHomeView()}
               >
                 <AiFillHome size={iconsize} />
               </button>
-            </a>
+            </div>
           </li>
           <li>
-            <a
-              href="#"
-              class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
+            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
               <button onClick={() => props.handleTilesetView()}>
                 {" "}
                 <BsFillPuzzleFill size={iconsize} />
               </button>
-            </a>
+            </div>
           </li>
           <li>
-            <a
-              href="#"
-              class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
+            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
               <button onClick={() => props.handleMapView()}>
                 <BsMapFill size={iconsize} />
               </button>
-            </a>
+            </div>
           </li>
           <li>
-            <a
-              href="#"
-              class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
+            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
               <button onClick={() => props.handleSearchView()}>
                 <BsSearch size={iconsize} />
               </button>
-            </a>
+            </div>
           </li>
           <li class="pt-20">
-            <a
-              href="#"
-              class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
+            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
               <button onClick={() => props.handleProfileView()}>
                 <BsFillPersonBadgeFill size={iconsize} />
               </button>
-            </a>
+            </div>
           </li>
           <li>
-            <a
-              href="#"
-              class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
+            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
               <button>
                 {" "}
                 <BsPower size={iconsize} />
               </button>
-            </a>
+            </div>
           </li>
         </ul>
       </div>
