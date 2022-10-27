@@ -1,4 +1,3 @@
-import Box from "@mui/material/Box";
 const TilesetScreen = (props) => {
   return (
     <div>
