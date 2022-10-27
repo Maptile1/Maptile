@@ -1,4 +1,3 @@
-import { AiFillHome } from "react-icons/ai";
 import { GiReptileTail } from "react-icons/gi";
 import {
   BsFillPuzzleFill,
@@ -6,60 +5,63 @@ import {
   BsSearch,
   BsFillPersonBadgeFill,
   BsPower,
+  BsFillHouseFill,
 } from "react-icons/bs";
+
 const Sidebar = (props) => {
   const iconsize = 30;
+  let iconStyles = { color: "white", stroke: "black", strokeWidth: "0.50" };
   return (
     <aside class="w-40" aria-label="Sidebar">
       <div class="py-5 px-3 bg-maptile-green rounded dark:bg-maptile-green top-0 fixed bottom-0">
         <ul class="space-y-5">
           <li class="pb-5">
-            <GiReptileTail size={iconsize} />
+            <GiReptileTail size={iconsize} style={iconStyles} />
           </li>
           <li>
-            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-              <button
-                class="hover:bg-green-200"
-                onClick={() => props.handleHomeView()}
-              >
-                <AiFillHome size={iconsize} />
+            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white ">
+              <button onClick={() => props.handleHomeView()}>
+                {" "}
+                <div className="icon">
+                  <BsFillHouseFill size={iconsize} style={iconStyles} />
+                </div>
               </button>
             </div>
           </li>
           <li>
-            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white ">
               <button onClick={() => props.handleTilesetView()}>
                 {" "}
-                <BsFillPuzzleFill size={iconsize} />
+                <BsFillPuzzleFill size={iconsize} style={iconStyles} />
               </button>
             </div>
           </li>
           <li>
-            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white ">
               <button onClick={() => props.handleMapView()}>
-                <BsMapFill size={iconsize} />
+                <BsMapFill size={iconsize} style={iconStyles} />
               </button>
             </div>
           </li>
           <li>
-            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white ">
               <button onClick={() => props.handleSearchView()}>
-                <BsSearch size={iconsize} />
+                <BsSearch size={iconsize} style={iconStyles} />
               </button>
             </div>
           </li>
           <li class="pt-20">
-            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white ">
               <button onClick={() => props.handleProfileView()}>
-                <BsFillPersonBadgeFill size={iconsize} />
+                <BsFillPersonBadgeFill size={iconsize} style={iconStyles} />
               </button>
             </div>
           </li>
           <li>
-            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white ">
               <button>
                 {" "}
-                <BsPower size={iconsize} />
+                <BsPower size={iconsize} style={iconStyles} />
               </button>
             </div>
           </li>

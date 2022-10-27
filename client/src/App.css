@@ -44,3 +44,8 @@
 body {
   background-color: #383838;
 }
+
+.icon:hover {
+  background-color: red;
+  fill: red;
+}
