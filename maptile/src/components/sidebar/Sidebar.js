@@ -1,4 +1,5 @@
 import { AiFillHome } from "react-icons/ai";
+import { GiReptileTail } from "react-icons/gi";
 import {
   BsFillPuzzleFill,
   BsMapFill,
@@ -13,7 +14,7 @@ const Sidebar = (props) => {
       <div class="py-5 px-3 bg-maptile-green rounded dark:bg-maptile-green top-0 fixed bottom-0">
         <ul class="space-y-5">
           <li class="pb-5">
-            <span class="ml-3">ICON</span>
+            <GiReptileTail size={iconsize} />
           </li>
           <li>
             <a
