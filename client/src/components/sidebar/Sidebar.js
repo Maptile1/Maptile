@@ -1,4 +1,4 @@
-import { GiReptileTail } from "react-icons/gi";
+import { } from "react-icons/gi";
 import {
   BsFillPuzzleFill,
   BsMapFill,
