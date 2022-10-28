@@ -112,7 +112,10 @@ const Homescreen = (props) => {
             handleSearchView={handleSearchView}
             handleLogOut={handleLogOut}
           />
-          {homeView && <Home />}
+          {homeView && <Home handleTilesetView={handleTilesetView}
+            handleMapView={handleMapView}
+            handleProfileView={handleProfileView}
+            handleSearchView={handleSearchView} />}
           {tilesetView && <TilesetScreen />}
           {mapView && <MapScreen />}
           {profileView && <ProfileScreen />}

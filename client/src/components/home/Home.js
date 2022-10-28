@@ -8,9 +8,9 @@ const Home = (props) => {
           <img class="object-cover w-full h-56 rounded-lg lg:w-64" src="https://cdn.dribbble.com/users/1514670/screenshots/17817496/media/260fa9c895a14133f8821e173b130c14.jpg?compress=1&resize=400x300" alt="" />
 
           <div class="flex flex-col justify-between py-6 lg:mx-6">
-            <div class="text-xl font-semibold text-white hover:underline dark:text-white ">
+            <button class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={() => props.handleTilesetView()}>
               Create your Tilesets
-            </div>
+            </button>
           </div>
         </div>
 
@@ -18,9 +18,9 @@ const Home = (props) => {
           <img class="object-cover w-full h-56 rounded-lg lg:w-64" src="https://cdn.dribbble.com/users/1068771/screenshots/6339347/map4_4x.jpg?compress=1&resize=400x300" alt="" />
 
           <div class="flex flex-col justify-between py-6 lg:mx-6">
-            <div class="text-xl font-semibold text-white hover:underline dark:text-white ">
+            <button class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={() => props.handleMapView()}>
               Create your Maps
-            </div>
+            </button>
           </div>
         </div>
 
@@ -28,9 +28,9 @@ const Home = (props) => {
           <img class="object-cover w-full h-56 rounded-lg lg:w-64" src="https://content.presentermedia.com/files/clipart/00001000/1813/searching_stick_figure_800_wht.jpg" alt="" />
 
           <div class="flex flex-col justify-between py-6 lg:mx-6">
-            <div class="text-xl font-semibold text-white hover:underline dark:text-white ">
+            <button class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={() => props.handleSearchView()}>
               Search Tilesets/Maps
-            </div>
+            </button>
 
           </div>
         </div>
@@ -39,9 +39,9 @@ const Home = (props) => {
           <img class="object-cover w-full h-56 rounded-lg lg:w-64" src="https://cdn3.iconfinder.com/data/icons/my-business-icons/200/BusinessIcon-03-512.png" alt="" />
 
           <div class="flex flex-col justify-between py-6 lg:mx-6">
-            <div class="text-xl font-semibold text-white hover:underline dark:text-white ">
+            <button class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={() => props.handleProfileView()}>
               Profile Page
-            </div>
+            </button>
           </div>
         </div>
 
