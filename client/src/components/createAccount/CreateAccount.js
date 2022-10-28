@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
 
 const CreateAccount = (props) => {
-    const [input, setInput] = useState({ email: '', password: '', firstName: '', lastName: '' });
+    // const [input, setInput] = useState({ email: '', password: '', firstName: '', lastName: '' });
 
-    const updateInput = (e) => {
-        const { name, value } = e.target;
-        const updated = { ...input, [name]: value };
-        setInput(updated);
-    };
+    // const updateInput = (e) => {
+    //     const { name, value } = e.target;
+    //     const updated = { ...input, [name]: value };
+    //     setInput(updated);
+    // };
 
-    //needs to be async once accounts are implemented
-    const handleCreateAccount = (e) => {
-        for (let field in input) {
-            if (!input[field]) {
-                alert('All fields must be filled out to register');
-                return;
-            }
-        }
-        //Async usedb call goes here.
-        console.log(input)
-        props.toggleCreateAccount(false)
+    // //needs to be async once accounts are implemented
+    // const handleCreateAccount = (e) => {
+    //     for (let field in input) {
+    //         if (!input[field]) {
+    //             alert('All fields must be filled out to register');
+    //             return;
+    //         }
+    //     }
+    //     //Async usedb call goes here.
+    //     console.log(input)
+    //     props.toggleCreateAccount(false)
 
-    }
+    // }
 
     return (
         <main
