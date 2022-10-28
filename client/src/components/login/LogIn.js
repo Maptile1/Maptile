@@ -1,14 +1,6 @@
 import React, { useState } from "react";
 
 const LogIn = (props) => {
-  const [input, setInput] = useState({ email: "", password: "" });
-
-  const updateInput = (e) => {
-    const { name, value } = e.target;
-    const updated = { ...input, [name]: value };
-    setInput(updated);
-  };
-
 
   return (
     <main
