@@ -93,7 +93,6 @@ const Homescreen = (props) => {
         createAccountView === false &&
         loginView === false ? (
         <div>
-          <h1 className="text-9xl text-white font-sans-extrabold">MAPTILE</h1>
           <SplashScreen
             toggleCreateAccount={toggleCreateAccountView}
             toggleLogIn={toggleLogInView}
