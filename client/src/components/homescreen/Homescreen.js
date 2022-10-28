@@ -20,7 +20,7 @@ const Homescreen = (props) => {
 
   console.log(homeView);
   //   const auth = props.user === null ? false : true;
-  const auth = "";
+  var auth = "";
 
   const handleHomeView = () => {
     toggleHomeView(true);
@@ -61,14 +61,27 @@ const Homescreen = (props) => {
     toggleProfileView(false);
     toggleSearchView(true);
   };
+
+  const handleLogOut = () => {
+    auth = false;
+    toggleLogInView(false)
+    toggleCreateAccountView(false)
+    toggleHomeView(false);
+    toggleTilesetView(false);
+    toggleMapView(false);
+    toggleProfileView(false);
+    toggleSearchView(false);
+    console.log(props.user, auth, createAccountView, loginView)
+  }
+
   return (
     <div>
       {props.user === null &&
-      auth === false &&
-      createAccountView === false &&
-      loginView === false ? (
+        auth === false &&
+        createAccountView === false &&
+        loginView === false ? (
         <div>
-          <h1 className="text-9xl font-sans-extrabold">MAPTILE</h1>
+          <h1 className="text-9xl text-white font-sans-extrabold">MAPTILE</h1>
           <SplashScreen
             toggleCreateAccount={toggleCreateAccountView}
             toggleLogIn={toggleLogInView}
@@ -86,6 +99,7 @@ const Homescreen = (props) => {
             handleMapView={handleMapView}
             handleProfileView={handleProfileView}
             handleSearchView={handleSearchView}
+            handleLogOut={handleLogOut}
           />
           {homeView && <Home />}
           {tilesetView && <TilesetScreen />}

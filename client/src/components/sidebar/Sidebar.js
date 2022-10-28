@@ -59,8 +59,7 @@ const Sidebar = (props) => {
           </li>
           <li>
             <div class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white ">
-              <button>
-                {" "}
+              <button onClick={() => props.handleLogOut()}>
                 <BsPower size={iconsize} style={iconStyles} />
               </button>
             </div>
