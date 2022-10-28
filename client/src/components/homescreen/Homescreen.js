@@ -60,6 +60,11 @@ const Homescreen = (props) => {
     toggleSearchView(true);
   };
 
+  const handleCreateAccountView = () => {
+    toggleCreateAccountView(true);
+    toggleLogInView(false);
+  }
+
   const handleLogIn = () => { ///temp usage
     setauth(true);
   }
@@ -73,6 +78,10 @@ const Homescreen = (props) => {
     toggleProfileView(false);
     toggleSearchView(false);
     console.log(props.user, auth, createAccountView, loginView)
+  }
+
+  const handleHomeScreenView = () => {
+    toggleCreateAccountView(false);
   }
 
 
@@ -91,9 +100,9 @@ const Homescreen = (props) => {
           />
         </div>
       ) : auth === false && createAccountView === true ? (
-        <CreateAccount toggleCreateAccount={toggleCreateAccountView} />
+        <CreateAccount toggleCreateAccount={toggleCreateAccountView} handleLogIn={handleLogIn} handleHomeScreenView={handleHomeScreenView} />
       ) : auth === false && loginView === true ? (
-        <Login toggleLogIn={toggleLogInView} handleLogIn={handleLogIn} />
+        <Login toggleLogIn={toggleLogInView} handleCreateAccountView={handleCreateAccountView} handleLogIn={handleLogIn} />
       ) : (
         <div>
           <Sidebar
