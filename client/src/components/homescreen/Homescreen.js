@@ -17,10 +17,8 @@ const Homescreen = (props) => {
   const [mapView, toggleMapView] = useState(false);
   const [profileView, toggleProfileView] = useState(false);
   const [searchView, toggleSearchView] = useState(false);
-
-  console.log(homeView);
+  const [auth, setauth] = useState(false);
   //   const auth = props.user === null ? false : true;
-  var auth = "";
 
   const handleHomeView = () => {
     toggleHomeView(true);
@@ -62,8 +60,11 @@ const Homescreen = (props) => {
     toggleSearchView(true);
   };
 
+  const handleLogIn = () => { ///temp usage
+    setauth(true);
+  }
   const handleLogOut = () => {
-    auth = false;
+    setauth(false);
     toggleLogInView(false)
     toggleCreateAccountView(false)
     toggleHomeView(false);
@@ -73,6 +74,8 @@ const Homescreen = (props) => {
     toggleSearchView(false);
     console.log(props.user, auth, createAccountView, loginView)
   }
+
+
 
   return (
     <div>
@@ -90,7 +93,7 @@ const Homescreen = (props) => {
       ) : auth === false && createAccountView === true ? (
         <CreateAccount toggleCreateAccount={toggleCreateAccountView} />
       ) : auth === false && loginView === true ? (
-        <Login toggleLogIn={toggleLogInView} />
+        <Login toggleLogIn={toggleLogInView} handleLogIn={handleLogIn} />
       ) : (
         <div>
           <Sidebar
@@ -106,6 +109,7 @@ const Homescreen = (props) => {
           {mapView && <MapScreen />}
           {profileView && <ProfileScreen />}
           {searchView && <SearchScreen />}
+
         </div>
       )}
     </div>

@@ -9,18 +9,6 @@ const LogIn = (props) => {
     setInput(updated);
   };
 
-  //needs to be async once accounts are implemented
-  const handleLogIn = (e) => {
-    for (let field in input) {
-      if (!input[field]) {
-        alert("All fields must be filled out to register");
-        return;
-      }
-    }
-    //Async usedb call goes here.
-    console.log(input);
-    props.toggleLogIn(false);
-  };
 
   return (
     <div>
@@ -62,7 +50,7 @@ const LogIn = (props) => {
 
         <button
           type=""
-          onClick={handleLogIn}
+          onClick={props.handleLogIn}
           className=" text-white text-shadow bg-maptile-green hover:bg-maptile-green-highlight focus:ring-4 focus:outline-none focus:ring-gray-200 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
           Submit
