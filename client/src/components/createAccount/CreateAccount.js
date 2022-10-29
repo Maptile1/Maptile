@@ -1,62 +1,85 @@
-import React, { } from 'react';
+import React, { useState } from 'react';
 
 const CreateAccount = (props) => {
+    const [input, setInput] = useState({ email: '', password: '', userName: ''});
+    const [inputValid, setInputValid] = useState(false)
+
+    const updateInput = (e) => {
+		const { name, value } = e.target;
+		const updated = { ...input, [name]: value };
+		setInput(updated);
+        setInputValid(updated.email !== '' && updated.password !== '' && updated.userName !== '');
+	};
+
+    const handleLogIn = (e) => {
+        console.log(input)
+        if(inputValid){
+            props.handleLogIn()
+        }
+    }
 
     return (
         <main
-            class="mx-auto flex min-h-screen w-full items-center justify-center bg-gray-900 text-white"
+            className="mx-auto flex min-h-screen w-full items-center justify-center bg-maptile-background-dark text-white"
         >
-            <div class="bg-maptile-purple flex w-[40rem] h-[35rem] justify-center align-middle">
-                <section class="flex w-[30rem] flex-col space-y-10 mt-10">
-                    <div class="text-center text-4xl font-medium">Create Account</div>
+            <div className="bg-maptile-purple flex w-[40rem] h-[35rem] justify-center align-middle shadow-md rounded-lg">
+                <section className="flex w-[30rem] flex-col space-y-10 mt-10">
+                    <div className="text-center text-4xl font-medium">Create Account</div>
 
                     <div
-                        class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+                        className="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
                     >
                         <input
                             type="text"
+                            name="userName"
                             placeholder="Username"
-                            class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                            className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                            onBlur={updateInput}
                         />
                     </div>
 
                     <div
-                        class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+                        className="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
                     >
                         <input
                             type="email"
+                            name="email"
                             placeholder="Email"
-                            class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                            className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                            onBlur={updateInput}
                         />
                     </div>
                     <div
-                        class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+                        className="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
                     >
                         <input
                             type="password"
                             placeholder="Password"
-                            class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                            className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
                         />
                     </div>
                     <div
-                        class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+                        className="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
                     >
                         <input
-                            type="confirmpassword"
+                            type="password"
+                            name="password"
                             placeholder="Confirm Password"
-                            class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                            className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                            onBlur={updateInput}
                         />
                     </div>
 
-                    <button onClick={() => props.handleLogIn()}
-                        class="transform rounded-sm bg-maptile-green-highlight py-2 font-bold duration-300 hover:bg-maptile-green"
+                    <button onClick={handleLogIn}
+                        className={`${!inputValid ? 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red': 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green'}`}
+                        //className="transform rounded-sm py-2 font-bold duration-300 {{inputValid ? 'bg-maptile-red-unselected hover:bg-maptile-red' : 'bg-maptile-green-highlight hover:bg-maptile-green'}}"
                     >
                         Register
                     </button>
 
                     <button
                         onClick={() => props.handleHomeScreenView()}
-                        class="transform text-center font-semibold text-white duration-300 hover:text-gray-300"
+                        className="transform text-center font-semibold text-white duration-300 hover:text-gray-300 underline"
                     >Return
                     </button>
 
