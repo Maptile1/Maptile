@@ -12,7 +12,7 @@ import SearchScreen from "../search/SearchScreen";
 const Homescreen = (props) => {
   const [createAccountView, toggleCreateAccountView] = useState(false);
   const [loginView, toggleLogInView] = useState(false);
-  const [homeView, toggleHomeView] = useState(false);
+  const [homeView, toggleHomeView] = useState(true);
   const [tilesetView, toggleTilesetView] = useState(false);
   const [mapView, toggleMapView] = useState(false);
   const [profileView, toggleProfileView] = useState(false);
@@ -104,14 +104,7 @@ const Homescreen = (props) => {
         <Login toggleLogIn={toggleLogInView} handleCreateAccountView={handleCreateAccountView} handleLogIn={handleLogIn} />
       ) : (
         <div>
-          <Sidebar
-            handleHomeView={handleHomeView}
-            handleTilesetView={handleTilesetView}
-            handleMapView={handleMapView}
-            handleProfileView={handleProfileView}
-            handleSearchView={handleSearchView}
-            handleLogOut={handleLogOut}
-          />
+          <Sidebar/>
           {homeView && <Home handleTilesetView={handleTilesetView}
             handleMapView={handleMapView}
             handleProfileView={handleProfileView}

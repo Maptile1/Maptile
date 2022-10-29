@@ -2,6 +2,10 @@ import './App.css';
 import React 			from 'react';
 import { BrowserRouter, Routes, Route} from 'react-router-dom';
 import Homescreen from './components/homescreen/Homescreen';
+import TilesetScreen from './components/tileset/TilesetScreen';
+import MapScreen from './components/map/MapScreen';
+import SearchScreen from './components/search/SearchScreen';
+import ProfileScreen from './components/profile/ProfileScreen';
 
 function App() {
 
@@ -11,7 +15,11 @@ function App() {
     <BrowserRouter>
       <div className='app-container'>
         <Routes>
-          <Route index element={<Homescreen user={user}/>}/>
+          <Route exact index path="/" element={<Homescreen user={user}/>}/>
+          <Route path ="/user_tilesets" element={<TilesetScreen user={user}/>}/>
+          <Route path ="/user_maps" element={<MapScreen user={user}/>}/>
+          <Route path ="/search" element={<SearchScreen user={user}/>}/>
+          <Route path ="/user_profile" element={<ProfileScreen user={user}/>}/>
         </Routes>
       </div>
 		</BrowserRouter>

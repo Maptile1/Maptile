@@ -1,11 +1,14 @@
 import { BsMapFill, BsFillPuzzleFill } from "react-icons/bs";
 import { BiLike } from "react-icons/bi";
 import TilesetDisplay from "../display/TilesetDisplay";
+import Sidebar from "../sidebar/Sidebar";
 
 const ProfileScreen = (props) => {
   return (
     <div class="grid grid-cols-10 grid-rows-10 gap-4">
+      <Sidebar/>
       <div class="col-start-2 col-span-2 row-start-3 text-white text-center">
+        
         <div class="text-6xl mb-8">  @Joe Schmo</div>
 
         <img
