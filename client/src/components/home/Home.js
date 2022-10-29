@@ -1,4 +1,24 @@
+import { useNavigate } from "react-router-dom";
+
 const Home = (props) => {
+  const nav = useNavigate()
+
+  const handleClick = (e) => {
+    const { id } = e.currentTarget
+    if(id === "home-Tileset"){
+      nav("/user_tilesets")
+    }
+    if(id === "home-Map"){
+      nav("/user_maps")
+    }
+    if(id === "home-Search"){
+      nav("/search")
+    }
+    if(id === "home-Profile"){
+      nav("/user_profile")
+    }
+  }
+
   return <div>
     <div class="container px-6 py-10 mx-auto ">
       <h1 class="text-3xl font-semibold text-white capitalize lg:text-4xl dark:text-white">On Maptile</h1>
@@ -8,7 +28,7 @@ const Home = (props) => {
           <img class="object-cover w-full h-56 rounded-lg lg:w-64" src="https://cdn.dribbble.com/users/1514670/screenshots/17817496/media/260fa9c895a14133f8821e173b130c14.jpg?compress=1&resize=400x300" alt="" />
 
           <div class="flex flex-col justify-between py-6 lg:mx-6">
-            <button class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={() => props.handleTilesetView()}>
+            <button id="home-Tileset" class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={handleClick}>
               Create your Tilesets
             </button>
           </div>
@@ -18,7 +38,7 @@ const Home = (props) => {
           <img class="object-cover w-full h-56 rounded-lg lg:w-64" src="https://cdn.dribbble.com/users/1068771/screenshots/6339347/map4_4x.jpg?compress=1&resize=400x300" alt="" />
 
           <div class="flex flex-col justify-between py-6 lg:mx-6">
-            <button class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={() => props.handleMapView()}>
+            <button id="home-Map" class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={handleClick}>
               Create your Maps
             </button>
           </div>
@@ -28,7 +48,7 @@ const Home = (props) => {
           <img class="object-cover w-full h-56 rounded-lg lg:w-64" src="https://content.presentermedia.com/files/clipart/00001000/1813/searching_stick_figure_800_wht.jpg" alt="" />
 
           <div class="flex flex-col justify-between py-6 lg:mx-6">
-            <button class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={() => props.handleSearchView()}>
+            <button id="home-Search" class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={handleClick}>
               Search Tilesets/Maps
             </button>
 
@@ -39,7 +59,7 @@ const Home = (props) => {
           <img class="object-cover w-full h-56 rounded-lg lg:w-64" src="https://cdn3.iconfinder.com/data/icons/my-business-icons/200/BusinessIcon-03-512.png" alt="" />
 
           <div class="flex flex-col justify-between py-6 lg:mx-6">
-            <button class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={() => props.handleProfileView()}>
+            <button id="home-Profile"class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={handleClick}>
               Profile Page
             </button>
           </div>
