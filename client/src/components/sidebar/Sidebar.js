@@ -8,7 +8,6 @@ import {
   BsFillHouseFill,
 } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import { navbar } from "@material-tailwind/react";
 
 const Sidebar = (props) => {
   const iconsize = 30;
@@ -18,7 +17,7 @@ const Sidebar = (props) => {
   const handleClick = (e) => {
     const { id } = e.currentTarget
     if(id === "sidebar-Home"){
-
+      nav("/", {replace: true})
     }
     if(id === "sidebar-Tileset"){
       nav("/user_tilesets")

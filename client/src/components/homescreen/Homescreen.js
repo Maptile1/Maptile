@@ -18,15 +18,16 @@ const Homescreen = (props) => {
   const [profileView, toggleProfileView] = useState(false);
   const [searchView, toggleSearchView] = useState(false);
   const [auth, setauth] = useState(false);
+
   //   const auth = props.user === null ? false : true;
 
-  const handleHomeView = () => {
-    toggleHomeView(true);
-    toggleTilesetView(false);
-    toggleMapView(false);
-    toggleProfileView(false);
-    toggleSearchView(false);
-  };
+  // const handleHomeView = () => {
+  //   toggleHomeView(true);
+  //   toggleTilesetView(false);
+  //   toggleMapView(false);
+  //   toggleProfileView(false);
+  //   toggleSearchView(false);
+  // };
 
   const handleTilesetView = () => {
     toggleHomeView(false);
@@ -68,17 +69,17 @@ const Homescreen = (props) => {
   const handleLogIn = () => { ///temp usage
     setauth(true);
   }
-  const handleLogOut = () => {
-    setauth(false);
-    toggleLogInView(false)
-    toggleCreateAccountView(false)
-    toggleHomeView(false);
-    toggleTilesetView(false);
-    toggleMapView(false);
-    toggleProfileView(false);
-    toggleSearchView(false);
-    console.log(props.user, auth, createAccountView, loginView)
-  }
+  // const handleLogOut = () => {
+  //   setauth(false);
+  //   toggleLogInView(false)
+  //   toggleCreateAccountView(false)
+  //   toggleHomeView(false);
+  //   toggleTilesetView(false);
+  //   toggleMapView(false);
+  //   toggleProfileView(false);
+  //   toggleSearchView(false);
+  //   console.log(props.user, auth, createAccountView, loginView)
+  // }
 
   const handleHomeScreenView = () => {
     toggleCreateAccountView(false);
