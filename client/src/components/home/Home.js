@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import Sidebar from "../sidebar/Sidebar";
 
 const Home = (props) => {
   const nav = useNavigate()
@@ -20,7 +21,10 @@ const Home = (props) => {
   }
 
   return <div>
+    <div>
+    <Sidebar/>
     <div class="container px-6 py-10 mx-auto ">
+      
       <h1 class="text-3xl font-semibold text-white capitalize lg:text-4xl dark:text-white">On Maptile</h1>
 
       <div class="grid grid-cols-1 gap-8 mt-8 md:mt-16 md:grid-cols-2">
@@ -89,6 +93,7 @@ const Home = (props) => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   </div>
 };

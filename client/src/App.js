@@ -2,6 +2,7 @@ import './App.css';
 import React 			from 'react';
 import { BrowserRouter, Routes, Route} from 'react-router-dom';
 import Homescreen from './components/homescreen/Homescreen';
+import Home from './components/home/Home';
 import TilesetScreen from './components/tileset/TilesetScreen';
 import MapScreen from './components/map/MapScreen';
 import SearchScreen from './components/search/SearchScreen';
@@ -16,6 +17,7 @@ function App() {
       <div className='app-container'>
         <Routes>
           <Route exact index path="/" element={<Homescreen user={user}/>}/>
+          <Route path ="/home" element={<Home user={user}/>}/>
           <Route path ="/user_tilesets" element={<TilesetScreen user={user}/>}/>
           <Route path ="/user_maps" element={<MapScreen user={user}/>}/>
           <Route path ="/search" element={<SearchScreen user={user}/>}/>
