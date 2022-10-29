@@ -12,7 +12,6 @@ const LogIn = (props) => {
 	};
 
   const handleLogIn = (e) => {
-    console.log(input)
     if(inputValid){
         props.handleLogIn()
     }
