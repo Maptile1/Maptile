@@ -8,7 +8,7 @@ const CreateAccount = (props) => {
         >
             <div class="bg-maptile-purple flex w-[40rem] h-[35rem] justify-center align-middle">
                 <section class="flex w-[30rem] flex-col space-y-10 mt-10">
-                    <div class="text-center text-4xl font-medium">Log In</div>
+                    <div class="text-center text-4xl font-medium">Create Account</div>
 
                     <div
                         class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
