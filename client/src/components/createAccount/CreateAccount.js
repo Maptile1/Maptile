@@ -12,7 +12,6 @@ const CreateAccount = (props) => {
 	};
 
     const handleLogIn = (e) => {
-        console.log(input)
         if(inputValid){
             props.handleLogIn()
         }
@@ -71,7 +70,7 @@ const CreateAccount = (props) => {
                     </div>
 
                     <button onClick={handleLogIn}
-                        className={`${!inputValid ? 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red': 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green'}`}
+                        className={`${!inputValid ? 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red rounded-xl': 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl'}`}
                         //className="transform rounded-sm py-2 font-bold duration-300 {{inputValid ? 'bg-maptile-red-unselected hover:bg-maptile-red' : 'bg-maptile-green-highlight hover:bg-maptile-green'}}"
                     >
                         Register
