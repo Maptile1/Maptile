@@ -1,14 +1,14 @@
 import { BsMapFill, BsFillPuzzleFill } from "react-icons/bs";
 import { BiLike } from "react-icons/bi";
-import TilesetCard from "../card/TilesetCard";
+import TilesetDisplay from "../display/TilesetDisplay";
 import Sidebar from "../sidebar/Sidebar";
 
 const ProfileScreen = (props) => {
   return (
     <div class="grid grid-cols-10 grid-rows-10 gap-4">
-      <Sidebar />
+      <Sidebar/>
       <div class="col-start-2 col-span-2 row-start-3 text-white text-center">
-
+        
         <div class="text-6xl mb-8">  @Joe Schmo</div>
 
         <img
@@ -28,13 +28,13 @@ const ProfileScreen = (props) => {
         <BiLike />8 Likes
       </div>
       <div class="mt-20 grid grid-cols-4 col-span-10 col-start-2 row-start-4 gap-5">
-        <TilesetCard
+        <TilesetDisplay
           tilename="nice tileset"
           description="awesome tiles for your games"
         />
-        <TilesetCard tilename="Ice Tiles" description="perfect tiles for 2D winter theme" />
-        <TilesetCard tilename="Fire Tiles" description="perfect tiles for 2D fire theme" />
-        <TilesetCard tilename="Space Tiles" description="perfect tiles for 2D space theme" />
+        <TilesetDisplay tilename="Ice Tiles" description="perfect tiles for 2D winter theme" />
+        <TilesetDisplay tilename="Fire Tiles" description="perfect tiles for 2D fire theme" />
+        <TilesetDisplay tilename="Space Tiles" description="perfect tiles for 2D space theme" />
       </div>
 
     </div>

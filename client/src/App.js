@@ -1,13 +1,12 @@
 import './App.css';
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React 			from 'react';
+import { BrowserRouter, Routes, Route} from 'react-router-dom';
 import Homescreen from './components/homescreen/Homescreen';
 import Home from './components/home/Home';
 import TilesetScreen from './components/tileset/TilesetScreen';
 import MapScreen from './components/map/MapScreen';
 import SearchScreen from './components/search/SearchScreen';
 import ProfileScreen from './components/profile/ProfileScreen';
-import TilesetDisplay from './components/display/TilesetDisplay';
 
 function App() {
 
@@ -25,7 +24,7 @@ function App() {
           <Route path ="/user_profile" element={<ProfileScreen user={user}/>}/>
         </Routes>
       </div>
-    </BrowserRouter>
+		</BrowserRouter>
   );
 }
 export default App;
