@@ -41,8 +41,8 @@ const Sidebar = (props) => {
     <aside class="w-40" aria-label="Sidebar">
       <div class="py-5 px-3 bg-maptile-green rounded dark:bg-maptile-green top-0 fixed bottom-0">
         <ul class="space-y-10">
-          <li class="pb-5 p-2 w-20 h-20">
-            <img src="maptile-logo.png" class="object-scale-down " alt="logo" />
+          <li class="w-12 h-12">
+            <img src="maptile-logo.png" class="object-fit " alt="logo" />
           </li>
           <li>
             <div name="Home"class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white ">
