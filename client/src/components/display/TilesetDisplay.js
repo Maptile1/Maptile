@@ -23,7 +23,7 @@ const TilesetDisplay = (props) => {
                         </div>
                     </div>
                     <div class="mt-10 row-start-2 col-span-3">Tags: Destiny, Space, Adventure, Gray</div>
-                    <div class="row-start-3 row-end-4 col-start-1 col-end-4 bg-white">
+                    <div class="row-start-3 row-end-4 col-start-1 col-end-4 bg-white mb-10">
                         <img class="object-cover w-full h-full mx-auto rounded-md lg:max-w-2xl" src="https://pbs.twimg.com/media/EWTELxfXYAMD66j.jpg:large" alt="" />
                     </div>
                     <div class="flex flex-row gap-20 row-start-3 col-start-5">
