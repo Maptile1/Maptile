@@ -30,8 +30,17 @@ const TilesetScreen = (props) => {
     setModal(false)
   }
 
-  const tilesets = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  const tilesets = []
+  let tileset1 = { name: "Great Tileset" };
+  let tileset2 = { name: "Best Tileset" };
+  let tileset3 = { name: "Nice Tileset" }
+  let tileset4 = { name: "Water Tileset" }
+  let tileset5 = { name: "Grass Tileset" }
+  let tileset6 = { name: "Lava Tileset" }
+  let tileset7 = { name: "Small Tileset" }
+  let tileset8 = { name: "Large Tileset" }
 
+  tilesets.push(tileset1, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8)
   return (
     <div>
       <Sidebar />
@@ -47,7 +56,7 @@ const TilesetScreen = (props) => {
           <div className="bg-maptile-background-mid w-full h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
             <div className="flex flex-row flex-wrap px-5 py-5 pl-10  ">
               {tilesets.map((obj, index) =>
-                <TSSCard />
+                <TSSCard name={obj.name} />
               )}
             </div>
             <CreateTilesetModal modalOpen={modalOpen} inputValid={inputValid} updateInput={updateInput} handleCreate={handleCreate} handleClose={handleClose} />

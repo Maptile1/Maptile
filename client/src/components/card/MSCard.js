@@ -5,12 +5,12 @@ import { BiEdit } from "react-icons/bi"
 import { MdOutlineContentCopy } from "react-icons/md"
 import { Fragment } from 'react'
 
-const TSSCard = (props) => {
+const MSCard = (props) => {
     return (
         <div class="max-w-sm rounded overflow-hidden mt-5 mx-14">
             <img class="w-full border border-white" src="https://images.gnwcdn.com/2020/usgamer/A-Link-to-the-Past-Map-Header1-05292020.jpg/EG11/thumbnail/1920x1080/format/jpg/quality/65/the-20-best-in-game-maps.jpg" alt="" />
             <div class="grid grid-cols-4">
-                <div class='col-start-1 col-span-3 text-center text-white text-xl underline mt-5'>{props.name}</div>
+                <div class='col-start-1 col-span-3 text-center text-white text-xl underline mt-5'> {props.name}</div>
                 <div>
                     <Menu as="div" className="col-start-3 relative inline-block text-right">
                         <div>
@@ -105,4 +105,4 @@ const TSSCard = (props) => {
     );
 };
 
-export default TSSCard;
+export default MSCard;
