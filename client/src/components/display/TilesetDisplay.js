@@ -40,7 +40,25 @@ const TilesetDisplay = (props) => {
 
                     </div>
 
+                    <div class=" row-start-5 col-start-1 col-span-5 shadow-lg mt-2 w-full">
+                        <form class="w-full max-w-xl  bg-gray-600 border rounded-lg px-4 pt-2 flex text-white">
+                            <div class="flex flex-wrap -mx-3 mb-6">
+                                <h2 class="px-4 pt-3 pb-2  text-lg">Add A Comment</h2>
+                                <div class="w-full  px-3 mb-2 mt-2">
+                                    <textarea class="bg-gray-700 rounded border border-white leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-white focus:outline-none focus:bg-gray-600" name="body" placeholder='Type Your Comment' required></textarea>
+                                </div>
+                                <div class="w-full flex items-start  px-3">
+                                    <div class="flex items-start w-1/2 text-gray-700 px-2 mr-auto">
+                                    </div>
+                                    <div class="-mr-1">
+                                        <input type='submit' class="bg-grayfont-medium py-1 px-4 border border-white bg-gray-700 rounded-lg tracking-wide mr-1 hover:bg-gray-600" value='Post Comment' />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
+
 
             </div>
         </div >
