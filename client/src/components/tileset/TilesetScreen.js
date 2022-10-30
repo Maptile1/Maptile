@@ -48,7 +48,7 @@ const TilesetScreen = (props) => {
           </div>
         </div>
         <Modal isOpen={modalOpen} onRequestClose={handleClose} contentLabel="Create Tileset"
-            className="createModal bg-maptile-background-mid w-1/3 h-2/3"
+            className="createModal bg-maptile-background-mid w-1/3 h-2/3 rounded-xl"
             overlayClassName="modalOverlay">
           <div className="flex flex-col items-center justify-center">
             <button className="text-white w-full text-right text-lg font-bold opacity-50" onClick={handleClose}>X</button>
