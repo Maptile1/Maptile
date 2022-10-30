@@ -5,7 +5,6 @@ const TilesetScreen = (props) => {
   let [userSelected, updateUserSelected] = useState(true)
   let tab_selected = 'bg-maptile-background-mid text-center rounded-t-xl cursor-pointer'
   let tab_unselected = 'bg-maptile-tab-unselected text-center rounded-t-xl cursor-pointer'
-  //bg-maptile-background-mid text-center rounded-t-xl
 
   return (
     <div>
