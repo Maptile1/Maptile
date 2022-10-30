@@ -1,5 +1,6 @@
 import Sidebar from "../sidebar/Sidebar";
-import { BsFillHandThumbsUpFill, BsFillHandThumbsDownFill } from "react-icons/bs"
+import { FaThumbsDown, FaThumbsUp } from "react-icons/fa"
+import Comment from "../comment/Comment";
 const TilesetDisplay = (props) => {
     return (
         <div>
@@ -25,13 +26,17 @@ const TilesetDisplay = (props) => {
                     <div class="row-start-3 row-end-4 col-start-1 col-end-4 bg-white">
                         <img class="object-cover w-full h-full mx-auto rounded-md lg:max-w-2xl" src="https://pbs.twimg.com/media/EWTELxfXYAMD66j.jpg:large" alt="" />
                     </div>
-                    <div class="flex flex-row gap-10 row-start-3 col-start-5">
-                        <BsFillHandThumbsUpFill color={"green"} size={100} /> <div>5</div>
-                        < BsFillHandThumbsDownFill color={"red"} size={100} /> <div>5</div>
+                    <div class="flex flex-row gap-20 row-start-3 col-start-5">
+                        <div class="flex flex-col text-6xl font-bold"> <FaThumbsUp color={"green"} size={100} stroke={1} /><div class="mt-10">5 Likes</div></div>
+
+                        <div class="flex flex-col text-6xl font-bold">< FaThumbsDown color={"red"} size={100} /><div class="mt-10 ">5 Dislikes</div></div>
                     </div>
 
-                    <div class="row-start-4 mt-5">
-                        <div>Comments</div>
+
+                    <div class="row-start-4 mt-5 col-span-5 ">
+                        Comments
+                        <Comment owner={"Joe Schmo"} date={"October 30 2021 at 8:00pm"} comment_text={"This tileset is great for my new game!"} />
+                        <Comment owner={"Joe Schmo"} date={"October 30 2021 at 8:00pm"} comment_text={"This tileset is great for my new game!"} />
 
                     </div>
 
