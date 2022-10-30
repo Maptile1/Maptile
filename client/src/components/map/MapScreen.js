@@ -36,7 +36,7 @@ const MapScreen = (props) => {
       <Sidebar/>
       
       <main className="mx-auto flex flex-col min-h-screen w-full items-center justify-top bg-maptile-background-dark text-white">
-        <div className="pt-5 text-center text-4xl font-bold text-white">map</div>
+        <div className="pt-5 text-center text-4xl font-bold text-white underline">Maps</div>
         <div className="flex flex-col h-[53rem] w-5/6 items-left justify-top ml-20 mt-10">
           <div className="grid grid-cols-8 grid-rows-1 place-items-left w-full">
             <div className={`${userSelected ? tab_selected : tab_unselected}`} onClick={() => updateUserSelected(true)}>User Maps</div>
