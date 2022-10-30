@@ -6,12 +6,12 @@ import { BiEdit } from "react-icons/bi"
 import { MdOutlineContentCopy } from "react-icons/md"
 import { Fragment } from 'react'
 import Comment from "../comment/Comment";
-const TilesetDisplay = (props) => {
+const MapDisplay = (props) => {
     return (
         <div>
             <Sidebar />
             <div class="container px-6 text-xl py-10 mx-auto text-white">
-                <div class="text-center text-4xl font-bold">Epic Lava Tileset</div>
+                <div class="text-center text-4xl font-bold">THE GREATEST MAP</div>
                 <div class="grid grid-cols-5 grid-rows-2">
                     <div class="row-start-1 col-start-1 col-span-3 mt-10">
                         <div class="flex">
@@ -22,7 +22,7 @@ const TilesetDisplay = (props) => {
 
                             <div class="flex flex-col justify-between ml-5">
                                 <div>@Joe Schmo</div>
-                                <div>Destiny Inspired Map</div>
+                                <div>This map is perfect for large and pocket games</div>
                             </div>
 
                         </div>
@@ -116,12 +116,12 @@ const TilesetDisplay = (props) => {
                             </Transition>
                         </Menu>
                     </div>
-                    <div class="mt-10 row-start-2 col-span-3">Tags: Lava, Fire, Volcano, Red</div>
+                    <div class="mt-10 row-start-2 col-span-3">Tags: Pocket, Green, Grass, Town</div>
                     <div class="row-start-3 row-end-4 col-start-1 col-end-4 bg-white mb-10">
-                        <img class="object-cover w-full h-full mx-auto rounded-md lg:max-w-2xl" src="https://dicegrimorium.com/wp-content/uploads/2019/09/LavaPoolsPublic1JPG-1024x683.jpg" alt="" />
+                        <img class="object-cover w-full h-full mx-auto rounded-md lg:max-w-2xl" src="https://images.gnwcdn.com/2020/usgamer/A-Link-to-the-Past-Map-Header1-05292020.jpg/EG11/thumbnail/1920x1080/format/jpg/quality/65/the-20-best-in-game-maps.jpg" alt="" />
                     </div>
                     <div class="flex flex-row gap-20 row-start-3 col-start-5">
-                        <div class="flex flex-col text-6xl font-bold"> <FaThumbsUp color={"green"} size={100} stroke={1} /><div class="mt-10">5 Likes</div></div>
+                        <div class="flex flex-col text-6xl font-bold"> <FaThumbsUp color={"green"} size={100} stroke={1} /><div class="mt-10">50 Likes</div></div>
 
                         <div class="flex flex-col text-6xl font-bold">< FaThumbsDown color={"red"} size={100} /><div class="mt-10 ">5 Dislikes</div></div>
                     </div>
@@ -129,8 +129,8 @@ const TilesetDisplay = (props) => {
 
                     <div class="row-start-4 mt-5 col-span-5 ">
                         Comments
-                        <Comment owner={"Joe Schmo"} date={"October 30 2021 at 8:00pm"} comment_text={"I love the red volcanos"} />
-                        <Comment owner={"Joe Schmo"} date={"October 30 2021 at 8:00pm"} comment_text={"This tileset is great for my map"} />
+                        <Comment owner={"Joe Schmo"} date={"October 30 2021 at 8:00pm"} comment_text={"This map is great for new pokemon game"} />
+                        <Comment owner={"Joe Schmo"} date={"October 30 2021 at 8:00pm"} comment_text={"This map is great for my new game!"} />
 
                     </div>
 
@@ -160,4 +160,4 @@ const TilesetDisplay = (props) => {
     );
 };
 
-export default TilesetDisplay;
+export default MapDisplay;

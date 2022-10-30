@@ -2,6 +2,7 @@ import { BsMapFill, BsFillPuzzleFill } from "react-icons/bs";
 import { BiLike } from "react-icons/bi";
 import TilesetCard from "../card/TilesetCard";
 import Sidebar from "../sidebar/Sidebar";
+import MapCard from "../card/MapCard"
 
 const ProfileScreen = (props) => {
   return (
@@ -33,7 +34,7 @@ const ProfileScreen = (props) => {
           description="awesome tiles for your games"
         />
         <TilesetCard tilename="Ice Tiles" description="perfect tiles for 2D winter theme" />
-        <TilesetCard tilename="Fire Tiles" description="perfect tiles for 2D fire theme" />
+        <MapCard mapname="Fire Map" description="perfect map for your 2D fire map" />
         <TilesetCard tilename="Space Tiles" description="perfect tiles for 2D space theme" />
       </div>
 
