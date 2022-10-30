@@ -1,8 +1,8 @@
 
 import { Menu, Transition } from '@headlessui/react'
-import { BsSave } from "react-icons/bs"
-import { BiEdit } from "react-icons/bi"
-import { MdOutlineContentCopy } from "react-icons/md"
+import { BiShareAlt } from "react-icons/bi"
+import { FiEdit } from "react-icons/fi"
+import { MdDriveFileRenameOutline, MdDelete } from "react-icons/md"
 import { Fragment } from 'react'
 
 const TSSCard = (props) => {
@@ -37,12 +37,54 @@ const TSSCard = (props) => {
                                                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                             >
                                                 {active ? (
-                                                    <BiEdit
+                                                    <MdDriveFileRenameOutline
                                                         className="mr-2 h-5 w-5"
                                                         aria-hidden="true"
                                                     />
                                                 ) : (
-                                                    <BiEdit
+                                                    <MdDriveFileRenameOutline
+                                                        className="mr-2 h-5 w-5"
+                                                        aria-hidden="true"
+                                                    />
+                                                )}
+                                                Rename
+                                            </button>
+                                        )}
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        {({ active }) => (
+                                            <button
+                                                className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
+                                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                            >
+                                                {active ? (
+                                                    <MdDelete
+                                                        className="mr-2 h-5 w-5"
+                                                        aria-hidden="true"
+                                                    />
+                                                ) : (
+                                                    <MdDelete
+                                                        className="mr-2 h-5 w-5"
+                                                        aria-hidden="true"
+                                                    />
+                                                )}
+                                                Delete
+                                            </button>
+                                        )}
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        {({ active }) => (
+                                            <button
+                                                className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
+                                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                            >
+                                                {active ? (
+                                                    <FiEdit
+                                                        className="mr-2 h-5 w-5"
+                                                        aria-hidden="true"
+                                                    />
+                                                ) : (
+                                                    <FiEdit
                                                         className="mr-2 h-5 w-5"
                                                         aria-hidden="true"
                                                     />
@@ -58,39 +100,17 @@ const TSSCard = (props) => {
                                                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                             >
                                                 {active ? (
-                                                    <MdOutlineContentCopy
+                                                    <BiShareAlt
                                                         className="mr-2 h-5 w-5"
                                                         aria-hidden="true"
                                                     />
                                                 ) : (
-                                                    <MdOutlineContentCopy
+                                                    <BiShareAlt
                                                         className="mr-2 h-5 w-5"
                                                         aria-hidden="true"
                                                     />
                                                 )}
-                                                Save to Shared
-                                            </button>
-                                        )}
-                                    </Menu.Item>
-
-                                    <Menu.Item>
-                                        {({ active }) => (
-                                            <button
-                                                className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                            >
-                                                {active ? (
-                                                    <BsSave
-                                                        className="mr-2 h-5 w-5"
-                                                        aria-hidden="true"
-                                                    />
-                                                ) : (
-                                                    <BsSave
-                                                        className="mr-2 h-5 w-5"
-                                                        aria-hidden="true"
-                                                    />
-                                                )}
-                                                Download
+                                                Share
                                             </button>
                                         )}
                                     </Menu.Item>
