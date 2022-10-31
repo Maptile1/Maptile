@@ -1,25 +1,22 @@
-
-import { Menu, Transition } from '@headlessui/react'
-import { BiShareAlt } from "react-icons/bi"
+import Sidebar from "../sidebar/Sidebar"
+import { BiShareAlt ,BiCog, BiDownload} from "react-icons/bi"
 import { FiEdit } from "react-icons/fi"
-import { MdDriveFileRenameOutline, MdDelete } from "react-icons/md"
+import { MdDriveFileRenameOutline} from "react-icons/md"
 import { Fragment } from 'react'
-import { useNavigate } from 'react-router-dom'
-const TSSCard = (props) => {
-    const nav = useNavigate()
-    const handleTilesetView = () => {
-        nav("/tileset_edit")
-    }
-    return (
-        <div class="max-w-sm rounded overflow-hidden mt-5 mx-14">
-            <img onClick={handleTilesetView} class="w-full border border-white cursor-pointer" src="https://images.gnwcdn.com/2020/usgamer/A-Link-to-the-Past-Map-Header1-05292020.jpg/EG11/thumbnail/1920x1080/format/jpg/quality/65/the-20-best-in-game-maps.jpg" alt="" />
-            <div class="grid grid-cols-4">
-                <div onClick={handleTilesetView} class='col-start-1 col-span-3 text-center text-white text-xl underline mt-5 cursor-pointer'> {props.name}</div>
-                <div>
-                    <Menu as="div" className="col-start-3 relative inline-block text-right">
-                        <div>
-                            <Menu.Button className=" inline-flex w-full justify-center rounded-md bg-opacity-20 px-4 py-2 text-5xl font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                                ...
+import { Menu, Transition } from '@headlessui/react'
+
+const EditTileset = (props) => {
+    return(
+        <div>
+            <Sidebar />
+            <main className="mx-auto flex flex-col min-h-screen w-full items-center justify-top bg-maptile-background-dark text-white">
+                <div className="pt-5 text-center text-4xl font-bold text-white underline">Tileset Name</div>
+                <div className="flex flex-col h-[53rem] w-5/6 items-left justify-top ml-20 mt-10">
+                    
+                    <Menu as="div" className=" relative inline-block text-right">
+                    <div>
+                            <Menu.Button className=" inline-flex w-full items-center justify-top rounded-md bg-opacity-20 px-4 py-2 text-5xl font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                                <BiCog className="mr-2 h-5 w-5" aria-hidden="true"></BiCog>
 
                             </Menu.Button>
                         </div>
@@ -32,9 +29,8 @@ const TSSCard = (props) => {
                             leaveFrom="transform opacity-100 scale-100"
                             leaveTo="transform opacity-0 scale-95"
                         >
-                            <Menu.Items className=" absolute bottom-0 right-0 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                <div className="px-1 py-1 ">
-                                    <Menu.Item>
+                            <Menu.Items className=" absolute bottom-200 left-0 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <Menu.Item>
                                         {({ active }) => (
                                             <button
                                                 className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
@@ -54,55 +50,12 @@ const TSSCard = (props) => {
                                                 Rename
                                             </button>
                                         )}
-                                    </Menu.Item>
-                                    <Menu.Item>
+                                </Menu.Item>
+                                <Menu.Item>
                                         {({ active }) => (
-                                            <button
-                                                className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
+                                            <button className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
                                                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                            >
-                                                {active ? (
-                                                    <MdDelete
-                                                        className="mr-2 h-5 w-5"
-                                                        aria-hidden="true"
-                                                    />
-                                                ) : (
-                                                    <MdDelete
-                                                        className="mr-2 h-5 w-5"
-                                                        aria-hidden="true"
-                                                    />
-                                                )}
-                                                Delete
-                                            </button>
-                                        )}
-                                    </Menu.Item>
-                                    <Menu.Item>
-                                        {({ active }) => (
-                                            <button onClick={handleTilesetView}
-                                                className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                            >
-                                                {active ? (
-                                                    <FiEdit
-                                                        className="mr-2 h-5 w-5"
-                                                        aria-hidden="true"
-                                                    />
-                                                ) : (
-                                                    <FiEdit
-                                                        className="mr-2 h-5 w-5"
-                                                        aria-hidden="true"
-                                                    />
-                                                )}
-                                                Edit
-                                            </button>
-                                        )}
-                                    </Menu.Item>
-                                    <Menu.Item>
-                                        {({ active }) => (
-                                            <button onClick={() => props.setShareModal(true)}
-                                                className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                            >
+                                                >
                                                 {active ? (
                                                     <BiShareAlt
                                                         className="mr-2 h-5 w-5"
@@ -118,15 +71,38 @@ const TSSCard = (props) => {
                                             </button>
                                         )}
                                     </Menu.Item>
-                                </div>
-
+                                    <Menu.Item>
+                                        {({ active }) => (
+                                            <button className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
+                                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                                >
+                                                {active ? (
+                                                    <BiDownload
+                                                        className="mr-2 h-5 w-5"
+                                                        aria-hidden="true"
+                                                    />
+                                                ) : (
+                                                    <BiDownload
+                                                        className="mr-2 h-5 w-5"
+                                                        aria-hidden="true"
+                                                    />
+                                                )}
+                                                Share
+                                            </button>
+                                        )}
+                                    </Menu.Item>
                             </Menu.Items>
+                            
                         </Transition>
                     </Menu>
-                </div>
-            </div>
-        </div >
-    );
-};
+                    <div className="bg-maptile-background-mid w-full h-[53rem] rounded-xl overflow-auto">
 
-export default TSSCard;
+                    </div>
+                    
+                </div>
+            </main>
+        </div>
+    )
+}
+
+export default EditTileset

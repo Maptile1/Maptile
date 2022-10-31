@@ -4,13 +4,18 @@ import { BiShareAlt } from "react-icons/bi"
 import { FiEdit } from "react-icons/fi"
 import { MdDriveFileRenameOutline, MdDelete } from "react-icons/md"
 import { Fragment } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const MSCard = (props) => {
+    const nav = useNavigate()
+    const handleMapView = () => {
+        nav("/mapdisplay")
+    }
     return (
         <div class="max-w-sm rounded overflow-hidden mt-5 mx-14">
-            <img class="w-full border border-white" src="https://images.gnwcdn.com/2020/usgamer/A-Link-to-the-Past-Map-Header1-05292020.jpg/EG11/thumbnail/1920x1080/format/jpg/quality/65/the-20-best-in-game-maps.jpg" alt="" />
+            <img onClick={handleMapView} class="w-full border border-white cursor-pointer" src="https://images.gnwcdn.com/2020/usgamer/A-Link-to-the-Past-Map-Header1-05292020.jpg/EG11/thumbnail/1920x1080/format/jpg/quality/65/the-20-best-in-game-maps.jpg" alt="" />
             <div class="grid grid-cols-4">
-                <div class='col-start-1 col-span-3 text-center text-white text-xl underline mt-5'> {props.name}</div>
+                <div onClick={handleMapView} class='col-start-1 col-span-3 text-center text-white text-xl underline mt-5 cursor-pointer'> {props.name}</div>
                 <div>
                     <Menu as="div" className="col-start-3 relative inline-block text-right">
                         <div>
@@ -74,7 +79,7 @@ const MSCard = (props) => {
                                     </Menu.Item>
                                     <Menu.Item>
                                         {({ active }) => (
-                                            <button
+                                            <button onClick={handleMapView}
                                                 className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
                                                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                             >
