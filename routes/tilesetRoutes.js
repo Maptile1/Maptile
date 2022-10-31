@@ -19,7 +19,7 @@ router.post('/tileset/create', async (req, res) => {
         comments: [],
         public: false,
         tilesetCreated: Date.now(),
-        owner: new ObjectId(req.session._id)
+        owner: req.session._id
     })
     await tileset.save()
     res.json({payload: {tileset: tileset}})
@@ -42,6 +42,18 @@ router.post('/tileset/delete/:id', async (req, res) => {
 
 // Update tileset
 router.post('/tileset/update/:id', async (req, res) => {
+    if (req.session._id == undefined){
+        res.status(400).json({errorMessage: 'Not logged in'})
+        return;
+    }
+    var updates = {};
+    if (req.body.tileset_data){
+        updates.tileset_data = req.body.tileset_data
+    }
+    if (req.body.name){
+        updates.name = req.body.name
+    }
+    Tileset.findOneAndUpdate({_id: req.params.id, owner: req.session._id})
     Tileset.findById(req.params.id)
         .then(tileset => {
             tileset.tileset_data = req.body.tileset_data || tileset.tileset_data;
