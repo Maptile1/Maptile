@@ -52,9 +52,17 @@ router.get('/map/getall', async (req, res) => {
 
 //Delete Map
 router.post('/map/delete/:id', async (req, res) => {
-    Map.findByIdAndDelete(req.params.id)
-        .then(() => res.json('Map deleted.'))
-        .catch(err => res.status(400).json('Error: ' + err));
+    if (req.session._id == undefined){
+        res.status(400).json({errorMessage: 'Not logged in'})
+        return;
+    }
+    Map.findOneAndRemove({_id: req.params.id, owner: req.session._id})
+        .then(() => res.json({message: 'Map deleted'}))
+        .catch(err => {
+            Map.findOne({_id: req.params.id})
+                .then(() => res.status(400).json({errorMessage: 'Not owner of map'}))
+                .catch(err => res.status(400).json({errorMessage: 'Map does not exist'}))
+        })
 });
 
 // Update Map
