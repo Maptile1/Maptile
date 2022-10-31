@@ -4,11 +4,15 @@ import { BiShareAlt } from "react-icons/bi"
 import { FiEdit } from "react-icons/fi"
 import { MdDriveFileRenameOutline, MdDelete } from "react-icons/md"
 import { Fragment } from 'react'
-
+import { useNavigate } from 'react-router-dom'
 const TSSCard = (props) => {
+    const nav = useNavigate()
+    const handleTilesetView = () => {
+        nav("/tilesetdisplay")
+    }
     return (
         <div class="max-w-sm rounded overflow-hidden mt-5 mx-14">
-            <img class="w-full border border-white" src="https://images.gnwcdn.com/2020/usgamer/A-Link-to-the-Past-Map-Header1-05292020.jpg/EG11/thumbnail/1920x1080/format/jpg/quality/65/the-20-best-in-game-maps.jpg" alt="" />
+            <img class="w-full border border-white" onClick={() => handleTilesetView()} src="https://images.gnwcdn.com/2020/usgamer/A-Link-to-the-Past-Map-Header1-05292020.jpg/EG11/thumbnail/1920x1080/format/jpg/quality/65/the-20-best-in-game-maps.jpg" alt="" />
             <div class="grid grid-cols-4">
                 {props.search ? <div class='col-start-1 col-span-3 text-center text-white text-xl ml-20 underline mt-5'>{props.name}</div> : <div class='col-start-1 col-span-3 text-center text-white text-xl underline mt-5'>{props.name}</div>}
                 <div>

@@ -2,10 +2,11 @@ import Sidebar from "../sidebar/Sidebar";
 import React, { useState } from "react";
 import CreateMapModal from "./CreateMapModal";
 import MSCard from "../card/MSCard"
-
+import ShareModal from "./ShareModal";
 const MapScreen = (props) => {
   const [userSelected, updateUserSelected] = useState(true)
   const [modalOpen, setModal] = useState(false)
+  const [shareModalOpen, setShareModal] = useState(false)
   const [input, setInput] = useState({ name: '', tilewidth: '', tileheight: '', mapwidth: '', mapheight: '', tileset: '' });
   const [inputValid, setInputValid] = useState(false)
   let tab_selected = 'bg-maptile-background-mid text-center rounded-t-xl cursor-pointer  mt-[10px] duration-300'
@@ -25,11 +26,19 @@ const MapScreen = (props) => {
     }
   }
 
+  const handleShare = (e) => {
+    setShareModal(false);
+  }
+
+  const handleShareClose = () => {
+    setShareModal(false);
+  }
   const handleClose = (e) => {
     setInput({ name: '', tilewidth: '', tileheight: '', mapwidth: '', mapheight: '', tileset: '' })
     setInputValid(false)
     setModal(false)
   }
+
   const maps = []
   let map1 = { name: "Great Map" };
   let map2 = { name: "Best Map" };
@@ -56,10 +65,11 @@ const MapScreen = (props) => {
           <div className="bg-maptile-background-mid w-full h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
             <div className="flex flex-row flex-wrap px-5 py-5 pl-10  ">
               {maps.map((obj, index) =>
-                <MSCard name={obj.name} />
+                <MSCard name={obj.name} setShareModal={setShareModal} />
               )}
             </div>
             <CreateMapModal modalOpen={modalOpen} inputValid={inputValid} updateInput={updateInput} handleCreate={handleCreate} handleClose={handleClose} />
+            <ShareModal modalOpen={shareModalOpen} handleShare={handleShare} handleShareClose={handleShareClose} setShareModal={setShareModal} />
           </div>
         </div>
 
