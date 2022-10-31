@@ -1,11 +1,13 @@
 import Sidebar from "../sidebar/Sidebar"
 import { BiShareAlt ,BiCog, BiDownload} from "react-icons/bi"
-import { FiEdit } from "react-icons/fi"
 import { MdDriveFileRenameOutline} from "react-icons/md"
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
+import ShareModal from "../map/ShareModal";
+import {React, useState} from "react"
 
 const EditTileset = (props) => {
+    const [shareModalOpen, setShareModal] = useState(false)
     return(
         <div>
             <Sidebar />
@@ -53,7 +55,8 @@ const EditTileset = (props) => {
                                 </Menu.Item>
                                 <Menu.Item>
                                         {({ active }) => (
-                                            <button className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
+                                            <button onClick={()=>setShareModal(true)}
+                                                    className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
                                                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                                 >
                                                 {active ? (
@@ -100,6 +103,7 @@ const EditTileset = (props) => {
                     </div>
                     
                 </div>
+                <ShareModal modalOpen={shareModalOpen} setShareModal={setShareModal} />
             </main>
         </div>
     )
