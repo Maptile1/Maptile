@@ -87,7 +87,7 @@ router.get('/tileset/get/:id', async (req, res) => {
 
 
 // Get all tilesets
-router.get('/tileset', async (req, res) => {
+router.get('/tileset/getall', async (req, res) => {
     Tileset.find()
         .then(tilesets => res.json(tilesets))
         .catch(err => res.status(400).json('Error: ' + err));
