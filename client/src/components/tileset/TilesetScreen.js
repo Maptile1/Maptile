@@ -2,11 +2,13 @@ import Sidebar from "../sidebar/Sidebar";
 import React, { useState } from "react";
 import CreateTilesetModal from "./CreateTilesetModal";
 import TSSCard from "../card/TSSCard";
+import ShareModal from "../map/ShareModal";
 const TilesetScreen = (props) => {
   const [userSelected, updateUserSelected] = useState(true)
   const [modalOpen, setModal] = useState(false)
   const [input, setInput] = useState({ name: '', tilewidth: '', tileheight: '', tilesetwidth: '', tilesetheight: '' });
   const [inputValid, setInputValid] = useState(false)
+  const [shareModalOpen, setShareModal] = useState(false)
   let tab_selected = 'bg-maptile-background-mid text-center rounded-t-xl cursor-pointer  mt-[10px] duration-300'
   let tab_unselected = 'bg-maptile-tab-unselected text-center rounded-t-xl cursor-pointer duration-300'
 
@@ -60,6 +62,7 @@ const TilesetScreen = (props) => {
               )}
             </div>
             <CreateTilesetModal modalOpen={modalOpen} inputValid={inputValid} updateInput={updateInput} handleCreate={handleCreate} handleClose={handleClose} />
+            <ShareModal modalOpen={shareModalOpen} setShareModal={setShareModal} />
           </div>
         </div>
 
