@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const Sidebar = (props) => {
   const iconsize = 30;
-  let iconStyles = { color: "white", stroke: "black", strokeWidth: "0.50" };
+  let iconStyles = { color: "white", stroke: "white", strokeWidth: "0.50" };
   const nav = useNavigate()
 
   const handleClick = (e) => {
