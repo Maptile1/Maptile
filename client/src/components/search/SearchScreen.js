@@ -5,9 +5,7 @@ const SearchScreen = (props) => {
   const [userSelected, updateUserSelected] = useState(true)
   let tab_selected = 'bg-maptile-background-mid text-center rounded-t-xl cursor-pointer  mt-[10px] duration-300'
   let tab_unselected = 'bg-maptile-tab-unselected text-center rounded-t-xl cursor-pointer duration-300'
-  const handleAddTag = (e) => {
-    console.log(e.target.value)
-  }
+
   const tilesets = []
   let tileset1 = { name: "Great Tileset" };
   let tileset2 = { name: "Best Tileset" };
@@ -46,13 +44,13 @@ const SearchScreen = (props) => {
           <div className="bg-maptile-background-mid w-10/12 h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
             <div className="flex flex-row flex-wrap justify-center mr-8 py-10 pl-10 ">
               {tilesets.map((obj, index) =>
-                <TSSCard name={obj.name} />
+                <TSSCard search={true} name={obj.name} />
               )}
             </div>
             <div class="absolute text-white top-10 mt-48 mr-10 right-4">
               <div class="text-3xl font-bold text-center"> Tags</div>
               <div class="bg-maptile-background-mid w-full mt-5 h-[30rem] overflow-auto ">
-                <input onEnter={() => handleAddTag()} class=" bg-maptile-background-light mt-5 w-3/4 flex ml-7"></input>
+                <input class=" bg-maptile-background-light mt-5 w-3/4 flex ml-7"></input>
                 <div class="flex flex-col ml-7 mt-5 space-y-4">
                   {tags.map((obj, index) =>
                     <div>
