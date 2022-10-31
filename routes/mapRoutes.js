@@ -4,6 +4,10 @@ const Map = require('../schema/map-schema.js')
 const ObjectId = require('mongodb').ObjectId;
 
 router.post('/map/create', async (req, res) => {
+    if (req.session._id == undefined){
+        res.status(400).json({errorMessage: 'Not logged in'})
+        return;
+    }
     var map = new Map({
         _id: new ObjectId(),
         name: req.body.name,
@@ -21,10 +25,10 @@ router.post('/map/create', async (req, res) => {
         public: false,
         mapCreated: Date.now(),
         layers: [],
-        owner: new ObjectId() //placeholder for when authentication is done
+        owner: req.session._id
     })
     await map.save()
-    res.json({payload: {map: map}})
+    res.json({map: map})
 });
 
 // Get map

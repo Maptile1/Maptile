@@ -68,7 +68,7 @@ const mapSchema = new Schema(
            default: []
         },
         owner: {
-            type: ObjectId,
+            type: String,
             required: true
         }
     }
