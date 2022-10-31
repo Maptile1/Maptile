@@ -4,6 +4,7 @@ import ShareModal from "./ShareModal"
 import {React, useState, useEffect} from "react"
 import EditMapTileDisplay from "./EditMapTileDisplay"
 import EditMapGridCell from "./EditMapGridCell"
+import LayerCard from "../card/LayerCard"
 
 const EditMap = (props) => {
     const [shareModalOpen, setShareModal] = useState(false)
@@ -11,6 +12,7 @@ const EditMap = (props) => {
     const [gridCol, setGridCol] = useState(64)
     const [gridSize, setGridSize] = useState({x:20, y:20})
     const tempTiles = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
+    const tempLayers = ["Layer1", "Layer2","Layer3", "Layer4","Layer5", "Layer6"]
     const [grid, setGrid] = useState([])
 
     
@@ -68,7 +70,10 @@ const EditMap = (props) => {
                         <div className="flex flex-col w-1/6 ml-2 h-[50rem]">
                             <div className="bg-maptile-background-mid w-full h-1/2 rounded-xl overflow-auto">
                                 <div className="text-white text-2xl text-center w-full underline">Layers</div>
-                                <div className="bg-maptile-background-bright w-5/6 h-5/6 ml-5 mt-5 rounded-xl ">
+                                <div className="bg-maptile-background-bright w-5/6 h-5/6 ml-5 mt-5 rounded-xl overflow-auto">
+                                    {tempLayers.map((layer)=>{
+                                        return(<LayerCard name={layer}/>)
+                                    })}
                                 </div>
                             </div>
                             <div className="bg-maptile-background-mid w-full h-1/2 rounded-xl overflow-auto mt-2">
