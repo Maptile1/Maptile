@@ -12,8 +12,8 @@ router.post('/tileset/create', async (req, res) => {
     var tileset = new Tileset({
         _id: new ObjectId(),
         tileset_data: [],
-        name: req.body.name,
-        description: req.body.description,
+        name: 'New Tileset',
+        description: 'Description',
         likes: 0,
         dislikes: 0,
         comments: [],
@@ -22,7 +22,7 @@ router.post('/tileset/create', async (req, res) => {
         owner: req.session._id
     })
     await tileset.save()
-    res.json({payload: {tileset: tileset}})
+    res.json({tileset: tileset})
 })
 
 // Delete Tileset
@@ -53,21 +53,24 @@ router.post('/tileset/update/:id', async (req, res) => {
     if (req.body.name){
         updates.name = req.body.name
     }
-    Tileset.findOneAndUpdate({_id: req.params.id, owner: req.session._id})
-    Tileset.findById(req.params.id)
-        .then(tileset => {
-            tileset.tileset_data = req.body.tileset_data || tileset.tileset_data;
-            tileset.name = req.body.name || tileset.name;
-            tileset.description = req.body.description || tileset.description;
-            tileset.likes = req.body.likes || tileset.likes;
-            tileset.dislikes = req.body.dislikes || tileset.dislikes;
-            tileset.comments = req.body.comments || tileset.comments;
-            tileset.public = req.body.public || tileset.public;
-            tileset.save()
-                .then(() => res.json('Tileset updated!'))
-                .catch(err => res.status(400).json('Error: ' + err));
-        })
-        .catch(err => res.status(400).json('Error: ' + err));
+    if (req.body.description){
+        updates.description = req.body.description
+    }
+    if (req.body.public){
+        updates.public = req.body.public
+    }
+    var tileset = await Tileset.findOneAndUpdate({_id: req.params.id, owner: req.session._id}, {$set: updates}, {new: true})
+    if (tileset != null){
+        res.json({tileset: tileset})
+    }
+    else{
+        if (await Tileset.findById(req.params.id) != null){
+            res.status(400).json({errorMessage: 'Not permitted to editle'})
+        }
+        else{
+            res.status(400).json({errorMessage: 'Tileset does not exist'})
+        }
+    }
 });
 
 
