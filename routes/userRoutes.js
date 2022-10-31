@@ -48,16 +48,16 @@ userRouter.route('/user/logout').post(async (req, res) => {
 
 userRouter.route('/user/loggedin').get(async (req, res) => {
     if (req.session._id == undefined){
-        res.json({payload: {loggedIn: false}})
+        res.json({loggedIn: false})
     }
     else{
         var user = await User.findById(req.session._id)
         if (user != null){
-            res.json({payload: {userName: user.userName}})
+            res.json({user: user, loggedIn: true})
         }
         else{
             req.session.destroy()
-            res.status(400).json({payload: {errorMessage: "couldnt find user???"}})
+            res.status(400).json({errorMessage: 'Couldnt find user'})
         }
     }
 })
