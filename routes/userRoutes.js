@@ -28,7 +28,7 @@ userRouter.route('/user/login').post(async (req, res) => {
     //hash password later bcrypt...
     var user = await User.findOne({userName: req.body.userName, password: req.body.password})
     if (user == null){
-        res.statusCode(400).json({errorMessage: "Username password combination not found"})
+        res.status(400).json({errorMessage: "Username password combination not found"})
     }
     else{
         req.session._id = user._id.toString()
@@ -38,7 +38,7 @@ userRouter.route('/user/login').post(async (req, res) => {
 
 userRouter.route('/user/logout').post(async (req, res) => {
     if (req.session._id == undefined){
-        res.statusCode(400).json({errorMessage: 'Not logged in'})
+        res.status(400).json({errorMessage: 'Not logged in'})
     }
     else{
         req.session.destroy()
