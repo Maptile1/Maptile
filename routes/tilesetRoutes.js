@@ -12,8 +12,8 @@ router.post('/tileset/create', async (req, res) => {
     var tileset = new Tileset({
         _id: new ObjectId(),
         tileset_data: [],
-        name: 'New Tileset',
-        description: 'Description',
+        name: req.body.name,
+        description: req.body.description,
         likes: 0,
         dislikes: 0,
         comments: [],
