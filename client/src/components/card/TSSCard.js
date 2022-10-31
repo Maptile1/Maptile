@@ -1,6 +1,6 @@
 
 import { Menu, Transition } from '@headlessui/react'
-import { BiShareAlt } from "react-icons/bi"
+// import { BiShareAlt } from "react-icons/bi"
 import { FiEdit } from "react-icons/fi"
 import { MdDriveFileRenameOutline, MdDelete } from "react-icons/md"
 import { Fragment } from 'react'
