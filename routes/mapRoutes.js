@@ -60,8 +60,15 @@ router.post('/map/delete/:id', async (req, res) => {
         .then(() => res.json({message: 'Map deleted'}))
         .catch(err => {
             Map.findOne({_id: req.params.id})
-                .then(() => res.status(400).json({errorMessage: 'Not owner of map'}))
-                .catch(err => res.status(400).json({errorMessage: 'Map does not exist'}))
+                .then((map) => {
+                    if (map != null){
+                        res.status(400).json({errorMessage: 'Not owner of map'})
+                    }
+                    else{
+                        res.status(400).json({errorMessage: 'Map does not exist'})
+                    }
+                })
+                .catch(err => res.status(400).json({errorMessage :err}))
         })
 });
 

@@ -35,8 +35,15 @@ router.post('/tileset/delete/:id', async (req, res) => {
         .then(() => res.json({message: 'Tileset deleted'}))
         .catch(err => {
             Tileset.findOne({_id: req.params.id})
-                .then(() => res.status(400).json({errorMessage: 'Not owner of tileset'}))
-                .catch(err => res.status(400).json({errorMessage: 'Tileset does not exist'}))
+                .then((tileset) => {
+                    if (tileset != null){
+                        res.status(400).json({errorMessage: 'Not owner of tileset'})
+                    }
+                    else{
+                        res.status(400).json({errorMessage: 'Tileset does not exist'})
+                    }
+                })
+                .catch(err => res.status(400).json({errorMessage :err}))
         })
 })
 
