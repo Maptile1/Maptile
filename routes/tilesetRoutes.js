@@ -23,14 +23,22 @@ router.post('/tileset/create', async (req, res) => {
     })
     await tileset.save()
     res.json({payload: {tileset: tileset}})
-});
+})
 
 // Delete Tileset
 router.post('/tileset/delete/:id', async (req, res) => {
-    Tileset.findByIdAndDelete(req.params.id)
-        .then(() => res.json('Tileset deleted.'))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
+    if (req.session._id == undefined){
+        res.status(400).json({errorMessage: 'Not logged in'})
+        return;
+    }
+    Tileset.findOneAndRemove({_id: req.params.id, owner: req.session._id})
+        .then(() => res.json({message: 'Tileset deleted'}))
+        .catch(err => {
+            Tileset.findOne({_id: req.params.id})
+                .then(() => res.status(400).json({errorMessage: 'Not owner of tileset'}))
+                .catch(err => res.status(400).json({errorMessage: 'Tileset does not exist'}))
+        })
+})
 
 // Update tileset
 router.post('/tileset/update/:id', async (req, res) => {
