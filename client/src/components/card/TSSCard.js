@@ -103,7 +103,7 @@ const TSSCard = (props) => {
                                                 </button>
                                             )}
                                         </Menu.Item>
-                                        <Menu.Item>
+                                        {/* <Menu.Item>
                                             {({ active }) => (
                                                 <button onClick={() => props.setShareModal(true)}
                                                     className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
@@ -123,7 +123,7 @@ const TSSCard = (props) => {
                                                     Share
                                                 </button>
                                             )}
-                                        </Menu.Item>
+                                        </Menu.Item> */}
                                     </div>
 
                                 </Menu.Items>
