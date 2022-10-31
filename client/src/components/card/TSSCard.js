@@ -20,7 +20,6 @@ const TSSCard = (props) => {
             <div class="grid grid-cols-4">
                 {props.search ? <div onClick={handleTilesetDisplay} class='col-start-1 col-span-3 text-center ml-20 text-white text-xl underline mt-5 cursor-pointer'> {props.name}</div> :
                     <div onClick={handleTilesetView} class='col-start-1 col-span-3 text-center text-white text-xl underline mt-5 cursor-pointer'> {props.name}</div>}
-
                 <div>
                     {!props.search &&
                         <Menu as="div" className="col-start-3 relative inline-block text-right">
