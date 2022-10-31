@@ -5,6 +5,10 @@ const ObjectId = require('mongodb').ObjectId;
 
 // Create Tileset
 router.post('/tileset/create', async (req, res) => {
+    if (req.session._id == undefined){
+        res.status(400).json({errorMessage: 'Not logged in'})
+        return;
+    }
     var tileset = new Tileset({
         _id: new ObjectId(),
         tileset_data: [],
@@ -15,7 +19,7 @@ router.post('/tileset/create', async (req, res) => {
         comments: [],
         public: false,
         tilesetCreated: Date.now(),
-        owner: new ObjectId() //placeholder for when authentication is done
+        owner: new ObjectId(req.session._id)
     })
     await tileset.save()
     res.json({payload: {tileset: tileset}})
