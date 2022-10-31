@@ -32,10 +32,14 @@ router.post('/map/create', async (req, res) => {
 });
 
 // Get map
-router.get('/map/:id', async (req, res) => {
-    Map.findById(req.params.id)
-        .then(map => res.json(map))
-        .catch(err => res.status(400).json('Error: ' + err));
+router.get('/map/get/:id', async (req, res) => {
+    var map = await Map.findById(req.params.id)
+    if (map != null){
+        res.json({map: map})
+    }
+    else{
+        res.status(400).json({errorMessage: 'Map does not exist'})
+    }
 });
 
 
