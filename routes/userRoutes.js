@@ -20,7 +20,8 @@ userRouter.route('/user/register').post(async (req, res) => {
         accountCreated: Date.now()
     })
     await user.save()
-    res.json({payload: {userName: user.userName, email: user.email}})
+        .then((user) => {res.json({user: user})})
+        .catch((err) => {res.json({errorMessage: err.message})})
 })
 
 userRouter.route('/user/login').post(async (req, res) => {
