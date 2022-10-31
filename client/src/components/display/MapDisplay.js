@@ -6,7 +6,6 @@ import { BiEdit } from "react-icons/bi"
 import { MdOutlineContentCopy } from "react-icons/md"
 import { Fragment } from 'react'
 import Comment from "../comment/Comment";
-import MSCard from "../card/MSCard"
 const MapDisplay = (props) => {
     return (
         <div>

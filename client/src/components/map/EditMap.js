@@ -8,8 +8,10 @@ import LayerCard from "../card/LayerCard"
 
 const EditMap = (props) => {
     const [shareModalOpen, setShareModal] = useState(false)
-    const [gridRow, setGridRow] = useState(64)
-    const [gridCol, setGridCol] = useState(64)
+    //const [gridRow, setGridRow] = useState(64)
+    //const [gridCol, setGridCol] = useState(64)
+    const gridCol = 64
+    const gridRow = 64
     const [gridSize, setGridSize] = useState({x:20, y:20})
     const tempTiles = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]
     const tempLayers = ["Layer1", "Layer2","Layer3", "Layer4","Layer5", "Layer6"]
@@ -30,7 +32,7 @@ const EditMap = (props) => {
             tempGrid.push(currentRow);
         }
         setGrid(tempGrid)
-    }, [grid,gridRow,gridCol,gridSize])
+    }, [grid,gridSize])
 
     const zoom = (factor) => {
         if((gridSize.x +(factor * 10) <= 60 && gridSize.x +(factor * 10) >= 20)){
