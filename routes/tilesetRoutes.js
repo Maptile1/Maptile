@@ -75,10 +75,14 @@ router.post('/tileset/update/:id', async (req, res) => {
 
 
 // Get Tileset
-router.get('/tileset/:id', async (req, res) => {
-    Tileset.findById(req.params.id)
-        .then(tilesets => res.json(tilesets))
-        .catch(err => res.status(400).json('Error: ' + err));
+router.get('/tileset/get/:id', async (req, res) => {
+    var tileset = await Tileset.findById(req.params.id)
+    if (tileset != null){
+        res.json({tileset: tileset})
+    }
+    else{
+        res.status(400).json({errorMessage: 'Tileset does not exist'})
+    }
 });
 
 
