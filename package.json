@@ -8,7 +8,7 @@
     "install-client": "cd client && npm install",
     "heroku-postbuild": "npm run install-client && npm run build",
     "start": "node app.js",
-    "test": "jest tests/user.test.js"
+    "test": "jest tests/user.test.js --forceExit"
   },
   "author": "",
   "license": "ISC",

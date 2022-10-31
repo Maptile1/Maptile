@@ -1,5 +1,5 @@
 const app = require('../app')
-const request = require('supertest')
+const request = require('supertest');
 jest.setTimeout(3 * 60 * 1000);
 
 describe('POST /register test', () => {
@@ -15,5 +15,3 @@ describe('POST /register test', () => {
             })
     })
 })
-
-
