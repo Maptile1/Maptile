@@ -44,7 +44,7 @@ router.get('/map/get/:id', async (req, res) => {
 
 
 // Get all maps
-router.get('/map', async (req, res) => {
+router.get('/map/getall', async (req, res) => {
     Map.find()
         .then(maps => res.json(maps))
         .catch(err => res.status(400).json('Error: ' + err));
