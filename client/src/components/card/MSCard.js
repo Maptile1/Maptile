@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 const MSCard = (props) => {
     const nav = useNavigate()
     const handleMapView = () => {
-        nav("/mapdisplay")
+        nav("/map_edit")
     }
     return (
         <div class="max-w-sm rounded overflow-hidden mt-5 mx-14">

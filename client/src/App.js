@@ -10,6 +10,7 @@ import ProfileScreen from './components/profile/ProfileScreen';
 import TilesetDisplay from './components/display/TilesetDisplay';
 import MapDisplay from './components/display/MapDisplay';
 import EditTileset from './components/tileset/EditTileset';
+import EditMap from './components/map/EditMap';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           <Route path="/tilesetdisplay" element={<TilesetDisplay user={user} />} />
           <Route path="/mapdisplay" element={<MapDisplay user={user} />} />
           <Route path="/tileset_edit" element={<EditTileset user={user}/>}/>
+          <Route path="/map_edit" element={<EditMap user={user}/>}/>
         </Routes>
       </div>
     </BrowserRouter>
