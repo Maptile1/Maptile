@@ -22,7 +22,7 @@ const SearchScreen = (props) => {
     <div>
       <Sidebar />
       <main className="mx-auto flex flex-col min-h-screen w-full items-center justify-top bg-maptile-background-dark text-white">
-        <div className="pt-5 text-center text-4xl font-bold text-white underline">Search</div>
+        <div className="pt-5 text-center text-4xl font-bold text-white">Search</div>
         <div className="flex flex-col h-[53rem] w-5/6 items-left justify-top ml-20 mt-10">
           <div class="grid grid-cols-4">
             <form className="mb-10 col-start-4 col-span-3">
