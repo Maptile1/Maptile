@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import Axios from 'axios'
 const LogIn = (props) => {
-  const [input, setInput] = useState({ email: '', password: '' });
+  const [input, setInput] = useState({ userName: '', password: '' });
   const [inputValid, setInputValid] = useState(false)
 
   const updateInput = (e) => {
     const { name, value } = e.target;
     const updated = { ...input, [name]: value };
     setInput(updated);
-    setInputValid(updated.email !== '' && updated.password !== '' && updated.userName !== '');
+    setInputValid(updated.userName !== '' && updated.password !== '' && updated.userName !== '');
   };
 
   const handleLogIn = async (e) => {
@@ -19,7 +19,7 @@ const LogIn = (props) => {
           userName: input.userName,
           password: input.password,
         });
-      props.handleLogIn("ABC");
+      props.handleLogIn(response.data.user);
     }
   }
 
@@ -35,9 +35,9 @@ const LogIn = (props) => {
             class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
           >
             <input
-              type="text"
-              name="email"
-              placeholder="Email"
+              type="userName"
+              name="userName"
+              placeholder="User Name"
               class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
               onChange={updateInput}
             />

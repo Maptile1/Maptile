@@ -22,7 +22,6 @@ const CreateAccount = (props) => {
                     password: input.password,
                 });
             props.handleLogIn(response.data.user);
-            console.log(response.data.user)
         }
 
     }
