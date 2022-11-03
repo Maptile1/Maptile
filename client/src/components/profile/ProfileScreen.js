@@ -1,9 +1,9 @@
 import { BsMapFill, BsFillPuzzleFill } from "react-icons/bs";
-import { BiLike , BiCog} from "react-icons/bi";
+import { BiLike, BiCog } from "react-icons/bi";
 import TilesetCard from "../card/TilesetCard";
 import Sidebar from "../sidebar/Sidebar";
 import MapCard from "../card/MapCard"
-import { React , useState} from "react";
+import { React, useState } from "react";
 import ProfileEditModal from "./ProfileEditModal";
 
 const ProfileScreen = (props) => {
@@ -11,33 +11,33 @@ const ProfileScreen = (props) => {
 
   return (
     <div class="grid grid-cols-10 grid-rows-10 gap-4">
-      <Sidebar />
-      
-      <div class="col-start-2 col-span-2 row-start-3 text-white text-center">
-          <div class="text-6xl mb-8">  @Joe Schmo</div>
+      <Sidebar setTheUser={props.setTheUser} />
 
-          <img
-            class="w-full h-3/4 object-cover object-center"
-            src="https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
-            alt="blog"
-          />
-          <div class="mt-5">Hi my name is Joe Schmo, I like making games!</div>
-          <button className="mt-5 flex flex-row p-2 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl" onClick={()=>setProfileModal(true)}>
-            <BiCog />
-            <div className="ml-2 mt-[-4px]"> Settings </div>
-          </button>
+      <div class="col-start-2 col-span-2 row-start-3 text-white text-center">
+        <div class="text-6xl mb-8">  @Joe Schmo</div>
+
+        <img
+          class="w-full h-3/4 object-cover object-center"
+          src="https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
+          alt="blog"
+        />
+        <div class="mt-5">Hi my name is Joe Schmo, I like making games!</div>
+        <button className="mt-5 flex flex-row p-2 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl" onClick={() => setProfileModal(true)}>
+          <BiCog />
+          <div className="ml-2 mt-[-4px]"> Settings </div>
+        </button>
       </div>
-      
-        <div class="col-start-5 row-start-3 mt-20 text-6xl justify-self-center text-white">
-          <BsMapFill />8 Maps
-        </div>
-        <div class="col-start-7 row-start-3 mt-20 text-6xl justify-self-center text-white">
-          <BsFillPuzzleFill />8 Tilesets
-        </div>
-        <div class="col-start-9 row-start-3 mt-20 text-6xl justify-self-center text-white">
-          <BiLike />8 Likes
-        </div>
-      
+
+      <div class="col-start-5 row-start-3 mt-20 text-6xl justify-self-center text-white">
+        <BsMapFill />8 Maps
+      </div>
+      <div class="col-start-7 row-start-3 mt-20 text-6xl justify-self-center text-white">
+        <BsFillPuzzleFill />8 Tilesets
+      </div>
+      <div class="col-start-9 row-start-3 mt-20 text-6xl justify-self-center text-white">
+        <BiLike />8 Likes
+      </div>
+
       <div class="mt-20 grid grid-cols-4 col-span-10 col-start-2 row-start-4 gap-5">
         <TilesetCard
           tilename="nice tileset"
@@ -47,7 +47,7 @@ const ProfileScreen = (props) => {
         <MapCard mapname="Fire Map" description="perfect map for your 2D fire map" />
         <TilesetCard tilename="Space Tiles" description="perfect tiles for 2D space theme" />
       </div>
-      <ProfileEditModal modalOpen={modalOpen} setProfileModal={setProfileModal}/>
+      <ProfileEditModal modalOpen={modalOpen} setProfileModal={setProfileModal} />
 
     </div>
   );

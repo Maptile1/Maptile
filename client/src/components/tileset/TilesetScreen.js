@@ -12,7 +12,6 @@ const TilesetScreen = (props) => {
   let tab_selected = 'bg-maptile-background-mid text-center rounded-t-xl cursor-pointer  mt-[10px] duration-300'
   let tab_unselected = 'bg-maptile-tab-unselected text-center rounded-t-xl cursor-pointer duration-300'
 
-
   const updateInput = (e) => {
     const { name, value } = e.target;
     const updated = { ...input, [name]: value };

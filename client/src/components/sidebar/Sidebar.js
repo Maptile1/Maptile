@@ -16,24 +16,27 @@ const Sidebar = (props) => {
 
   const handleClick = (e) => {
     const { id } = e.currentTarget
-    if(id === "sidebar-Home"){
-      nav("/home", {replace: true})
+    if (id === "sidebar-Home") {
+      nav("/home", { replace: true })
     }
-    if(id === "sidebar-Tileset"){
+    if (id === "sidebar-Tileset") {
       nav("/user_tilesets")
     }
-    if(id === "sidebar-Map"){
+    if (id === "sidebar-Map") {
       nav("/user_maps")
     }
-    if(id === "sidebar-Search"){
+    if (id === "sidebar-Search") {
       nav("/search")
     }
-    if(id === "sidebar-Profile"){
+    if (id === "sidebar-Profile") {
       nav("/user_profile")
     }
-    if(id === "sidebar-LogOut"){
+    if (id === "sidebar-LogOut") {
       //Log Out Shit goes here, wont actually do anything until we set up auth and whatever.
-      nav("/", {replace: true})
+      props.setTheUser(null);
+      nav("/", { replace: true })
+
+
     }
   }
 
@@ -45,7 +48,7 @@ const Sidebar = (props) => {
             <img src="maptile-logo.png" class="object-fit " alt="logo" />
           </li>
           <li>
-            <div name="Home"class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white ">
+            <div name="Home" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white ">
               <button id="sidebar-Home" onClick={handleClick}>
                 {" "}
                 <div>

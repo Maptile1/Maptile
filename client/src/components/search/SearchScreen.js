@@ -20,7 +20,7 @@ const SearchScreen = (props) => {
   const tags = ["Fire", "Water", "Awesome", "Big", "Small", "Great", "Earth", "City", "Lava", "Madison", "Castle", "Larger"]
   return (
     <div>
-      <Sidebar />
+      <Sidebar setTheUser={props.setTheUser} />
       <main className="mx-auto flex flex-col min-h-screen w-full items-center justify-top bg-maptile-background-dark text-white">
         <div className="pt-5 text-center text-4xl font-bold text-white">Search</div>
         <div className="flex flex-col h-[53rem] w-5/6 items-left justify-top ml-20 mt-10">

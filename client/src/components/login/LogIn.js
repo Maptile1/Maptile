@@ -1,21 +1,27 @@
 import React, { useState } from "react";
-
+import Axios from 'axios'
 const LogIn = (props) => {
   const [input, setInput] = useState({ email: '', password: '' });
   const [inputValid, setInputValid] = useState(false)
 
   const updateInput = (e) => {
-		const { name, value } = e.target;
-		const updated = { ...input, [name]: value };
-		setInput(updated);
-        setInputValid(updated.email !== '' && updated.password !== '' && updated.userName !== '');
-	};
+    const { name, value } = e.target;
+    const updated = { ...input, [name]: value };
+    setInput(updated);
+    setInputValid(updated.email !== '' && updated.password !== '' && updated.userName !== '');
+  };
 
-  const handleLogIn = (e) => {
-    if(inputValid){
-        props.handleLogIn()
+  const handleLogIn = async (e) => {
+    console.log(input)
+    if (inputValid) {
+      const response = await Axios.post("https://maptile1.herokuapp.com/user/login",
+        {
+          userName: input.userName,
+          password: input.password,
+        });
+      props.handleLogIn("ABC");
     }
-}
+  }
 
   return (
     <main
@@ -33,7 +39,7 @@ const LogIn = (props) => {
               name="email"
               placeholder="Email"
               class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
-              onBlur={updateInput}
+              onChange={updateInput}
             />
           </div>
 
@@ -45,12 +51,12 @@ const LogIn = (props) => {
               name="password"
               placeholder="Password"
               class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
-              onBlur={updateInput}
+              onChange={updateInput}
             />
           </div>
 
           <button onClick={handleLogIn}
-            className={`${!inputValid ? 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red rounded-xl': 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl'}`}
+            className={`${!inputValid ? 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red rounded-xl' : 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl'}`}
           >
             LOG IN
           </button>

@@ -1,20 +1,30 @@
 import React, { useState } from 'react';
+import Axios from 'axios';
 
 const CreateAccount = (props) => {
-    const [input, setInput] = useState({ email: '', password: '', userName: ''});
+    const [input, setInput] = useState({ email: '', password: '', confirmpassword: '', userName: '' });
     const [inputValid, setInputValid] = useState(false)
 
     const updateInput = (e) => {
-		const { name, value } = e.target;
-		const updated = { ...input, [name]: value };
-		setInput(updated);
-        setInputValid(updated.email !== '' && updated.password !== '' && updated.userName !== '');
-	};
+        const { name, value } = e.target;
+        const updated = { ...input, [name]: value };
+        setInput(updated);
+        setInputValid(updated.email !== '' && updated.password !== '' && updated.userName !== '' && updated.confirmpassword === updated.password);
 
-    const handleLogIn = (e) => {
-        if(inputValid){
-            props.handleLogIn()
+    };
+
+    const handleRegister = async (e) => {
+        if (inputValid) {
+            const response = await Axios.post("https://maptile1.herokuapp.com/user/register",
+                {
+                    userName: input.userName,
+                    email: input.email,
+                    password: input.password,
+                });
+            props.handleLogIn(response.data.user);
+            console.log(response.data.user)
         }
+
     }
 
     return (
@@ -33,7 +43,7 @@ const CreateAccount = (props) => {
                             name="userName"
                             placeholder="Username"
                             className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
-                            onBlur={updateInput}
+                            onChange={updateInput}
                         />
                     </div>
 
@@ -45,16 +55,7 @@ const CreateAccount = (props) => {
                             name="email"
                             placeholder="Email"
                             className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
-                            onBlur={updateInput}
-                        />
-                    </div>
-                    <div
-                        className="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
-                    >
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                            onChange={updateInput}
                         />
                     </div>
                     <div
@@ -63,15 +64,26 @@ const CreateAccount = (props) => {
                         <input
                             type="password"
                             name="password"
+                            placeholder="Password"
+                            className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                            onChange={updateInput}
+                        />
+                    </div>
+                    <div
+                        className="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+                    >
+                        <input
+                            type="confirmpassword"
+                            name="confirmpassword"
                             placeholder="Confirm Password"
                             className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
-                            onBlur={updateInput}
+                            onChange={updateInput}
                         />
                     </div>
 
-                    <button onClick={handleLogIn}
-                        className={`${!inputValid ? 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red rounded-xl': 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl'}`}
-                        //className="transform rounded-sm py-2 font-bold duration-300 {{inputValid ? 'bg-maptile-red-unselected hover:bg-maptile-red' : 'bg-maptile-green-highlight hover:bg-maptile-green'}}"
+                    <button onClick={handleRegister}
+                        className={`${!inputValid ? 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red rounded-xl' : 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl'}`}
+                    //className="transform rounded-sm py-2 font-bold duration-300 {{inputValid ? 'bg-maptile-red-unselected hover:bg-maptile-red' : 'bg-maptile-green-highlight hover:bg-maptile-green'}}"
                     >
                         Register
                     </button>

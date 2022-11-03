@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Homescreen from './components/homescreen/Homescreen';
 import Home from './components/home/Home';
@@ -13,23 +13,25 @@ import EditTileset from './components/tileset/EditTileset';
 import EditMap from './components/map/EditMap';
 
 function App() {
-
-  let user = null
-
+  const [user, setUser] = useState(null)
+  const setTheUser = (newuser) => {
+    setUser(newuser);
+  }
+  console.log(user);
   return (
     <BrowserRouter>
       <div className='app-container'>
         <Routes>
-          <Route exact index path="/" element={<Homescreen user={user} />} />
-          <Route path="/home" element={<Home user={user} />} />
-          <Route path="/user_tilesets" element={<TilesetScreen user={user} />} />
-          <Route path="/user_maps" element={<MapScreen user={user} />} />
-          <Route path="/search" element={<SearchScreen user={user} />} />
-          <Route path="/user_profile" element={<ProfileScreen user={user} />} />
-          <Route path="/tilesetdisplay" element={<TilesetDisplay user={user} />} />
-          <Route path="/mapdisplay" element={<MapDisplay user={user} />} />
-          <Route path="/tileset_edit" element={<EditTileset user={user}/>}/>
-          <Route path="/map_edit" element={<EditMap user={user}/>}/>
+          <Route exact index path="/" element={<Homescreen user={user} setTheUser={setTheUser} />} />
+          <Route path="/home" element={<Home user={user} setTheUser={setTheUser} />} />
+          <Route path="/user_tilesets" element={<TilesetScreen user={user} setTheUser={setTheUser} />} />
+          <Route path="/user_maps" element={<MapScreen user={user} setTheUser={setTheUser} />} />
+          <Route path="/search" element={<SearchScreen user={user} setTheUser={setTheUser} />} />
+          <Route path="/user_profile" element={<ProfileScreen user={user} setTheUser={setTheUser} />} />
+          <Route path="/tilesetdisplay" element={<TilesetDisplay user={user} setTheUser={setTheUser} />} />
+          <Route path="/mapdisplay" element={<MapDisplay user={user} setTheUser={setTheUser} />} />
+          <Route path="/tileset_edit" element={<EditTileset user={user} setTheUser={setTheUser} />} />
+          <Route path="/map_edit" element={<EditMap user={user} setTheUser={setTheUser} />} />
         </Routes>
       </div>
     </BrowserRouter>

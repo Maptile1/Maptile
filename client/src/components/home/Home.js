@@ -28,7 +28,7 @@ const Home = (props) => {
 
   return <div>
     <div>
-      <Sidebar />
+      <Sidebar setTheUser={props.setTheUser} />
       <div class="container px-6 py-10 mx-auto ">
 
         <h1 class="text-3xl font-semibold text-white capitalize lg:text-4xl dark:text-white">On Maptile</h1>
