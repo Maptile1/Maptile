@@ -2,14 +2,14 @@ import { BsMapFill, BsFillPuzzleFill } from "react-icons/bs";
 import { BiLike, BiCog } from "react-icons/bi";
 import TilesetCard from "../card/TilesetCard";
 import Sidebar from "../sidebar/Sidebar";
-import MapCard from "../card/MapCard"
+import MapCard from "../card/MapCard";
 import { React, useState } from "react";
 import ProfileEditModal from "./ProfileEditModal";
 
 const ProfileScreen = (props) => {
-  const [modalOpen, setProfileModal] = useState(false)
+  const [modalOpen, setProfileModal] = useState(false);
   var user = props.user;
-  console.log(user)
+  console.log(user);
   return (
     <div class="grid grid-cols-10 grid-rows-10 gap-4">
       <Sidebar setTheUser={props.setTheUser} />
@@ -23,7 +23,10 @@ const ProfileScreen = (props) => {
           alt="blog"
         />
         <div class="mt-5">Hi my name is Joe Schmo, I like making games!</div>
-        <button className="mt-5 flex flex-row p-2 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl" onClick={() => setProfileModal(true)}>
+        <button
+          className="mt-5 flex flex-row p-2 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl"
+          onClick={() => setProfileModal(true)}
+        >
           <BiCog />
           <div className="ml-2 mt-[-4px]"> Settings </div>
         </button>
@@ -44,12 +47,24 @@ const ProfileScreen = (props) => {
           tilename="nice tileset"
           description="awesome tiles for your games"
         />
-        <TilesetCard tilename="Ice Tiles" description="perfect tiles for 2D winter theme" />
-        <MapCard mapname="Fire Map" description="perfect map for your 2D fire map" />
-        <TilesetCard tilename="Space Tiles" description="perfect tiles for 2D space theme" />
+        <TilesetCard
+          tilename="Ice Tiles"
+          description="perfect tiles for 2D winter theme"
+        />
+        <MapCard
+          mapname="Fire Map"
+          description="perfect map for your 2D fire map"
+        />
+        <TilesetCard
+          tilename="Space Tiles"
+          description="perfect tiles for 2D space theme"
+        />
       </div>
-      <ProfileEditModal modalOpen={modalOpen} setProfileModal={setProfileModal} />
-
+      <ProfileEditModal
+        user={props.user}
+        modalOpen={modalOpen}
+        setProfileModal={setProfileModal}
+      />
     </div>
   );
 };
