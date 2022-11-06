@@ -1,22 +1,25 @@
 import Sidebar from "../sidebar/Sidebar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TSSCard from "../card/TSSCard";
+import Axios from "axios";
 const SearchScreen = (props) => {
   const [userSelected, updateUserSelected] = useState(true)
+  var [searchResults, setSearchResults] = useState([])
   let tab_selected = 'bg-maptile-background-mid text-center rounded-t-xl cursor-pointer  mt-[10px] duration-300'
   let tab_unselected = 'bg-maptile-tab-unselected text-center rounded-t-xl cursor-pointer duration-300'
 
-  const tilesets = []
-  let tileset1 = { name: "Great Tileset" };
-  let tileset2 = { name: "Best Tileset" };
-  let tileset3 = { name: "Nice Tileset" }
-  let tileset4 = { name: "Water Tileset" }
-  let tileset5 = { name: "Grass Tileset" }
-  let tileset6 = { name: "Lava Tileset" }
-  let tileset7 = { name: "Small Tileset" }
-  let tileset8 = { name: "Large Tileset" }
 
-  tilesets.push(tileset1, tileset2, tileset3, tileset4, tileset5, tileset6, tileset7, tileset8)
+  useEffect(() => {
+    const tilesetRes = async () => {
+      var response = await Axios.get(
+        "https://maptile1.herokuapp.com/tileset")
+      setSearchResults(response.data)
+    }
+
+    tilesetRes();
+  }, []);
+
+
   const tags = ["Fire", "Water", "Awesome", "Big", "Small", "Great", "Earth", "City", "Lava", "Madison", "Castle", "Larger"]
   return (
     <div>
@@ -29,7 +32,7 @@ const SearchScreen = (props) => {
               <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300">Search</label>
               <div className="relative w-100">
                 <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                  <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                  <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
                 <input type="search" id="default-search" class="block p-4 pl-10 w-full text-sm text-gray-900 bg-maptile-background-mid rounded-lg border border-gray-300 focus:ring-white-500 focus:border-black-500 dark:bg-maptile-background-mid dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Tilesets and Maps" required />
                 <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-maptile-background-mid hover:bg-black focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-maptile-green dark:hover:bg-maptile-green-highlight dark:focus:ring-blue-800">Search</button>
@@ -43,7 +46,7 @@ const SearchScreen = (props) => {
           </div>
           <div className="bg-maptile-background-mid w-10/12 h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
             <div className="flex flex-row flex-wrap justify-center mr-8 py-10 pl-10 ">
-              {tilesets.map((obj, index) =>
+              {searchResults.map((obj, index) =>
                 <TSSCard search={true} name={obj.name} />
               )}
             </div>

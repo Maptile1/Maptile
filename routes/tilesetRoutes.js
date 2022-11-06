@@ -5,10 +5,10 @@ const ObjectId = require('mongodb').ObjectId;
 
 // Create Tileset
 router.post('/tileset/create', async (req, res) => {
-    if (req.session._id == undefined){
-        res.status(400).json({errorMessage: 'Not logged in'})
-        return;
-    }
+    // if (req.session._id == undefined){
+    //     res.status(400).json({errorMessage: 'Not logged in'})
+    //     return;
+    // }
     var tileset = new Tileset({
         _id: new ObjectId(),
         tileset_data: [],
@@ -19,38 +19,38 @@ router.post('/tileset/create', async (req, res) => {
         comments: [],
         public: false,
         tilesetCreated: Date.now(),
-        owner: req.session._id
+        owner: req.body._id
     })
     await tileset.save()
-    res.json({tileset: tileset})
+    res.json({ tileset: tileset })
 })
 
 // Delete Tileset
 router.post('/tileset/delete/:id', async (req, res) => {
-    if (req.session._id == undefined){
-        res.status(400).json({errorMessage: 'Not logged in'})
+    if (req.session._id == undefined) {
+        res.status(400).json({ errorMessage: 'Not logged in' })
         return;
     }
-    Tileset.findOneAndRemove({_id: req.params.id, owner: req.session._id})
-        .then(() => res.json({message: 'Tileset deleted'}))
+    Tileset.findOneAndRemove({ _id: req.params.id, owner: req.session._id })
+        .then(() => res.json({ message: 'Tileset deleted' }))
         .catch(err => {
-            Tileset.findOne({_id: req.params.id})
+            Tileset.findOne({ _id: req.params.id })
                 .then((tileset) => {
-                    if (tileset != null){
-                        res.status(400).json({errorMessage: 'Not owner of tileset'})
+                    if (tileset != null) {
+                        res.status(400).json({ errorMessage: 'Not owner of tileset' })
                     }
-                    else{
-                        res.status(400).json({errorMessage: 'Tileset does not exist'})
+                    else {
+                        res.status(400).json({ errorMessage: 'Tileset does not exist' })
                     }
                 })
-                .catch(err => res.status(400).json({errorMessage :err}))
+                .catch(err => res.status(400).json({ errorMessage: err }))
         })
 })
 
 // Update tileset
 router.post('/tileset/update/:id', async (req, res) => {
-    if (req.session._id == undefined){
-        res.status(400).json({errorMessage: 'Not logged in'})
+    if (req.session._id == undefined) {
+        res.status(400).json({ errorMessage: 'Not logged in' })
         return;
     }
     var updates = {};
@@ -58,16 +58,16 @@ router.post('/tileset/update/:id', async (req, res) => {
     updates.name = req.body.name
     updates.description = req.body.description
     updates.public = req.body.public
-    var tileset = await Tileset.findOneAndUpdate({_id: req.params.id, owner: req.session._id}, {$set: updates}, {new: true})
-    if (tileset != null){
-        res.json({tileset: tileset})
+    var tileset = await Tileset.findOneAndUpdate({ _id: req.params.id, owner: req.session._id }, { $set: updates }, { new: true })
+    if (tileset != null) {
+        res.json({ tileset: tileset })
     }
-    else{
-        if (await Tileset.findById(req.params.id) != null){
-            res.status(400).json({errorMessage: 'Not permitted to editle'})
+    else {
+        if (await Tileset.findById(req.params.id) != null) {
+            res.status(400).json({ errorMessage: 'Not permitted to editle' })
         }
-        else{
-            res.status(400).json({errorMessage: 'Tileset does not exist'})
+        else {
+            res.status(400).json({ errorMessage: 'Tileset does not exist' })
         }
     }
 });
@@ -76,11 +76,11 @@ router.post('/tileset/update/:id', async (req, res) => {
 // Get Tileset
 router.get('/tileset/get/:id', async (req, res) => {
     var tileset = await Tileset.findById(req.params.id)
-    if (tileset != null){
-        res.json({tileset: tileset})
+    if (tileset != null) {
+        res.json({ tileset: tileset })
     }
-    else{
-        res.status(400).json({errorMessage: 'Tileset does not exist'})
+    else {
+        res.status(400).json({ errorMessage: 'Tileset does not exist' })
     }
 });
 
