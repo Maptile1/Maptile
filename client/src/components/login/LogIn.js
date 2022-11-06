@@ -11,6 +11,8 @@ const LogIn = (props) => {
     setInputValid(updated.userName !== '' && updated.password !== '' && updated.userName !== '');
   };
 
+  Axios.defaults.withCredentials = true
+
   const handleLogIn = async (e) => {
     console.log(input)
     if (inputValid) {
@@ -18,7 +20,11 @@ const LogIn = (props) => {
         {
           userName: input.userName,
           password: input.password,
-        })
+        },
+        {
+          headers: { Cookie: "_id=5"}
+        }
+        )
         .then(function(response){
           props.handleLogIn(response.data.user);
         })

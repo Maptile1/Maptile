@@ -5,6 +5,7 @@ import Sidebar from "../sidebar/Sidebar";
 import MapCard from "../card/MapCard";
 import { React, useState } from "react";
 import ProfileEditModal from "./ProfileEditModal";
+import { isRouteErrorResponse } from "react-router-dom";
 
 const ProfileScreen = (props) => {
   const [modalOpen, setProfileModal] = useState(false);
@@ -21,7 +22,7 @@ const ProfileScreen = (props) => {
           src="https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
           alt="blog"
         />
-        <div class="mt-5">Hi my name is Joe Schmo, I like making games!</div>
+        <div class="mt-5">{user.bio}</div>
         <button
           className="mt-5 flex flex-row p-2 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl"
           onClick={() => setProfileModal(true)}
@@ -32,13 +33,13 @@ const ProfileScreen = (props) => {
       </div>
 
       <div class="col-start-5 row-start-3 mt-20 text-6xl justify-self-center text-white">
-        <BsMapFill />8 Maps
+        <BsMapFill />{user.maps.length} Maps
       </div>
       <div class="col-start-7 row-start-3 mt-20 text-6xl justify-self-center text-white">
-        <BsFillPuzzleFill />8 Tilesets
+        <BsFillPuzzleFill />{user.tilesets.length} Tilesets
       </div>
       <div class="col-start-9 row-start-3 mt-20 text-6xl justify-self-center text-white">
-        <BiLike />8 Likes
+        <BiLike />{user.likes} Likes
       </div>
 
       <div class="mt-20 grid grid-cols-4 col-span-10 col-start-2 row-start-4 gap-5">
@@ -63,6 +64,7 @@ const ProfileScreen = (props) => {
         user={props.user}
         modalOpen={modalOpen}
         setProfileModal={setProfileModal}
+        updateUser={props.setTheUser}
       />
 
     </div>
