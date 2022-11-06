@@ -22,7 +22,10 @@ userRouter.route("/user/register").post(async (req, res) => {
       featured: [],
       accountCreated: Date.now(),
     });
-    await user
+    var userDupe = await User.findOne({ userName: req.body.userName });
+    var emailDupe = await User.findOne({ email : req.body.email});
+    if(userDupe === null && emailDupe === null){
+      await user
       .save()
       .then((user) => {
         res.json({ user: user });
@@ -30,6 +33,24 @@ userRouter.route("/user/register").post(async (req, res) => {
       .catch((err) => {
         res.json({ errorMessage: err.message });
       });
+    }
+    else{
+      if(userDupe !== null && emailDupe === null){
+        res
+          .status(400)
+          .json({errorMessage: "Username taken."})
+      }
+      if(userDupe === null && emailDupe !== null){
+        res
+          .status(400)
+          .json({errorMessage: "Account already exists with this email."})
+      }
+      if(userDupe !== null && emailDupe !== null){
+        res
+          .status(400)
+          .json({errorMessage: "Username and email already in use."})
+      }
+    }
   });
 });
 

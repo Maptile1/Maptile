@@ -15,13 +15,19 @@ const CreateAccount = (props) => {
 
     const handleRegister = async (e) => {
         if (inputValid) {
-            const response = await Axios.post("https://maptile1.herokuapp.com/user/register",
-                {
-                    userName: input.userName,
-                    email: input.email,
-                    password: input.password,
-                });
-            props.handleLogIn(response.data.user);
+            await Axios.post("https://maptile1.herokuapp.com/user/register",
+            {
+                userName: input.userName,
+                email: input.email,
+                password: input.password,
+            })
+            .then(function(response){
+                props.handleLogIn(response.data.user);
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+            
         }
 
     }
@@ -72,7 +78,7 @@ const CreateAccount = (props) => {
                         className="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
                     >
                         <input
-                            type="confirmpassword"
+                            type="password"
                             name="confirmpassword"
                             placeholder="Confirm Password"
                             className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
