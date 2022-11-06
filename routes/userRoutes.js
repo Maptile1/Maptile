@@ -96,16 +96,16 @@ userRouter.post("/user/update", async (req, res) => {
         bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
             updates.password = hash
             var user = await User.findOneAndUpdate(
-                { _id: req.session._id },
-                { $set: updates },
-                { new: true }
-              )
-              if (user != null) {
-                  res.json({ user: user })
-              } 
-              else {
-                  res.status(400).json({ errorMessage: "User doesn't exist" })
-              }
+              { _id: req.session._id },
+              { $set: updates },
+              { new: true }
+            )
+            if (user != null) {
+                res.json({ user: user })
+            } 
+            else {
+                res.status(400).json({ errorMessage: "User doesn't exist" })
+            }
         })
     }
 })
