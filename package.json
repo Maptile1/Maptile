@@ -4,12 +4,10 @@
   "description": "backend for maptile",
   "main": "app.js",
   "scripts": {
-    "build": "cd client && npm run build",
-    "install-client": "cd client && npm install --save --legacy-peer-deps",
-    "server": "node app.js",
+    "build": "cd client && npm install --save --legacy-peer-deps && npm run build",
+    "install-client": "cd client && npm install",
     "heroku-postbuild": "npm run install-client && npm run build",
-    "develop": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\"",
-    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run start --prefix client\"",
+    "start": "node app.js",
     "test": "jest tests/user.test.js --forceExit"
   },
   "author": "",
