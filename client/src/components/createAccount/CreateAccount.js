@@ -25,7 +25,7 @@ const CreateAccount = (props) => {
                 props.handleLogIn(response.data.user);
             })
             .catch(function(error){
-                console.log(error)
+                window.alert(error.response.data.errorMessage)
             })
             
         }

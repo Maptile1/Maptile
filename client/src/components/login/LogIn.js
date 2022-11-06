@@ -23,7 +23,7 @@ const LogIn = (props) => {
           props.handleLogIn(response.data.user);
         })
         .catch(function(error){
-          console.log("Invalid Login")
+          window.alert(error.response.data.errorMessage)
         })
     }
   }
