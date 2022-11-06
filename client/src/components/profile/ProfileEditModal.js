@@ -19,6 +19,7 @@ const ProfileEditModal = (props) => {
       "https://maptile1.herokuapp.com/user/update/:id'",
       {
         _id: user._id,
+        session_id: user._id,
         userName: updated.userName,
         password: updated.password,
       }

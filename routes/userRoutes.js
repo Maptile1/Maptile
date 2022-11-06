@@ -85,7 +85,7 @@ userRouter.route("/user/get/:id").get(async (req, res) => {
   }
 });
 
-router.post("/user/update/:id", async (req, res) => {
+userRouter.post("/user/update/:id", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
     return;
