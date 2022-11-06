@@ -21,7 +21,7 @@ const ProfileScreen = (props) => {
           src="https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
           alt="blog"
         />
-        <div class="mt-5">Hi my name is Joe Schmo, I like making games!</div>
+        <div class="mt-5">{user.bio}</div>
         <button
           className="mt-5 flex flex-row p-2 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl"
           onClick={() => setProfileModal(true)}
@@ -63,6 +63,7 @@ const ProfileScreen = (props) => {
         user={props.user}
         modalOpen={modalOpen}
         setProfileModal={setProfileModal}
+        updateUser={props.setTheUser}
       />
 
     </div>
