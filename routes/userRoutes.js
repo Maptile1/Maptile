@@ -7,52 +7,43 @@ const saltRounds = 10;
 
 userRouter.route("/user/register").post(async (req, res) => {
   bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
-    var user = new User({
-      _id: new ObjectId(),
-      userName: req.body.userName,
-      email: req.body.email,
-      password: hash,
-      tilesets: [],
-      shared_tilesets: [],
-      maps: [],
-      shared_maps: [],
-      likes: 0,
-      dislikes: 0,
-      bio: "bio",
-      featured: [],
-      accountCreated: Date.now(),
-    });
-    var userDupe = await User.findOne({ userName: req.body.userName });
-    var emailDupe = await User.findOne({ email : req.body.email});
-    if(userDupe === null && emailDupe === null){
-      await user
-      .save()
-      .then((user) => {
-        res.json({ user: user });
-      })
-      .catch((err) => {
-        res.json({ errorMessage: err.message });
-      });
-    }
-    else{
-      if(userDupe !== null && emailDupe === null){
-        res
-          .status(400)
-          .json({errorMessage: "Username taken."})
-      }
-      if(userDupe === null && emailDupe !== null){
-        res
-          .status(400)
-          .json({errorMessage: "Account already exists with this email."})
-      }
-      if(userDupe !== null && emailDupe !== null){
-        res
-          .status(400)
-          .json({errorMessage: "Username and email already in use."})
-      }
-    }
-  });
-});
+        var user = new User({
+            _id: new ObjectId(),
+            userName: req.body.userName,
+            email: req.body.email,
+            password: hash,
+            tilesets: [],
+            shared_tilesets: [],
+            maps: [],
+            shared_maps: [],
+            likes: 0,
+            dislikes: 0,
+            bio: "bio",
+            featured: [],
+            accountCreated: Date.now(),
+        })
+        await user.save()
+          .then((user) => {res.json({ user: user })})
+          .catch((err) => {res.json({ errorMessage: err.message})})
+    // else{
+    //   if(userDupe !== null && emailDupe === null){
+    //     res
+    //       .status(400)
+    //       .json({errorMessage: "Username taken."})
+    //   }
+    //   if(userDupe === null && emailDupe !== null){
+    //     res
+    //       .status(400)
+    //       .json({errorMessage: "Account already exists with this email."})
+    //   }
+    //   if(userDupe !== null && emailDupe !== null){
+    //     res
+    //       .status(400)
+    //       .json({errorMessage: "Username and email already in use."})
+    //   }
+    // }
+  })
+})
 
 userRouter.route("/user/login").post(async (req, res) => {
   var user = await User.findOne({ userName: req.body.userName });
