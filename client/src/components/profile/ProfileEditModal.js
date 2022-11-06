@@ -65,6 +65,7 @@ const ProfileEditModal = (props) => {
                     window.alert(error.response.data.errorMessage)
                 })
         }
+        props.setProfileModal(false)
     }
 
     return (
