@@ -26,6 +26,7 @@ const Homescreen = (props) => {
 
   const handleHomeScreenView = () => {
     toggleCreateAccountView(false);
+    toggleLogInView(false);
   }
 
   console.log(props.user);
@@ -43,7 +44,7 @@ const Homescreen = (props) => {
       ) : createAccountView === true ? (
         <CreateAccount toggleCreateAccount={toggleCreateAccountView} handleLogIn={handleLogIn} handleHomeScreenView={handleHomeScreenView} />
       ) : loginView === true ? (
-        <Login toggleLogIn={toggleLogInView} handleCreateAccountView={handleCreateAccountView} handleLogIn={handleLogIn} />
+        <Login toggleLogIn={toggleLogInView} handleCreateAccountView={handleCreateAccountView} handleLogIn={handleLogIn} handleHomeScreenView={handleHomeScreenView} />
       ) : (
         <div>
           {/* <Sidebar setUser={props.setUser} />

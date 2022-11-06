@@ -38,7 +38,7 @@ const LogIn = (props) => {
     <main
       class="mx-auto flex min-h-screen w-full items-center justify-center bg-maptile-background-dark text-white"
     >
-      <div class="bg-maptile-purple flex w-[40rem] h-[30rem] justify-center align-middle shadow-md rounded-lg">
+      <div class="bg-maptile-purple flex w-[40rem] h-[33rem] justify-center align-middle shadow-md rounded-lg">
         <section class="flex w-[30rem] flex-col space-y-10 mt-10">
           <div class="text-center text-4xl font-medium">Log In</div>
 
@@ -85,6 +85,12 @@ const LogIn = (props) => {
             > Create One
             </button>
           </p>
+
+          <button
+          onClick={() => props.handleHomeScreenView()}
+          className="transform text-center font-semibold text-white duration-300 hover:text-gray-300 underline"
+                >Return
+            </button>
         </section>
       </div>
     </main>

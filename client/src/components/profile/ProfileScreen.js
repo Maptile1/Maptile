@@ -5,7 +5,7 @@ import Sidebar from "../sidebar/Sidebar";
 import MapCard from "../card/MapCard";
 import { React, useState } from "react";
 import ProfileEditModal from "./ProfileEditModal";
-import { isRouteErrorResponse } from "react-router-dom";
+// import { isRouteErrorResponse } from "react-router-dom";
 
 const ProfileScreen = (props) => {
   const [modalOpen, setProfileModal] = useState(false);
