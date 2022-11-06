@@ -24,15 +24,15 @@ router.post('/tileset/create', async (req, res) => {
         owner: req.body._id
     })
     await tileset.save()
+    res.json({ tileset: tileset })
 
     var user = await User.findById(req.body._id)
     var newtilesetarray = user.tilesets.push(tilesetid)
-    var user = await User.findOneAndUpdate(
+    var newuser = await User.findOneAndUpdate(
         { _id: req.body._id }, //temp
         { tilesets: newtilesetarray },
         { new: true }
     )
-    res.json({ tileset: tileset })
 })
 
 // Delete Tileset
