@@ -86,7 +86,7 @@ userRouter.route("/user/get/:id").get(async (req, res) => {
 });
 
 userRouter.post("/user/update/:id", async (req, res) => {
-  if (req.session_id == undefined) {
+  if (req.body.session_id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
     return;
   }
