@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 userRouter.route("/user/register").post(async (req, res) => {
-  bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
+    bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
         var user = new User({
             _id: new ObjectId(),
             userName: req.body.userName,
@@ -25,77 +25,63 @@ userRouter.route("/user/register").post(async (req, res) => {
         await user.save()
           .then((user) => {res.json({ user: user })})
           .catch((err) => {res.json({ errorMessage: err.message})})
-    // else{
-    //   if(userDupe !== null && emailDupe === null){
-    //     res
-    //       .status(400)
-    //       .json({errorMessage: "Username taken."})
-    //   }
-    //   if(userDupe === null && emailDupe !== null){
-    //     res
-    //       .status(400)
-    //       .json({errorMessage: "Account already exists with this email."})
-    //   }
-    //   if(userDupe !== null && emailDupe !== null){
-    //     res
-    //       .status(400)
-    //       .json({errorMessage: "Username and email already in use."})
-    //   }
-    // }
-  })
+    })
 })
 
 userRouter.route("/user/login").post(async (req, res) => {
-  var user = await User.findOne({ userName: req.body.userName });
-  if (user == null) {
-    res
-      .status(400)
-      .json({ errorMessage: "Username password combination not found" });
-  } else {
-    bcrypt.compare(req.body.password, user.password, (err, result) => {
-      if (result) {
-        req.session._id = user._id.toString();
-        res.json({ user: user });
-      } else {
-        res
-          .status(400)
-          .json({ errorMessage: "Username password combination not found" });
-      }
-    });
-  }
-});
+    var user = await User.findOne({ userName: req.body.userName });
+    if (user == null) {
+        res.status(400)
+          .json({ errorMessage: "Username password combination not found" })
+    } 
+    else {
+        bcrypt.compare(req.body.password, user.password, (err, result) => {
+            if (result) {
+                req.session._id = user._id.toString()
+                res.json({ user: user })
+            }
+            else {
+                res.status(400)
+                .json({ errorMessage: "Username password combination not found" })
+            }
+        })
+    }
+})
 
 userRouter.route("/user/logout").post(async (req, res) => {
-  if (req.session._id == undefined) {
-    res.status(400).json({ errorMessage: "Not logged in" });
-  } else {
-    req.session.destroy();
-    res.json({ message: "success" });
-  }
-});
+    if (req.session._id == undefined) {
+        res.status(400).json({ errorMessage: "Not logged in" });
+    } else {
+        req.session.destroy()
+        res.json({ message: "success" })
+    }
+})
 
 userRouter.route("/user/loggedin").get(async (req, res) => {
-  if (req.session._id == undefined) {
-    res.json({ loggedIn: false });
-  } else {
-    var user = await User.findById(req.session._id);
-    if (user != null) {
-      res.json({ user: user, loggedIn: true });
-    } else {
-      req.session.destroy();
-      res.status(400).json({ errorMessage: "Couldnt find user" });
+    if (req.session._id == undefined) {
+        res.json({ loggedIn: false })
+    } 
+    else {
+        var user = await User.findById(req.session._id)
+        if (user != null) {
+            res.json({ user: user, loggedIn: true })
+        } 
+        else {
+            req.session.destroy()
+            res.status(400).json({ errorMessage: "Couldnt find user" })
+        }
     }
-  }
-});
+})
 
 userRouter.route("/user/get/:id").get(async (req, res) => {
-  var user = await User.findById(req.params.id);
-  if (user != null) {
-    res.json({ user: user });
-  } else {
-    res.status(400).json({ errorMessage: "Couldnt find user" });
-  }
-});
+    var user = await User.findById(req.params.id)
+    if (user != null) {
+        res.json({ user: user })
+    } 
+    else {
+        res.status(400).json({ errorMessage: "Couldnt find user" })
+    }
+})
 
 userRouter.post("/user/update/:id", async (req, res) => {
   if (req.body.session_id == undefined) {
