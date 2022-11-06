@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Tileset = require('../schema/tileset-schema');
 const ObjectId = require('mongodb').ObjectId;
+const User = require("../schema/user-schema");
 
 // Create Tileset
 router.post('/tileset/create', async (req, res) => {
@@ -9,8 +10,9 @@ router.post('/tileset/create', async (req, res) => {
     //     res.status(400).json({errorMessage: 'Not logged in'})
     //     return;
     // }
+    var tilesetid = new ObjectId()
     var tileset = new Tileset({
-        _id: new ObjectId(),
+        _id: tilesetid,
         tileset_data: [],
         name: req.body.name,
         description: req.body.description,
@@ -22,6 +24,14 @@ router.post('/tileset/create', async (req, res) => {
         owner: req.body._id
     })
     await tileset.save()
+
+    var user = await User.findById(req.params.id)
+    var newtilesetarray = user.tilesets.push(tilesetid)
+    var user = await User.findOneAndUpdate(
+        { _id: req.body._id }, //temp
+        { tilesets: newtilesetarray },
+        { new: true }
+    )
     res.json({ tileset: tileset })
 })
 

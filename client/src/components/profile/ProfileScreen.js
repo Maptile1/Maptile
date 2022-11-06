@@ -10,6 +10,7 @@ import ProfileEditModal from "./ProfileEditModal";
 const ProfileScreen = (props) => {
   const [modalOpen, setProfileModal] = useState(false);
   var user = props.user;
+  console.log(user);
   return (
     <div class="grid grid-cols-10 grid-rows-10 gap-4">
       <Sidebar setTheUser={props.setTheUser} />
