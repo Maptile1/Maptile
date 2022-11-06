@@ -83,39 +83,31 @@ userRouter.route("/user/get/:id").get(async (req, res) => {
     }
 })
 
-userRouter.post("/user/update/:id", async (req, res) => {
-  if (req.body.session_id == undefined) {
-    res.status(400).json({ errorMessage: "Not logged in" });
-    return;
-  }
-  var updates = {};
-  updates.userName = req.body.userName;
-  updates.email = req.body.email;
-  updates.password = req.body.password;
-  updates.tilesets = req.body.tilesets;
-  updates.shared_tilesets = req.body.shared_tilesets;
-  updates.maps = req.body.maps;
-  updates.shared_maps = req.body.shared_maps;
-  updates.likes = req.body.likes;
-  updates.dislikes = req.body.dislikes;
-  updates.bio = req.body.bio;
-  updates.featured = req.body.featured;
-  updates.accountCreated = req.body.accountCreated;
-
-  var user = await User.findOneAndUpdate(
-    { _id: req.params.id, owner: req.session_id },
-    { $set: updates },
-    { new: true }
-  );
-  if (user != null) {
-    res.json({ user: user });
-  } else {
-    if ((await User.findById(req.params.id)) != null) {
-      res.status(400).json({ errorMessage: "Not permitted to editle" });
-    } else {
-      res.status(400).json({ errorMessage: "Tileset does not exist" });
+userRouter.post("/user/update", async (req, res) => {
+    if (req.session._id == undefined) {
+        res.status(400).json({ errorMessage: "Not logged in" })
+        return
     }
-  }
-});
+    var updates = {}
+    updates.userName = req.body.userName
+    updates.email = req.body.email
+    updates.bio = req.body.bio
+    if (req.body.password != undefined){
+        bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
+            updates.password = hash
+            var user = await User.findOneAndUpdate(
+                { _id: req.session._id },
+                { $set: updates },
+                { new: true }
+              )
+              if (user != null) {
+                  res.json({ user: user })
+              } 
+              else {
+                  res.status(400).json({ errorMessage: "User doesn't exist" })
+              }
+        })
+    }
+})
 
 module.exports = userRouter;
