@@ -14,12 +14,17 @@ const LogIn = (props) => {
   const handleLogIn = async (e) => {
     console.log(input)
     if (inputValid) {
-      const response = await Axios.post("https://maptile1.herokuapp.com/user/login",
+      await Axios.post("https://maptile1.herokuapp.com/user/login",
         {
           userName: input.userName,
           password: input.password,
-        });
-      props.handleLogIn(response.data.user);
+        })
+        .then(function(response){
+          props.handleLogIn(response.data.user);
+        })
+        .catch(function(error){
+          console.log("Invalid Login")
+        })
     }
   }
 
