@@ -105,7 +105,7 @@ userRouter.post("/user/update/:id", async (req, res) => {
   updates.accountCreated = req.body.accountCreated;
 
   var user = await User.findOneAndUpdate(
-    { _id: req.params.id, owner: req.session._id },
+    { _id: req.params.id, owner: req.session_id },
     { $set: updates },
     { new: true }
   );

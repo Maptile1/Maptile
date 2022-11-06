@@ -14,9 +14,16 @@ import EditMap from './components/map/EditMap';
 
 function App() {
   const [user, setUser] = useState(null)
+  const [otherProfileUser, setOtherProfileUser] = useState(null);
+
   const setTheUser = (newuser) => {
     setUser(newuser);
   }
+
+  const setOtherProfile = (owner) => { ///this will be used to view other user's profile
+    setOtherProfileUser(owner);
+  }
+
   console.log(user);
   return (
     <BrowserRouter>
@@ -27,9 +34,9 @@ function App() {
           <Route path="/user_tilesets" element={<TilesetScreen user={user} setTheUser={setTheUser} />} />
           <Route path="/user_maps" element={<MapScreen user={user} setTheUser={setTheUser} />} />
           <Route path="/search" element={<SearchScreen user={user} setTheUser={setTheUser} />} />
-          <Route path="/user_profile" element={<ProfileScreen user={user} setTheUser={setTheUser} />} />
+          <Route path="/user_profile" element={<ProfileScreen user={user} otherProfileUser={otherProfileUser} setTheUser={setTheUser} />} />
           <Route path="/tilesetdisplay" element={<TilesetDisplay user={user} setTheUser={setTheUser} />} />
-          <Route path="/mapdisplay" element={<MapDisplay user={user} setTheUser={setTheUser} />} />
+          <Route path="/mapdisplay" element={<MapDisplay user={user} setTheUser={setTheUser} setOtherProfile={setOtherProfile} />} />
           <Route path="/tileset_edit" element={<EditTileset user={user} setTheUser={setTheUser} />} />
           <Route path="/map_edit" element={<EditMap user={user} setTheUser={setTheUser} />} />
         </Routes>
