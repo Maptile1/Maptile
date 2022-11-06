@@ -86,10 +86,10 @@ userRouter.route("/user/get/:id").get(async (req, res) => {
 });
 
 userRouter.post("/user/update/:id", async (req, res) => {
-  // if (req.session._id == undefined) {
-  //   res.status(400).json({ errorMessage: "Not logged in" });
-  //   return;
-  // }
+  if (req.session._id == undefined) {
+    res.status(400).json({ errorMessage: "Not logged in" });
+    return;
+  }
   var updates = {};
   updates.userName = req.body.userName;
   updates.email = req.body.email;

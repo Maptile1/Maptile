@@ -22,9 +22,10 @@ const ProfileEditModal = (props) => {
                 id: user._id,
                 session_id: user._id,
                 userName: updated.userName,
-                password: updated.password,
+                password: "test",
             }
         );
+        console.log(response)
     };
 
     //   const handleLogIn = async (e) => {
