@@ -15,53 +15,55 @@ const ProfileEditModal = (props) => {
     const updateInput = (e) => {
         const { name, value } = e.target;
         const updated = { ...input, [name]: value };
-        setInput(updated); 
+        setInput(updated);
     };
 
     const handleUpdate = async (e) => {
         console.log(input)
 
-        if(input.password !== "" || input.confirmpassword !== ""){
-            if(input.password === input.confirmpassword){
+        if (input.password !== "" || input.confirmpassword !== "") {
+            if (input.password === input.confirmpassword) {
                 await Axios.post(
                     "https://maptile1.herokuapp.com/user/update",
                     {
-                        id: user._id,
-                        session_id: user._id,
+                        _id: user._id,
                         userName: input.userName,
                         bio: input.bio,
                         email: input.email,
                         password: input.password,
                     }
                 )
-                .then(function(response){
-                    props.updateUser(response.data.user)
-                })
-                .catch(function(error){
-                    window.alert(error.response.data.errorMessage)
-                })
+                    .then(function (response) {
+
+                        props.updateUser(response.data.user)
+                    })
+                    .catch(function (error) {
+                        window.alert(error.response.data.errorMessage)
+                    })
+
                 return
             }
+
             window.alert("Passwords do not match.")
             return
         }
-        else{
+        else {
+
             await Axios.post(
                 "https://maptile1.herokuapp.com/user/update",
                 {
-                    id: user._id,
-                    session_id: user._id,
+                    _id: user._id,
                     userName: input.userName,
                     bio: input.bio,
                     email: input.email,
                 }
             )
-            .then(function(response){
-                props.updateUser(response.data.user)
-            })
-            .catch(function(error){
-                window.alert(error.response.data.errorMessage)
-            })
+                .then(function (response) {
+                    props.updateUser(response.data.user)
+                })
+                .catch(function (error) {
+                    window.alert(error.response.data.errorMessage)
+                })
         }
     }
 
@@ -121,7 +123,7 @@ const ProfileEditModal = (props) => {
                             type="text"
                             name="userName"
                             defaultValue={user.userName}
-                            onBlur={updateInput}
+                            onChange={updateInput}
                             className="w-full border-none bg-maptile-background-light outline-none placeholder:italic focus:outline-none text-white h-14 p-2.5 rounded-xl"
                         />
                     </div>
@@ -137,7 +139,7 @@ const ProfileEditModal = (props) => {
                             type="text"
                             name="bio"
                             defaultValue={user.bio}
-                            onBlur={updateInput}
+                            onChange={updateInput}
                             className="w-full border-none bg-maptile-background-light outline-none placeholder:italic focus:outline-none text-white h-14 p-2.5 rounded-xl"
                         />
                     </div>
@@ -151,9 +153,9 @@ const ProfileEditModal = (props) => {
 
                         <input
                             type="text"
-                            name="change-email"
-                            placeholder="(Current Email)"
-                            onBlur={updateInput}
+                            name="email"
+                            defaultValue={user.email}
+                            onChange={updateInput}
                             className="w-full border-none bg-maptile-background-light outline-none placeholder:italic focus:outline-none text-white h-14 p-2.5 rounded-xl"
                         />
                     </div>
@@ -167,16 +169,16 @@ const ProfileEditModal = (props) => {
 
                         <input
                             type="password"
-                            name="change-username"
+                            name="password"
                             placeholder="Enter a Password"
-                            onBlur={updateInput}
+                            onChange={updateInput}
                             className="w-full border-none bg-maptile-background-light outline-none placeholder:italic focus:outline-none text-white h-14 p-2.5 rounded-xl"
                         />
                     </div>
 
                     <div className="flex flex-col w-full">
                         <label
-                            for="share-email"
+                            for="confirm-password"
                             class="text-white h-14 p-2.5 rounded-xl underline"
                         >
                             Confirm Password
@@ -184,14 +186,14 @@ const ProfileEditModal = (props) => {
 
                         <input
                             type="password"
-                            name="confirm-password"
+                            name="confirmpassword"
                             placeholder="Confirm Password"
-                            onBlur={updateInput}
+                            onChange={updateInput}
                             className="w-full border-none bg-maptile-background-light outline-none placeholder:italic focus:outline-none text-white h-14 p-2.5 rounded-xl"
                         />
                     </div>
-                    <button className="transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl w-full text-white mt-3" onClick={()=>handleUpdate()}>
-                            Confirm
+                    <button className="transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl w-full text-white mt-3" onClick={() => handleUpdate()}>
+                        Confirm
                     </button>
                 </div>
             </div>

@@ -5,6 +5,7 @@ import Sidebar from "../sidebar/Sidebar";
 import MapCard from "../card/MapCard";
 import { React, useState } from "react";
 import ProfileEditModal from "./ProfileEditModal";
+import { isRouteErrorResponse } from "react-router-dom";
 
 const ProfileScreen = (props) => {
   const [modalOpen, setProfileModal] = useState(false);
@@ -32,13 +33,13 @@ const ProfileScreen = (props) => {
       </div>
 
       <div class="col-start-5 row-start-3 mt-20 text-6xl justify-self-center text-white">
-        <BsMapFill />8 Maps
+        <BsMapFill />{user.maps.length} Maps
       </div>
       <div class="col-start-7 row-start-3 mt-20 text-6xl justify-self-center text-white">
-        <BsFillPuzzleFill />8 Tilesets
+        <BsFillPuzzleFill />{user.tilesets.length} Tilesets
       </div>
       <div class="col-start-9 row-start-3 mt-20 text-6xl justify-self-center text-white">
-        <BiLike />8 Likes
+        <BiLike />{user.likes} Likes
       </div>
 
       <div class="mt-20 grid grid-cols-4 col-span-10 col-start-2 row-start-4 gap-5">
