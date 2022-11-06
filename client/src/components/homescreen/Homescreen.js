@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import SplashScreen from "../splash_screen/SplashScreen";
 import CreateAccount from "../createAccount/CreateAccount";
 import Login from "../login/LogIn";
-import Sidebar from "../sidebar/Sidebar";
-import Home from "../home/Home";
 import { useNavigate } from "react-router-dom";
 
 
