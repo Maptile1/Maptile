@@ -6,7 +6,16 @@ import { BiEdit } from "react-icons/bi"
 import { MdOutlineContentCopy } from "react-icons/md"
 import { Fragment } from 'react'
 import Comment from "../comment/Comment";
+import { useNavigate } from "react-router-dom";
 const TilesetDisplay = (props) => {
+    const nav = useNavigate()
+    var owner = {
+        userName: "Robert", description: "best tileset editor", maps: [1, 2, 3, 4], likes: 100, tilesets: [1, 2]
+    }
+    const handleOtherUserProfile = () => {
+        props.setOtherProfile(owner)
+        nav("/other_user_profile")
+    }
     return (
         <div>
             <Sidebar />
@@ -18,11 +27,11 @@ const TilesetDisplay = (props) => {
                             <img style={{ width: 100, height: 120, borderRadius: 400 / 2 }}
                                 class=" object-cover"
                                 src="https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
-                                alt="blog" />
+                                alt="blog" onClick={() => handleOtherUserProfile()} />
 
                             <div class="flex flex-col justify-between ml-5">
                                 <div>@Joe Schmo</div>
-                                <div>Destiny Inspired Map</div>
+                                <div>Destiny Inspired Tileset</div>
                             </div>
 
                         </div>
