@@ -3,10 +3,9 @@ import { BiLike, BiCog } from "react-icons/bi";
 import TilesetCard from "../card/TilesetCard";
 import Sidebar from "../sidebar/Sidebar";
 // import MapCard from "../card/MapCard";
-import { React, useState } from "react";
+import { React, useState, } from "react";
 import ProfileEditModal from "./ProfileEditModal";
 import { Navigate, useLocation  } from "react-router-dom";
-
 // import { isRouteErrorResponse } from "react-router-dom";
 
 const ProfileScreen = (props) => {
@@ -19,7 +18,7 @@ const ProfileScreen = (props) => {
 
   const updatePfp = (newImage) =>{
     console.log(newImage)
-    setPfp(newImage)
+    setPfp(newImage + "?=" + Math.random().toString().substring(2))
   }
 
   return user ? (
