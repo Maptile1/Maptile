@@ -22,14 +22,15 @@ const ProfileScreen = (props) => {
   }
 
   return user ? (
-    <div class="grid grid-cols-10 grid-rows-10 gap-4">
+    <div class="grid grid-cols-12 grid-rows-10 gap-4 ">
       <Sidebar setTheUser={props.setTheUser} />
 
-      <div class="col-start-2 col-span-2 row-start-3 text-white text-center">
-        <div class="text-3xl mb-8"> {user.userName}</div>
+      <div class="col-start-2 col-span-2 row-start-3 text-white text-center ">
+        <div class="text-3xl mb-8 text-center"> {user.userName}</div>
 
         <img
-          class="w-full h-3/4 object-cover object-center"
+          style={{ borderRadius: 400 / 4 }}
+          class="w-full h-3/4 object-cover object-center border-2 border-maptile-green"
           src={userPfp}
           alt="blog"
           onError={({currentTarget}) => {
@@ -37,7 +38,10 @@ const ProfileScreen = (props) => {
             updatePfp("https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65")
           }}
         />
-        <div class="mt-5">{user.bio}</div>
+        <div className="bg-maptile-background-mid p2.5 rounded-xl w-full">
+          <div class="mt-5 text-left ml-2">{user.bio}</div>
+        </div>
+        
         <button
           className="mt-5 flex flex-row p-2 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl"
           onClick={() => setProfileModal(true)}

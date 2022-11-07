@@ -46,7 +46,7 @@ const TilesetDisplay = (props) => {
                                 <div class="flex">
                                 <img
                                     style={{ width: 100, height: 120, borderRadius: 400 / 2 }}
-                                    class="w-full h-3/4 object-cover object-center"
+                                    class="w-full h-3/4 object-cover object-center border-2 border-maptile-green"
                                     src={userPfp}
                                     alt="blog"
                                     onError={({currentTarget}) => {
