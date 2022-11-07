@@ -10,6 +10,7 @@ const OtherUserProfile = (props) => {
     const location = useLocation();
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true);
+    const [userPfp, setPfp] = useState("")
 
     useEffect(() => {
         setUser(location.state.owner)
@@ -18,12 +19,12 @@ const OtherUserProfile = (props) => {
             let response = await Axios.get(
                 "https://maptile1.herokuapp.com/user/get/" + location.state.owner)
             setUser(response.data.user)
+            setPfp("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + response.data.user._id)
             setLoading(false);
         }
         getUser()
     }, [location.state.owner]);
 
-    var userPfp = "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + user._id
 
     return (
         <div>

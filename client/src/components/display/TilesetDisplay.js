@@ -14,12 +14,12 @@ const TilesetDisplay = (props) => {
     const nav = useNavigate()
     var [owner, setOwner] = useState(null)
     const [loading, setLoading] = useState(true);
+    const [userPfp, setPfp] = useState("")
     const handleOtherUserProfile = () => {
         props.setOtherProfile(owner)
         nav("/other_user_profile", { state: { owner: location.state.owner } });
     }
     const location = useLocation();
-    var userPfp = "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + owner._id
 
     useEffect(() => {
         const getOwner = async () => {
@@ -27,6 +27,7 @@ const TilesetDisplay = (props) => {
             let response = await Axios.get(
                 "https://maptile1.herokuapp.com/user/get/" + location.state.owner)
             setOwner(response.data.user)
+            setPfp("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +  response.data.user._id)
             setLoading(false);
         }
         getOwner()
