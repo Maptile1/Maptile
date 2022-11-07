@@ -15,7 +15,6 @@ const ProfileScreen = (props) => {
   const user = props.user;
   const location = useLocation();
 
-
   return user ? (
     <div class="grid grid-cols-10 grid-rows-10 gap-4">
       <Sidebar setTheUser={props.setTheUser} />
