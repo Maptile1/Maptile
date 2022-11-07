@@ -36,7 +36,7 @@ const OtherUserProfile = (props) => {
                         src="https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
                         alt="blog"
                     />
-                    <div class="mt-5">{user.description}</div>
+                    <div class="mt-5">{user.bio}</div>
 
                 </div>
 
