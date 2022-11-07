@@ -68,6 +68,23 @@ const ProfileEditModal = (props) => {
         props.setProfileModal(false)
     }
 
+    const uploadPfp = async (e) => {
+        const file = e.target.files[0]
+        const formData = new FormData()
+        formData.append('image', file)
+        formData.append('_id', user._id)
+
+        await Axios.post("https://maptile1.herokuapp.com/user/image", formData)
+        .then(function(response){
+            console.log(response)
+        })
+        .catch(function(error){
+            console.log(error)
+        })
+        props.updatePfp("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + user._id)
+        console.log("updated")
+    }
+
     return (
         <Modal
             isOpen={props.modalOpen}
@@ -94,9 +111,7 @@ const ProfileEditModal = (props) => {
                         >
                             Upload A Profile Picture:
                         </label>
-                        <button className="transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl w-1/3 text-white mt-3">
-                            Choose File
-                        </button>
+                        <input type="file" name="image" accept="image/*" multiple={false} onChange={uploadPfp} />
                     </div>
                     <div className="flex flex-col w-full">
                         <label

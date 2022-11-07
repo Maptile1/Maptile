@@ -2,12 +2,16 @@ import Sidebar from "../sidebar/Sidebar";
 import React, { useState, useEffect } from "react";
 import TSSCard from "../card/TSSCard";
 import Axios from "axios";
+import { Navigate, useLocation  } from "react-router-dom";
+
 const SearchScreen = (props) => {
   const [userSelected, updateUserSelected] = useState(true)
   var [searchResults, setSearchResults] = useState([])
   let tab_selected = 'bg-maptile-background-mid text-center rounded-t-xl cursor-pointer  mt-[10px] duration-300'
   let tab_unselected = 'bg-maptile-tab-unselected text-center rounded-t-xl cursor-pointer duration-300'
 
+  const user = props.user;
+  const location = useLocation();
 
   useEffect(() => {
     const tilesetRes = async () => {
@@ -21,7 +25,7 @@ const SearchScreen = (props) => {
 
 
   const tags = ["Fire", "Water", "Awesome", "Big", "Small", "Great", "Earth", "City", "Lava", "Madison", "Castle", "Larger"]
-  return (
+  return user ? (
     <div>
       <Sidebar setTheUser={props.setTheUser} />
       <main className="mx-auto flex flex-col min-h-screen w-full items-center justify-top bg-maptile-background-dark text-white">
@@ -70,7 +74,14 @@ const SearchScreen = (props) => {
 
       </main >
     </div >
-  );
+  ) : 
+  (
+    <Navigate
+        to="/"
+        replace
+        state={{ from: location }}
+    />)
+  ;
 };
 
 export default SearchScreen;

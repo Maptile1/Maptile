@@ -2,15 +2,26 @@ import { BsMapFill, BsFillPuzzleFill } from "react-icons/bs";
 import { BiLike, BiCog } from "react-icons/bi";
 import TilesetCard from "../card/TilesetCard";
 import Sidebar from "../sidebar/Sidebar";
-import MapCard from "../card/MapCard";
-import { React, useState } from "react";
+// import MapCard from "../card/MapCard";
+import { React, useState, } from "react";
 import ProfileEditModal from "./ProfileEditModal";
+import { Navigate, useLocation  } from "react-router-dom";
 // import { isRouteErrorResponse } from "react-router-dom";
 
 const ProfileScreen = (props) => {
   const [modalOpen, setProfileModal] = useState(false);
-  var user = props.user;
-  return (
+
+  const user = props.user;
+  const location = useLocation();
+
+  const [userPfp, setPfp] = useState("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + user._id + "?=" + Math.random().toString().substring(2))
+
+  const updatePfp = (newImage) =>{
+    console.log(newImage)
+    setPfp(newImage + "?=" + Math.random().toString().substring(2))
+  }
+
+  return user ? (
     <div class="grid grid-cols-10 grid-rows-10 gap-4">
       <Sidebar setTheUser={props.setTheUser} />
 
@@ -19,8 +30,12 @@ const ProfileScreen = (props) => {
 
         <img
           class="w-full h-3/4 object-cover object-center"
-          src="https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
+          src={userPfp}
           alt="blog"
+          onError={({currentTarget}) => {
+            currentTarget.onerror = null
+            updatePfp("https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65")
+          }}
         />
         <div class="mt-5">{user.bio}</div>
         <button
@@ -69,10 +84,17 @@ const ProfileScreen = (props) => {
         modalOpen={modalOpen}
         setProfileModal={setProfileModal}
         updateUser={props.setTheUser}
+        updatePfp={updatePfp}
       />
 
     </div>
-  );
+  ) : 
+  (
+  <Navigate
+      to="/"
+      replace
+      state={{ from: location }}
+  />);
 };
 
 export default ProfileScreen;

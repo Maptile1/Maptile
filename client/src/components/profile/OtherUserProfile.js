@@ -10,6 +10,7 @@ const OtherUserProfile = (props) => {
     const location = useLocation();
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true);
+    const [userPfp, setPfp] = useState("")
 
     useEffect(() => {
         setUser(location.state.owner)
@@ -18,10 +19,12 @@ const OtherUserProfile = (props) => {
             let response = await Axios.get(
                 "https://maptile1.herokuapp.com/user/get/" + location.state.owner)
             setUser(response.data.user)
+            setPfp("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + response.data.user._id)
             setLoading(false);
         }
         getUser()
-    }, []);
+    }, [location.state.owner]);
+
 
     return (
         <div>
@@ -33,10 +36,14 @@ const OtherUserProfile = (props) => {
 
                     <img
                         class="w-full h-3/4 object-cover object-center"
-                        src="https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
+                        src={userPfp}
                         alt="blog"
+                        onError={({ currentTarget }) => {
+                            currentTarget.onerror = null
+                            currentTarget.src = "https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
+                        }}
                     />
-                    <div class="mt-5">{user.bio}</div>
+                    <div class="mt-5">{user.description}</div>
 
                 </div>
 
