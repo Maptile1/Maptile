@@ -17,6 +17,11 @@ const ProfileScreen = (props) => {
 
   const [userPfp, setPfp] = useState("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + user._id)
 
+  const updatePfp = (newImage) =>{
+    console.log(newImage)
+    setPfp(newImage)
+  }
+
   return user ? (
     <div class="grid grid-cols-10 grid-rows-10 gap-4">
       <Sidebar setTheUser={props.setTheUser} />
@@ -30,7 +35,7 @@ const ProfileScreen = (props) => {
           alt="blog"
           onError={({currentTarget}) => {
             currentTarget.onerror = null
-            setPfp("https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65")
+            updatePfp("https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65")
           }}
         />
         <div class="mt-5">{user.bio}</div>
@@ -80,6 +85,7 @@ const ProfileScreen = (props) => {
         modalOpen={modalOpen}
         setProfileModal={setProfileModal}
         updateUser={props.setTheUser}
+        updatePfp={updatePfp}
       />
 
     </div>
