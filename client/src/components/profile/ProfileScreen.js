@@ -15,6 +15,8 @@ const ProfileScreen = (props) => {
   const user = props.user;
   const location = useLocation();
 
+  const [userPfp, setPfp] = useState("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + user._id)
+
   return user ? (
     <div class="grid grid-cols-10 grid-rows-10 gap-4">
       <Sidebar setTheUser={props.setTheUser} />
@@ -24,8 +26,12 @@ const ProfileScreen = (props) => {
 
         <img
           class="w-full h-3/4 object-cover object-center"
-          src="https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
+          src={userPfp}
           alt="blog"
+          onError={({currentTarget}) => {
+            currentTarget.onerror = null
+            setPfp("https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65")
+          }}
         />
         <div class="mt-5">{user.bio}</div>
         <button
