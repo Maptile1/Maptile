@@ -14,7 +14,7 @@ const ProfileScreen = (props) => {
   const user = props.user;
   const location = useLocation();
 
-  const [userPfp, setPfp] = useState("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + user._id)
+  const [userPfp, setPfp] = useState("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + user._id + "?=" + Math.random().toString().substring(2))
 
   const updatePfp = (newImage) =>{
     console.log(newImage)
