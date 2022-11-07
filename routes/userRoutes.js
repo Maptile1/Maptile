@@ -140,7 +140,9 @@ userRouter.post('/user/image', uploadStrategy, async (req, res) => {
     const blobService = new BlockBlobClient(process.env.AZURE_STORAGE_CONNECTION_STRING, 'maptile-profile-images', blobName)
     stream = getStream(req.files[0].buffer)
     streamLength = req.files[0].buffer.length
-    blobService.uploadStream(stream, streamLength)
+    const options = { blobHTTPHeaders: { blobContentType: req.files[0].mimetype } };
+    console.log(options)
+    blobService.uploadStream(stream, streamLength, undefined, options)
       .then(() => {res.json({message: 'successful upload'})})
       .catch((err) => {res.status(400).json({errorMessage: err})})
 })
