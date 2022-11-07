@@ -28,14 +28,15 @@ const OtherUserProfile = (props) => {
 
     return (
         <div>
-            {!loading && (<div class="grid grid-cols-10 grid-rows-10 gap-4">
+            {!loading && (<div class="grid grid-cols-12 grid-rows-10 gap-4">
                 <Sidebar />
 
                 <div class="col-start-2 col-span-2 row-start-3 text-white text-center">
                     <div class="text-3xl mb-8"> {user.userName}</div>
 
                     <img
-                        class="w-full h-3/4 object-cover object-center"
+                        style={{ borderRadius: 400 / 4 }}
+                        class="w-full h-3/4 object-cover object-center border-2 border-maptile-green"
                         src={userPfp}
                         alt="blog"
                         onError={({ currentTarget }) => {
