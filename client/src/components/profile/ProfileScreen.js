@@ -10,7 +10,6 @@ import ProfileEditModal from "./ProfileEditModal";
 const ProfileScreen = (props) => {
   const [modalOpen, setProfileModal] = useState(false);
   var user = props.user;
-  console.log(user);
   return (
     <div class="grid grid-cols-10 grid-rows-10 gap-4">
       <Sidebar setTheUser={props.setTheUser} />
@@ -47,18 +46,22 @@ const ProfileScreen = (props) => {
         <TilesetCard
           tilename="nice tileset"
           description="awesome tiles for your games"
+          owner={user._id}
         />
         <TilesetCard
           tilename="Ice Tiles"
           description="perfect tiles for 2D winter theme"
+          owner={user._id}
         />
-        <MapCard
+        <TilesetCard
           mapname="Fire Map"
           description="perfect map for your 2D fire map"
+          owner={user._id}
         />
         <TilesetCard
           tilename="Space Tiles"
           description="perfect tiles for 2D space theme"
+          owner={user._id}
         />
       </div>
       <ProfileEditModal

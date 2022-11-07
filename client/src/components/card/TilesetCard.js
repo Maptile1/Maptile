@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 const TilesetCard = (props) => {
     const nav = useNavigate()
     const handleTilesetView = () => {
-        nav("/tilesetdisplay")
+        nav("/tilesetdisplay", { state: { owner: props.owner } })
     }
     return (
         <div class="max-w-sm rounded overflow-hidden shadow-lg pb-20 border bg-maptile-background-mid">

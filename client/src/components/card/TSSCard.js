@@ -11,8 +11,9 @@ const TSSCard = (props) => {
         nav("/tileset_edit")
     }
     const handleTilesetDisplay = () => {
-        nav("/tilesetdisplay")
+        nav("/tilesetdisplay", { state: { owner: props.owner } });
     }
+
     return (
         <div class="max-w-sm rounded overflow-hidden mt-5 mx-14">
             {props.search ? <img onClick={handleTilesetDisplay} class="w-full border border-white cursor-pointer" src="https://images.gnwcdn.com/2020/usgamer/A-Link-to-the-Past-Map-Header1-05292020.jpg/EG11/thumbnail/1920x1080/format/jpg/quality/65/the-20-best-in-game-maps.jpg" alt="" /> : <img onClick={handleTilesetView} class="w-full border border-white cursor-pointer" src="https://images.gnwcdn.com/2020/usgamer/A-Link-to-the-Past-Map-Header1-05292020.jpg/EG11/thumbnail/1920x1080/format/jpg/quality/65/the-20-best-in-game-maps.jpg" alt="" />}

@@ -47,7 +47,7 @@ const SearchScreen = (props) => {
           <div className="bg-maptile-background-mid w-10/12 h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
             <div className="flex flex-row flex-wrap justify-center mr-8 py-10 pl-10 ">
               {searchResults.map((obj, index) =>
-                <TSSCard search={true} name={obj.name} />
+                <TSSCard search={true} owner={obj.owner} name={obj.name} />
               )}
             </div>
             <div className="absolute text-white top-10 mt-48 mr-10 right-4">
