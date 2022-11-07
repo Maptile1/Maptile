@@ -29,6 +29,7 @@ const LogIn = (props) => {
           props.handleLogIn(response.data.user);
         })
         .catch(function(error){
+          console.log("YOOO")
           window.alert(error.response.data.errorMessage)
         })
     }

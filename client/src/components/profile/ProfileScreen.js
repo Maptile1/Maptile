@@ -2,15 +2,21 @@ import { BsMapFill, BsFillPuzzleFill } from "react-icons/bs";
 import { BiLike, BiCog } from "react-icons/bi";
 import TilesetCard from "../card/TilesetCard";
 import Sidebar from "../sidebar/Sidebar";
-import MapCard from "../card/MapCard";
+// import MapCard from "../card/MapCard";
 import { React, useState } from "react";
 import ProfileEditModal from "./ProfileEditModal";
+import { Navigate, useLocation  } from "react-router-dom";
+
 // import { isRouteErrorResponse } from "react-router-dom";
 
 const ProfileScreen = (props) => {
   const [modalOpen, setProfileModal] = useState(false);
-  var user = props.user;
-  return (
+
+  const user = props.user;
+  const location = useLocation();
+
+
+  return user ? (
     <div class="grid grid-cols-10 grid-rows-10 gap-4">
       <Sidebar setTheUser={props.setTheUser} />
 
@@ -72,7 +78,13 @@ const ProfileScreen = (props) => {
       />
 
     </div>
-  );
+  ) : 
+  (
+  <Navigate
+      to="/"
+      replace
+      state={{ from: location }}
+  />);
 };
 
 export default ProfileScreen;
