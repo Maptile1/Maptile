@@ -4,6 +4,13 @@ const userRouter = express.Router();
 const ObjectId = require("mongodb").ObjectId;
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+const multer  = require('multer')
+const inMemoryStorage = multer.memoryStorage()
+const uploadStrategy = multer({ storage: inMemoryStorage }).any() //temp
+const { BlockBlobClient } = require('@azure/storage-blob')
+const getStream = require('into-stream')
+require('dotenv').config();
+
 
 userRouter.route("/user/register").post(async (req, res) => {
     bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
@@ -122,6 +129,22 @@ userRouter.post("/user/update", async (req, res) => {
               res.status(400).json({ errorMessage: "User doesn't exist" })
           }
     }
+})
+
+userRouter.post('/user/image', uploadStrategy, async (req, res) => {
+    // if (req.session._id == undefined) {
+    //     res.status(400).json({ errorMessage: "Not logged in" })
+    //     return
+    // }
+    const blobName = req.body._id //temp
+    const blobService = new BlockBlobClient(process.env.AZURE_STORAGE_CONNECTION_STRING, 'maptile-profile-images', blobName)
+    stream = getStream(req.files[0].buffer)
+    streamLength = req.files[0].buffer.length
+    const options = { blobHTTPHeaders: { blobContentType: req.files[0].mimetype } };
+    console.log(options)
+    blobService.uploadStream(stream, streamLength, undefined, options)
+      .then(() => {res.json({message: 'successful upload'})})
+      .catch((err) => {res.status(400).json({errorMessage: err})})
 })
 
 module.exports = userRouter;
