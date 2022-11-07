@@ -2,7 +2,7 @@ import Sidebar from "../sidebar/Sidebar";
 import { FaThumbsDown, FaThumbsUp } from "react-icons/fa"
 import { Menu, Transition } from '@headlessui/react'
 import { BsSave } from "react-icons/bs"
-import { BiEdit, BiSleepy } from "react-icons/bi"
+import { BiEdit } from "react-icons/bi"
 import { MdOutlineContentCopy } from "react-icons/md"
 import { Fragment, useEffect, useState } from 'react'
 import Comment from "../comment/Comment";
@@ -19,6 +19,7 @@ const TilesetDisplay = (props) => {
         nav("/other_user_profile", { state: { owner: location.state.owner } });
     }
     const location = useLocation();
+    var userPfp = "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + owner._id
 
     useEffect(() => {
         const getOwner = async () => {
@@ -29,7 +30,7 @@ const TilesetDisplay = (props) => {
             setLoading(false);
         }
         getOwner()
-    }, []);
+    }, [location.state.owner]);
 
     console.log(owner);
     return (
@@ -42,10 +43,16 @@ const TilesetDisplay = (props) => {
                         <div class="grid grid-cols-5 grid-rows-2">
                             <div class="row-start-1 col-start-1 col-span-3 mt-10">
                                 <div class="flex">
-                                    <img style={{ width: 100, height: 120, borderRadius: 400 / 2 }}
-                                        class=" object-cover"
-                                        src="https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
-                                        alt="blog" onClick={() => handleOtherUserProfile()} />
+                                <img
+                                    style={{ width: 100, height: 120, borderRadius: 400 / 2 }}
+                                    class="w-full h-3/4 object-cover object-center"
+                                    src={userPfp}
+                                    alt="blog"
+                                    onError={({currentTarget}) => {
+                                        currentTarget.onerror = null
+                                        currentTarget.src="https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
+                                    }}
+                                    onClick={() => handleOtherUserProfile()} />
 
                                     <div class="flex flex-col justify-between ml-5">
                                         <div>{owner.userName}</div>
