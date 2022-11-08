@@ -21,20 +21,19 @@ const TilesetScreen = (props) => {
     "bg-maptile-background-mid text-center rounded-t-xl cursor-pointer  mt-[10px] duration-300";
   let tab_unselected =
     "bg-maptile-tab-unselected text-center rounded-t-xl cursor-pointer duration-300";
+
+  var user = props.user;
+
   useEffect(() => {
-    var user = props.user;
     console.log(user);
     const getTilesets = async () => {
       var response = await Axios.get(
         "https://maptile1.herokuapp.com/tileset/getUser/" + user._id
       );
-      console.log(response.data);
       setUserTilesets(response.data.usertilesets);
     };
     getTilesets();
   }, []);
-
-  console.log(userTilesets);
 
   const updateInput = (e) => {
     const { name, value } = e.target;
@@ -51,12 +50,19 @@ const TilesetScreen = (props) => {
 
   const handleCreate = async (e) => {
     if (inputValid) {
-      setModal(false);
       await Axios.post("https://maptile1.herokuapp.com/tileset/create", {
         name: input.name,
         description: "test",
         _id: props.user._id,
       });
+      const getTilesets = async () => {
+        var response = await Axios.get(
+          "https://maptile1.herokuapp.com/tileset/getUser/" + user._id
+        );
+        setUserTilesets(response.data.usertilesets);
+      };
+      getTilesets();
+      setModal(false);
     }
   };
 
@@ -72,26 +78,6 @@ const TilesetScreen = (props) => {
     setModal(false);
   };
 
-  const tilesets = [];
-  let tileset1 = { name: "Great Tileset" };
-  let tileset2 = { name: "Best Tileset" };
-  let tileset3 = { name: "Nice Tileset" };
-  let tileset4 = { name: "Water Tileset" };
-  let tileset5 = { name: "Grass Tileset" };
-  let tileset6 = { name: "Lava Tileset" };
-  let tileset7 = { name: "Small Tileset" };
-  let tileset8 = { name: "Large Tileset" };
-
-  tilesets.push(
-    tileset1,
-    tileset2,
-    tileset3,
-    tileset4,
-    tileset5,
-    tileset6,
-    tileset7,
-    tileset8
-  );
   return (
     <div>
       <Sidebar />
@@ -123,7 +109,7 @@ const TilesetScreen = (props) => {
           </div>
           <div className="bg-maptile-background-mid w-full h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
             <div className="flex flex-row flex-wrap px-5 py-5 pl-10  ">
-              {tilesets.map((obj, index) => (
+              {userTilesets.map((obj, index) => (
                 <TSSCard name={obj.name} />
               ))}
             </div>
