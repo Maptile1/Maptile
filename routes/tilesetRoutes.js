@@ -15,7 +15,7 @@ router.post("/tileset/create", async (req, res) => {
     _id: tilesetId,
     tileset_data: [],
     name: req.body.name,
-    description: req.body.description,
+    description: "",
     likes: 0,
     dislikes: 0,
     comments: [],
@@ -60,7 +60,7 @@ router.post("/tileset/update/:id", async (req, res) => {
   var updates = {};
   updates.tileset_data = req.body.tileset_data;
   updates.name = req.body.name;
-  updates.description = "";
+  updates.description = req.body.description;
   updates.public = req.body.public;
   var tileset = await Tileset.findOneAndUpdate(
     { _id: req.params.id, owner: req.session._id },
