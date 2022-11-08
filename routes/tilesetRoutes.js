@@ -36,13 +36,13 @@ router.post("/tileset/delete/:id", async (req, res) => {
   //   res.status(400).json({ errorMessage: "Not logged in" });
   //   return;
   // }
-  var user_id = Tileset.findById(req.params.id).owner;
-  var user = User.findById(user_id);
+  var user_id = await Tileset.findById(req.params.id).owner;
+  var user = await User.findById(user_id);
   user.tilesets = user.tilesets.filter(
     (e) => e !== new ObjectId(req.params.id)
   );
   user.save();
-  Tileset.findOneAndRemove({ _id: req.params.id })
+  await Tileset.findOneAndRemove({ _id: req.params.id })
     .then(() => res.json({ message: "Tileset deleted" }))
     .catch((err) => {
       Tileset.findOne({ _id: req.params.id })
