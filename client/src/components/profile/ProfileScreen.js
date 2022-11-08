@@ -4,6 +4,7 @@ import TilesetCard from "../card/TilesetCard";
 import Sidebar from "../sidebar/Sidebar";
 // import MapCard from "../card/MapCard";
 import { React, useState, useEffect } from "react";
+import TSSCard from "../card/TSSCard";
 import ProfileEditModal from "./ProfileEditModal";
 import { Navigate, useLocation } from "react-router-dom";
 // import { isRouteErrorResponse } from "react-router-dom";
@@ -38,6 +39,7 @@ const ProfileScreen = (props) => {
     };
     getTilesets();
   }, []);
+
   console.log(userTilesets);
   return user ? (
     <div>
@@ -87,14 +89,15 @@ const ProfileScreen = (props) => {
           </div>
 
           <div class="mt-20 grid grid-cols-4 col-span-10 col-start-2 row-start-4 gap-5">
-            {userTilesets.map((tileset) => {
+            {userTilesets.map((obj, index) => (
               <TilesetCard
-                tilename={tileset.name}
-                description={tileset.description}
-                owner={tileset.owner}
-              />;
-            })}
+                tilename={obj.name}
+                description={obj.description}
+                owner={obj.owner}
+              />
+            ))}
           </div>
+
           <ProfileEditModal
             user={props.user}
             modalOpen={modalOpen}
