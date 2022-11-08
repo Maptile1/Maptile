@@ -97,7 +97,6 @@ router.get("/tileset/getUser/:id", async (req, res) => {
     user.tilesets.map(async (obj, index) => {
       tileset = await Tileset.findById(obj);
       usertilesets.push(tileset);
-      usertilesets.push(obj);
     })
   );
   res.json({ usertilesets: usertilesets });

@@ -1,5 +1,5 @@
 import Sidebar from "../sidebar/Sidebar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CreateTilesetModal from "./CreateTilesetModal";
 import TSSCard from "../card/TSSCard";
 import ShareModal from "../map/ShareModal";
@@ -7,6 +7,7 @@ import Axios from "axios";
 const TilesetScreen = (props) => {
   const [userSelected, updateUserSelected] = useState(true);
   const [modalOpen, setModal] = useState(false);
+  var [userTilesets, setUserTilesets] = useState([]);
   const [input, setInput] = useState({
     name: "",
     tilewidth: "",
@@ -20,8 +21,20 @@ const TilesetScreen = (props) => {
     "bg-maptile-background-mid text-center rounded-t-xl cursor-pointer  mt-[10px] duration-300";
   let tab_unselected =
     "bg-maptile-tab-unselected text-center rounded-t-xl cursor-pointer duration-300";
-  const user = props.user;
-  console.log(user);
+  useEffect(() => {
+    var user = props.user;
+    console.log(user);
+    const getTilesets = async () => {
+      var response = await Axios.get(
+        "https://maptile1.herokuapp.com/tileset/getUser/" + user._id
+      );
+      console.log(response.data);
+      setUserTilesets(response.data.usertilesets);
+    };
+    getTilesets();
+  }, []);
+
+  console.log(userTilesets);
 
   const updateInput = (e) => {
     const { name, value } = e.target;
