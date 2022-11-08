@@ -40,7 +40,7 @@ router.post("/tileset/delete/:id", async (req, res) => {
   var user = User.findById(user_id);
   user.tilesets = user.tilesets.filter((e) => e !== req.params.id);
   user.save();
-  Tileset.findOneAndRemove({ _id: req.params.id, owner: req.params.id })
+  Tileset.findOneAndRemove({ _id: req.params.id, owner: user_id })
     .then(() => res.json({ message: "Tileset deleted" }))
     .catch((err) => {
       Tileset.findOne({ _id: req.params.id })
