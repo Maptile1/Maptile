@@ -41,6 +41,7 @@ const TilesetScreen = (props) => {
       setModal(false);
       await Axios.post("https://maptile1.herokuapp.com/tileset/create", {
         name: input.name,
+        description: "test",
         _id: props.user._id,
       });
     }
