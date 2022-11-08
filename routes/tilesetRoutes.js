@@ -10,8 +10,9 @@ router.post("/tileset/create", async (req, res) => {
   //     res.status(400).json({errorMessage: 'Not logged in'})
   //     return;
   // }
+  var tilesetId = new ObjectId();
   var tileset = new Tileset({
-    _id: new ObjectId(),
+    _id: tilesetId,
     tileset_data: [],
     name: req.body.name,
     description: req.body.description,
@@ -24,7 +25,11 @@ router.post("/tileset/create", async (req, res) => {
   });
   await tileset.save();
   var user = await User.findById(req.body._id);
-  res.json({ tileset: tileset, user: user });
+  var updateduser = await User.updateOne({
+    _id: req.body._id,
+    tilesets: user.tilesets.push(tilesetId),
+  });
+  res.json({ tileset: tileset, user: updateduser });
 });
 
 // Delete Tileset
