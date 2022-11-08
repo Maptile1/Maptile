@@ -60,7 +60,7 @@ router.post("/tileset/update/:id", async (req, res) => {
   var updates = {};
   updates.tileset_data = req.body.tileset_data;
   updates.name = req.body.name;
-  updates.description = req.body.description;
+  updates.description = "";
   updates.public = req.body.public;
   var tileset = await Tileset.findOneAndUpdate(
     { _id: req.params.id, owner: req.session._id },
