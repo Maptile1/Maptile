@@ -92,11 +92,11 @@ router.get("/tileset/get/:id", async (req, res) => {
 router.get("/tileset/getUser/:id", async (req, res) => {
   var user = await User.findById(req.params.id);
   var usertilesets = [];
+  var tileset;
   user.tilesets.map(async (obj, index) => {
-    var tileset = await Tileset.findById(obj);
+    tileset = await Tileset.findById(obj);
     usertilesets.push(tileset);
-    console.log(user.tilesets);
-    console.log(obj);
+    usertilesets.push(obj);
   });
   res.json({ usertilesets: usertilesets });
 });
