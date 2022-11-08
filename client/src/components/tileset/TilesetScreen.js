@@ -20,6 +20,8 @@ const TilesetScreen = (props) => {
     "bg-maptile-background-mid text-center rounded-t-xl cursor-pointer  mt-[10px] duration-300";
   let tab_unselected =
     "bg-maptile-tab-unselected text-center rounded-t-xl cursor-pointer duration-300";
+  const user = props.user;
+  console.log(user);
 
   const updateInput = (e) => {
     const { name, value } = e.target;
@@ -37,14 +39,10 @@ const TilesetScreen = (props) => {
   const handleCreate = async (e) => {
     if (inputValid) {
       setModal(false);
-      var response = await Axios.post(
-        "https://maptile1.herokuapp.com/tileset/create",
-        {
-          name: input.name,
-          _id: props.user._id,
-        }
-      );
-      console.log(response);
+      await Axios.post("https://maptile1.herokuapp.com/tileset/create", {
+        name: input.name,
+        _id: props.user._id,
+      });
     }
   };
 

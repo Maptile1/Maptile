@@ -88,6 +88,17 @@ router.get("/tileset/get/:id", async (req, res) => {
   }
 });
 
+///Get all tilesets of user
+router.get("/tileset/getUser/:id", async (req, res) => {
+  var user = await User.findById(req.params.id);
+  var usertilesets = [];
+  user.tilesets.map(async (obj, index) => {
+    var tileset = await Tileset.findById(obj);
+    usertilesets.push(tileset);
+  });
+  res.json({ usertilesets: usertilesets });
+});
+
 // Get all tilesets
 router.get("/tileset", async (req, res) => {
   Tileset.find()
