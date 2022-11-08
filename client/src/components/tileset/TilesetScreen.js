@@ -110,7 +110,7 @@ const TilesetScreen = (props) => {
           <div className="bg-maptile-background-mid w-full h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
             <div className="flex flex-row flex-wrap px-5 py-5 pl-10  ">
               {userTilesets.map((obj, index) => (
-                <TSSCard name={obj.name} />
+                <TSSCard name={obj.name} owner={obj.owner} />
               ))}
             </div>
             <CreateTilesetModal

@@ -32,10 +32,10 @@ router.post("/tileset/create", async (req, res) => {
 
 // Delete Tileset
 router.post("/tileset/delete/:id", async (req, res) => {
-  if (req.session._id == undefined) {
-    res.status(400).json({ errorMessage: "Not logged in" });
-    return;
-  }
+  // if (req.session._id == undefined) {
+  //   res.status(400).json({ errorMessage: "Not logged in" });
+  //   return;
+  // }
   Tileset.findOneAndRemove({ _id: req.params.id, owner: req.session._id })
     .then(() => res.json({ message: "Tileset deleted" }))
     .catch((err) => {
