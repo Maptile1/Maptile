@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Tileset = require("../schema/tileset-schema");
 const ObjectId = require("mongodb").ObjectId;
+const User = require("../schema/user-schema");
 
 // Create Tileset
 router.post("/tileset/create", async (req, res) => {
@@ -22,7 +23,8 @@ router.post("/tileset/create", async (req, res) => {
     owner: req.body._id,
   });
   await tileset.save();
-  res.json({ tileset: tileset });
+  var user = await User.findById(req.body._id);
+  res.json({ tileset: tileset, user: user });
 });
 
 // Delete Tileset
