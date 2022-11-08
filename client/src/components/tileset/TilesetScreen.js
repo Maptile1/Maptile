@@ -47,6 +47,12 @@ const TilesetScreen = (props) => {
         updated.tilesetheight !== ""
     );
   };
+  const handleDelete = async (id) => {
+    let response = await Axios.post(
+      "https://maptile1.herokuapp.com/tileset/delete/" + id
+    );
+    console.log(response);
+  };
 
   const handleCreate = async (e) => {
     if (inputValid) {
@@ -110,7 +116,12 @@ const TilesetScreen = (props) => {
           <div className="bg-maptile-background-mid w-full h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
             <div className="flex flex-row flex-wrap px-5 py-5 pl-10  ">
               {userTilesets.map((obj, index) => (
-                <TSSCard name={obj.name} owner={obj.owner} />
+                <TSSCard
+                  handleDelete={handleDelete}
+                  name={obj.name}
+                  owner={obj.owner}
+                  _id={obj._id}
+                />
               ))}
             </div>
             <CreateTilesetModal
