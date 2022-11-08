@@ -51,6 +51,13 @@ const TilesetScreen = (props) => {
     let response = await Axios.post(
       "https://maptile1.herokuapp.com/tileset/delete/" + id
     );
+    const getTilesets = async () => {
+      var response = await Axios.get(
+        "https://maptile1.herokuapp.com/tileset/getUser/" + user._id
+      );
+      setUserTilesets(response.data.usertilesets);
+    };
+    getTilesets();
     console.log(response);
   };
 
