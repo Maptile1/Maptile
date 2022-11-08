@@ -10,9 +10,8 @@ router.post("/tileset/create", async (req, res) => {
   //     res.status(400).json({errorMessage: 'Not logged in'})
   //     return;
   // }
-  var tilesetid = new ObjectId();
   var tileset = new Tileset({
-    _id: tilesetid,
+    _id: new ObjectId(),
     tileset_data: [],
     name: req.body.name,
     description: "",
