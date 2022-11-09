@@ -18,9 +18,9 @@ const ProfileScreen = (props) => {
   var [userTilesets, setUserTilesets] = useState([]);
   const [userPfp, setPfp] = useState(
     "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
-      user._id +
-      "?=" +
-      Math.random().toString().substring(2)
+    user._id +
+    "?=" +
+    Math.random().toString().substring(2)
   );
 
   const updatePfp = (newImage) => {
@@ -89,13 +89,15 @@ const ProfileScreen = (props) => {
           </div>
 
           <div class="mt-20 grid grid-cols-4 col-span-10 col-start-2 row-start-4 gap-5">
-            {userTilesets.map((obj, index) => (
-              <TilesetCard
-                tilename={obj.name}
-                description={obj.description}
-                owner={obj.owner}
-              />
-            ))}
+            {userTilesets.length !== 0 ?
+              userTilesets.map((obj, index) => (
+                <TilesetCard
+                  tilename={obj.name}
+                  description={obj.description}
+                  owner={obj.owner}
+                />
+              )) : <div> No tilesets</div>
+            }
           </div>
 
           <ProfileEditModal

@@ -41,10 +41,10 @@ const TilesetScreen = (props) => {
     setInput(updated);
     setInputValid(
       updated.name !== "" &&
-        updated.tilewidth !== "" &&
-        updated.tileheight !== "" &&
-        updated.tilesetwidth !== "" &&
-        updated.tilesetheight !== ""
+      updated.tilewidth !== "" &&
+      updated.tileheight !== "" &&
+      updated.tilesetwidth !== "" &&
+      updated.tilesetheight !== ""
     );
   };
   const handleDelete = async (id) => {
@@ -90,7 +90,7 @@ const TilesetScreen = (props) => {
     setInputValid(false);
     setModal(false);
   };
-
+  console.log(userTilesets)
   return (
     <div>
       <Sidebar />
@@ -122,14 +122,17 @@ const TilesetScreen = (props) => {
           </div>
           <div className="bg-maptile-background-mid w-full h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
             <div className="flex flex-row flex-wrap px-5 py-5 pl-10  ">
-              {userTilesets.map((obj, index) => (
-                <TSSCard
-                  handleDelete={handleDelete}
-                  name={obj.name}
-                  owner={obj.owner}
-                  _id={obj._id}
-                />
-              ))}
+              {userTilesets.length !== 0 ?
+
+                userTilesets.map((obj, index) => (
+                  <TSSCard
+                    handleDelete={handleDelete}
+                    name={obj.name}
+                    owner={obj.owner}
+                    _id={obj._id}
+                  />
+                )) : <div>No Tilesets</div>
+              }
             </div>
             <CreateTilesetModal
               modalOpen={modalOpen}
