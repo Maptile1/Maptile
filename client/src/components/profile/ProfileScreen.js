@@ -92,7 +92,7 @@ const ProfileScreen = (props) => {
             {userTilesets.length !== 0 ?
               userTilesets.map((obj, index) => (
                 <TilesetCard
-                  tilename={obj.name}
+                  name={obj.name}
                   description={obj.description}
                   owner={obj.owner}
                 />
