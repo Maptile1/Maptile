@@ -40,7 +40,7 @@ router.post("/tileset/delete/:id", async (req, res) => {
   var user_id = tileset.owner;
   var user = await User.findById(user_id);
   var index = user.tilesets.indexOf(req.params.id);
-  user.tilesets = user.splice(index, 1)
+  user.tilesets = user.tilesets.splice(index, 1)
   user.save();
   await Tileset.findOneAndRemove({ _id: req.params.id })
     .then(() => res.json({ message: "Tileset deleted" }))
