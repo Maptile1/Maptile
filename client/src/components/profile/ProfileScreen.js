@@ -4,7 +4,6 @@ import TilesetCard from "../card/TilesetCard";
 import Sidebar from "../sidebar/Sidebar";
 // import MapCard from "../card/MapCard";
 import { React, useState, useEffect } from "react";
-import TSSCard from "../card/TSSCard";
 import ProfileEditModal from "./ProfileEditModal";
 import { Navigate, useLocation } from "react-router-dom";
 // import { isRouteErrorResponse } from "react-router-dom";
@@ -62,12 +61,12 @@ const ProfileScreen = (props) => {
                 );
               }}
             />
-            <div className="bg-maptile-background-mid p2.5 rounded-xl w-full">
+            <div className="bg-maptile-background-mid mt-8 p2.5 rounded-xl w-full">
               <div class="mt-5 text-left ml-2">{user.bio}</div>
             </div>
 
             <button
-              className="mt-5 flex flex-row p-2 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl"
+              className="mt-8 flex flex-row p-2 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl"
               onClick={() => setProfileModal(true)}
             >
               <BiCog />
@@ -75,20 +74,22 @@ const ProfileScreen = (props) => {
             </button>
           </div>
 
-          <div class="col-start-5 row-start-3 mt-20 text-6xl justify-self-center text-white">
+          <div class="col-start-6 row-start-3 mt-20 text-6xl justify-self-center text-white">
             <BsMapFill />
             {user.maps.length} Maps
           </div>
-          <div class="col-start-7 row-start-3 mt-20 text-6xl justify-self-center text-white">
+          <div class="col-start-8 row-start-3 mt-20 text-6xl justify-self-center text-white">
             <BsFillPuzzleFill />
             {user.tilesets.length} Tilesets
           </div>
-          <div class="col-start-9 row-start-3 mt-20 text-6xl justify-self-center text-white">
+          <div class="col-start-10 row-start-3 mt-20 text-6xl justify-self-center text-white">
             <BiLike />
             {user.likes} Likes
           </div>
-
-          <div class="mt-20 grid grid-cols-4 col-span-10 col-start-2 row-start-4 gap-5">
+          <div class="row-start-6 text-white text-3xl col-start-2 pt-10 mt-10">Featured
+          </div>
+          <div class="row-start-7 text-white text-3xl col-start-2 col-span-10" style={{ borderTop: "2px solid #fff ", marginRight: 20 }}></div>
+          <div class="mt-10 grid grid-cols-4 col-span-10 col-start-2 row-start-7 gap-5">
             {userTilesets.length !== 0 ?
               userTilesets.map((obj, index) => (
                 <TilesetCard

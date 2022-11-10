@@ -5,7 +5,7 @@ const TilesetCard = (props) => {
     nav("/tilesetdisplay", { state: { owner: props.owner } });
   };
   return (
-    <div class="max-w-sm rounded overflow-hidden shadow-lg pb-20 border bg-maptile-background-mid">
+    <div class="max-w-sm rounded overflow-hidden shadow-lg border bg-maptile-background-mid">
       <img
         class="w-full h-50 object-cover"
         src="https://dicegrimorium.com/wp-content/uploads/2019/09/LavaPoolsPublic1JPG-1024x683.jpg"
