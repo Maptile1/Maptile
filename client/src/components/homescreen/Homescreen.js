@@ -28,8 +28,6 @@ const Homescreen = (props) => {
     toggleCreateAccountView(false);
     toggleLogInView(false);
   }
-
-  console.log(props.user);
   return (
     <div>
       {props.user === null &&

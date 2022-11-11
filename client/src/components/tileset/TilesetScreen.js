@@ -26,7 +26,6 @@ const TilesetScreen = (props) => {
   var user = props.user;
 
   useEffect(() => {
-    console.log(user);
     const getTilesets = async () => {
       var response = await Axios.get(
         "https://maptile1.herokuapp.com/tileset/getUser/" + user._id
@@ -53,6 +52,7 @@ const TilesetScreen = (props) => {
     let response = await Axios.post(
       "https://maptile1.herokuapp.com/tileset/delete/" + id
     );
+    console.log(response);
     const getTilesets = async () => {
       var response = await Axios.get(
         "https://maptile1.herokuapp.com/tileset/getUser/" + user._id
@@ -60,7 +60,6 @@ const TilesetScreen = (props) => {
       setUserTilesets(response.data.usertilesets);
     };
     getTilesets();
-    console.log(response);
   };
 
   const handleCreate = async (e) => {
@@ -91,10 +90,10 @@ const TilesetScreen = (props) => {
     setInputValid(false);
     setModal(false);
   };
-  console.log(userTilesets)
+
   return (
     <div>
-      <Sidebar />
+      <Sidebar setTheUser={props.setTheUser} />
 
       <main className="mx-auto flex flex-col min-h-screen w-full items-center justify-top bg-maptile-background-dark text-white">
         <div className="pt-5 text-center text-4xl font-bold text-white">

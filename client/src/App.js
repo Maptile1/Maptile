@@ -26,7 +26,6 @@ function App() {
     setOtherProfileUser(owner);
   };
 
-  console.log(user);
   return (
     <BrowserRouter>
       <div className="app-container">

@@ -101,9 +101,11 @@ const ProfileScreen = (props) => {
             {userTilesets.length !== 0 ?
               userTilesets.map((obj, index) => (
                 <TilesetCard
+                  key={obj}
                   name={obj.name}
                   description={obj.description}
                   owner={obj.owner}
+                  _id={obj._id}
                 />
               )) : <div> No tilesets</div>
             }
