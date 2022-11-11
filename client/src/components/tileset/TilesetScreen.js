@@ -92,7 +92,7 @@ const TilesetScreen = (props) => {
 
   return (
     <div>
-      <Sidebar />
+      <Sidebar setTheUser={props.setTheUser} />
 
       <main className="mx-auto flex flex-col min-h-screen w-full items-center justify-top bg-maptile-background-dark text-white">
         <div className="pt-5 text-center text-4xl font-bold text-white">
