@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import Axios from 'axios'
+import ForgotPassword from "../ForgotPassword/ForgotPassword";
+
 const LogIn = (props) => {
   const [input, setInput] = useState({ userName: '', password: '' });
   const [inputValid, setInputValid] = useState(false)
+  const [forgotPasswordView, toggleForgotPasswordView] = useState(false);
 
   const updateInput = (e) => {
     const { name, value } = e.target;
@@ -35,7 +38,7 @@ const LogIn = (props) => {
     }
   }
 
-  return (
+  return !forgotPasswordView ? (
     <main
       class="mx-auto flex min-h-screen w-full items-center justify-center bg-maptile-background-dark text-white"
     >
@@ -74,7 +77,7 @@ const LogIn = (props) => {
           </button>
 
           <button
-
+            onClick={() => toggleForgotPasswordView(true)}
             class="transform text-center font-semibold text-white duration-300 hover:text-gray-300 underline"
           >FORGOT PASSWORD?
           </button>
@@ -95,6 +98,10 @@ const LogIn = (props) => {
         </section>
       </div>
     </main>
+  ) 
+  : 
+  (
+    <ForgotPassword closeView={toggleForgotPasswordView}/>
   );
 };
 
