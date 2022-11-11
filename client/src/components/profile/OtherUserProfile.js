@@ -7,15 +7,15 @@ import { React, useState, useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 // import { isRouteErrorResponse } from "react-router-dom";
 import Axios from "axios";
-const ProfileScreen = (props) => {
+const OtherUserProfile = (props) => {
 
-    const user = props.user;
     const location = useLocation();
     const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(null);
     var [userTilesets, setUserTilesets] = useState([]);
     const [userPfp, setPfp] = useState(
         "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
-        user._id +
+        location.state.owner +
         "?=" +
         Math.random().toString().substring(2)
     );
@@ -29,15 +29,18 @@ const ProfileScreen = (props) => {
         const getTilesets = async () => {
             setLoading(true);
             var response = await Axios.get(
-                "https://maptile1.herokuapp.com/tileset/getUser/" + user._id
+                "https://maptile1.herokuapp.com/tileset/getUser/" + location.state.owner
             );
+            var useresponse = await Axios.get("https://maptile1.herokuapp.com/user/get/" + location.state.owner
+            );
+            setUser(useresponse.data.user)
             setUserTilesets(response.data.usertilesets);
             setLoading(false);
         };
         getTilesets();
     }, []);
 
-    return user ? (
+    return location.state.owner ? (
         <div>
             {!loading && (
                 <div class="grid grid-cols-12 grid-rows-10 gap-4 ">
@@ -54,7 +57,7 @@ const ProfileScreen = (props) => {
                             onError={({ currentTarget }) => {
                                 currentTarget.onerror = null;
                                 updatePfp(
-                                    "https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
+                                    "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png"
                                 );
                             }}
                         />
@@ -109,4 +112,4 @@ const ProfileScreen = (props) => {
     );
 };
 
-export default ProfileScreen;
+export default OtherUserProfile;

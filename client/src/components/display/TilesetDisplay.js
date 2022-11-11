@@ -17,7 +17,7 @@ const TilesetDisplay = (props) => {
     const [tileset, setTileset] = useState(null);
     const [userPfp, setPfp] = useState("")
     const handleOtherUserProfile = () => {
-        props.setOtherProfile(owner)
+
         nav("/other_user_profile", { state: { owner: location.state.owner } });
     }
     const location = useLocation();

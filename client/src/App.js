@@ -59,9 +59,7 @@ function App() {
           <Route
             path="/other_user_profile"
             element={
-              <OtherUserProfile
-                user={user}
-                otherProfileUser={otherProfileUser}
+              <OtherUserProfile user={user} setTheUser={setTheUser}
               />
             }
           />
