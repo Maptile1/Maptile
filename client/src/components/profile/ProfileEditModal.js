@@ -19,7 +19,6 @@ const ProfileEditModal = (props) => {
     };
 
     const handleUpdate = async (e) => {
-        console.log(input)
 
         if (input.password !== "" || input.confirmpassword !== "") {
             if (input.password === input.confirmpassword) {
@@ -75,12 +74,12 @@ const ProfileEditModal = (props) => {
         formData.append('_id', user._id)
 
         await Axios.post("https://maptile1.herokuapp.com/user/image", formData)
-        .then(function(response){
-            console.log(response)
-        })
-        .catch(function(error){
-            console.log(error)
-        })
+            .then(function (response) {
+                console.log(response)
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
         props.updatePfp("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + user._id)
         console.log("updated")
     }

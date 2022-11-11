@@ -26,7 +26,6 @@ const TilesetScreen = (props) => {
   var user = props.user;
 
   useEffect(() => {
-    console.log(user);
     const getTilesets = async () => {
       var response = await Axios.get(
         "https://maptile1.herokuapp.com/tileset/getUser/" + user._id
@@ -60,7 +59,6 @@ const TilesetScreen = (props) => {
       setUserTilesets(response.data.usertilesets);
     };
     getTilesets();
-    console.log(response);
   };
 
   const handleCreate = async (e) => {
@@ -91,7 +89,7 @@ const TilesetScreen = (props) => {
     setInputValid(false);
     setModal(false);
   };
-  console.log(userTilesets)
+
   return (
     <div>
       <Sidebar />

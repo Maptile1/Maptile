@@ -14,7 +14,6 @@ const LogIn = (props) => {
   Axios.defaults.withCredentials = true
 
   const handleLogIn = async (e) => {
-    console.log(input)
     if (inputValid) {
       await Axios.post("https://maptile1.herokuapp.com/user/login",
         {
@@ -22,14 +21,13 @@ const LogIn = (props) => {
           password: input.password,
         },
         {
-          headers: { Cookie: "_id=5"}
+          headers: { Cookie: "_id=5" }
         }
-        )
-        .then(function(response){
+      )
+        .then(function (response) {
           props.handleLogIn(response.data.user);
         })
-        .catch(function(error){
-          console.log("YOOO")
+        .catch(function (error) {
           window.alert(error.response.data.errorMessage)
         })
     }
@@ -37,32 +35,32 @@ const LogIn = (props) => {
 
   return (
     <main
-      class="mx-auto flex min-h-screen w-full items-center justify-center bg-maptile-background-dark text-white"
+      className="mx-auto flex min-h-screen w-full items-center justify-center bg-maptile-background-dark text-white"
     >
-      <div class="bg-maptile-purple flex w-[40rem] h-[33rem] justify-center align-middle shadow-md rounded-lg">
-        <section class="flex w-[30rem] flex-col space-y-10 mt-10">
-          <div class="text-center text-4xl font-medium">Log In</div>
+      <div className="bg-maptile-purple flex w-[40rem] h-[33rem] justify-center align-middle shadow-md rounded-lg">
+        <section className="flex w-[30rem] flex-col space-y-10 mt-10">
+          <div className="text-center text-4xl font-medium">Log In</div>
 
           <div
-            class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+            className="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
           >
             <input
               type="userName"
               name="userName"
               placeholder="User Name"
-              class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+              className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
               onChange={updateInput}
             />
           </div>
 
           <div
-            class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+            className="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
           >
             <input
               type="password"
               name="password"
               placeholder="Password"
-              class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+              className="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
               onChange={updateInput}
             />
           </div>
@@ -75,23 +73,23 @@ const LogIn = (props) => {
 
           <button
 
-            class="transform text-center font-semibold text-white duration-300 hover:text-gray-300 underline"
+            className="transform text-center font-semibold text-white duration-300 hover:text-gray-300 underline"
           >FORGOT PASSWORD?
           </button>
 
-          <p class="text-center text-lg">
+          <p className="text-center text-lg">
             No account?
             <button onClick={() => props.handleCreateAccountView()}
-              class="font-medium text-indigo-200 underline-offset-4 hover:underline ml-2"
+              className="font-medium text-indigo-200 underline-offset-4 hover:underline ml-2"
             > Create One
             </button>
           </p>
 
           <button
-          onClick={() => props.handleHomeScreenView()}
-          className="transform text-center font-semibold text-white duration-300 hover:text-gray-300 underline"
-                >Return
-            </button>
+            onClick={() => props.handleHomeScreenView()}
+            className="transform text-center font-semibold text-white duration-300 hover:text-gray-300 underline"
+          >Return
+          </button>
         </section>
       </div>
     </main>
