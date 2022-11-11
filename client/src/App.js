@@ -15,16 +15,11 @@ import OtherUserProfile from "./components/profile/OtherUserProfile";
 
 function App() {
   const [user, setUser] = useState(null);
-  const [otherProfileUser, setOtherProfileUser] = useState(null);
 
   const setTheUser = (newuser) => {
     setUser(newuser);
   };
 
-  const setOtherProfile = (owner) => {
-    ///this will be used to view other user's profile
-    setOtherProfileUser(owner);
-  };
 
   return (
     <BrowserRouter>
