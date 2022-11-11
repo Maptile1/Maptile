@@ -2,7 +2,7 @@ import Sidebar from "../sidebar/Sidebar";
 import React, { useState, useEffect } from "react";
 import TSSCard from "../card/TSSCard";
 import Axios from "axios";
-import { Navigate, useLocation  } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 const SearchScreen = (props) => {
   const [userSelected, updateUserSelected] = useState(true)
