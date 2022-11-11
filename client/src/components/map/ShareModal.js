@@ -1,5 +1,7 @@
 import Modal from 'react-modal';
-import React, { useState, useRef } from 'react';
+import React from 'react';
+// import { useState, useRef } from 'react';
+
 import { BsClipboard } from "react-icons/bs"
 
 const ShareModal = (props) => {

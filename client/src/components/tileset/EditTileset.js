@@ -20,7 +20,7 @@ const EditTileset = (props) => {
             setLoading(false);
         }
         getTileset()
-    }, []);
+    }, [location.state._id]);
     const updateTileset = (tileset) => {
         setTileset(tileset)
     }

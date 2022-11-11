@@ -35,7 +35,7 @@ const TilesetScreen = (props) => {
       setSharedTilesets(response.data.sharedtilesets)
     };
     getTilesets();
-  }, []);
+  }, [user]);
 
   const updateInput = (e) => {
     const { name, value } = e.target;

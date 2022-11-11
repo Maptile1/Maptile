@@ -35,7 +35,7 @@ const ProfileScreen = (props) => {
             setLoading(false);
         };
         getTilesets();
-    }, []);
+    }, [user._id]);
 
     return user ? (
         <div>

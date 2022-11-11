@@ -42,6 +42,10 @@ const LogIn = (props) => {
     }
   }
 
+  const handleSendEmailCode = (email) => {
+      console.log(email);
+  }
+
   return (!forgotPasswordView && !resetPasswordView && !emailConfirmationView) ? (
     <main
       class="mx-auto flex min-h-screen w-full items-center justify-center bg-maptile-background-dark text-white"
@@ -108,6 +112,7 @@ const LogIn = (props) => {
     <ForgotPassword 
     closeView={toggleForgotPasswordView}
     toggleEmailConfirmationView={toggleEmailConfirmationView}
+    handleSendEmailCode={handleSendEmailCode}
     />
   )
   :
