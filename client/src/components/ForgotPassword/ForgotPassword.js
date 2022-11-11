@@ -7,13 +7,27 @@ const ForgotPassword = (props) => {
 
     const updateEmailInput = (event) => {
         setEmail(event.target.value);
+        setInputValid(validEmail(event.target.value));
+    }
+
+    const validEmail = (email) => {
+        return String(email)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+      }
+
+    const handleResetPassword = () => {
+        props.closeView();
+        props.toggleEmailConfirmationView(true);
     }
 
     return (
         <main
         class="mx-auto flex min-h-screen w-full items-center justify-center bg-maptile-background-dark text-white"
       >
-        <div class="bg-maptile-purple flex w-[40rem] h-[30rem] justify-center align-middle shadow-md rounded-lg">
+        <div class="bg-maptile-purple flex w-[40rem] h-[28rem] justify-center align-middle shadow-md rounded-lg">
           <section class="flex w-[30rem] flex-col space-y-10 mt-10">
             <div class="text-center text-4xl font-medium">Forgot Password?</div>
             <div class="text-center text-2xl font-medium">Enter your email address linked to your account and we'll send you a code</div>
@@ -31,6 +45,7 @@ const ForgotPassword = (props) => {
             </div>
 
             <button 
+            onClick = {handleResetPassword}
             className={`${!inputValid ? 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red rounded-xl' : 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl'}`}
           >
             SEND EMAIL
