@@ -8,6 +8,7 @@ const TilesetScreen = (props) => {
   const [userSelected, updateUserSelected] = useState(true);
   const [modalOpen, setModal] = useState(false);
   var [userTilesets, setUserTilesets] = useState([]);
+  var [sharedTilesets, setSharedTilesets] = useState([])
   const [input, setInput] = useState({
     name: "",
     tilewidth: "",
@@ -31,6 +32,7 @@ const TilesetScreen = (props) => {
         "https://maptile1.herokuapp.com/tileset/getUser/" + user._id
       );
       setUserTilesets(response.data.usertilesets);
+      setSharedTilesets(response.data.sharedtilesets)
     };
     getTilesets();
   }, []);
@@ -78,7 +80,6 @@ const TilesetScreen = (props) => {
       setModal(false);
     }
   };
-
   const handleClose = (e) => {
     setInput({
       name: "",
@@ -122,16 +123,28 @@ const TilesetScreen = (props) => {
           </div>
           <div className="bg-maptile-background-mid w-full h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
             <div className="flex flex-row flex-wrap px-5 py-5 pl-10  ">
-              {userTilesets.length !== 0 ?
+              {userSelected ?
+                userTilesets.length !== 0 ?
 
-                userTilesets.map((obj, index) => (
-                  <TSSCard
-                    handleDelete={handleDelete}
-                    name={obj.name}
-                    owner={obj.owner}
-                    _id={obj._id}
-                  />
-                )) : <div>No Tilesets</div>
+                  userTilesets.map((obj, index) => (
+                    <TSSCard
+                      handleDelete={handleDelete}
+                      name={obj.name}
+                      owner={obj.owner}
+                      _id={obj._id}
+                    />
+                  )) : <div>No Tilesets</div>
+                :
+                sharedTilesets.length !== 0 ?
+
+                  sharedTilesets.map((obj, index) => (
+                    <TSSCard
+                      handleDelete={handleDelete}
+                      name={obj.name}
+                      owner={obj.owner}
+                      _id={obj._id}
+                    />
+                  )) : <div>No Shared Tilesets</div>
               }
             </div>
             <CreateTilesetModal

@@ -99,6 +99,7 @@ router.get("/tileset/get/:id", async (req, res) => {
 router.get("/tileset/getUser/:id", async (req, res) => {
   var user = await User.findById(req.params.id);
   var usertilesets = [];
+  var usersharedtilesets = [];
   var tileset;
   await Promise.all(
     user.tilesets.map(async (obj, index) => {
@@ -106,7 +107,13 @@ router.get("/tileset/getUser/:id", async (req, res) => {
       usertilesets.push(tileset);
     })
   );
-  res.json({ usertilesets: usertilesets });
+  await Promise.all(
+    user.shared_tilesets.map(async (obj, index) => {
+      tileset = await Tileset.findById(obj);
+      usersharedtilesets.push(tileset);
+    })
+  );
+  res.json({ usertilesets: usertilesets, sharedtilesets: usersharedtilesets });
 });
 
 // Get all tilesets
