@@ -10,6 +10,10 @@ const tilesetSchema = new Schema(
             type: [String],
             required: true
         },
+        tags: {
+            type: [String],
+            required: true
+        },
         name: {
             type: String,
             required: true
@@ -26,7 +30,7 @@ const tilesetSchema = new Schema(
             type: Number,
             required: true
         },
-        comments:{
+        comments: {
             type: [ObjectId],
             required: true
         },

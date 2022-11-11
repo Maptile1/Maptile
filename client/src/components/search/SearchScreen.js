@@ -15,9 +15,14 @@ const SearchScreen = (props) => {
 
   useEffect(() => {
     const tilesetRes = async () => {
-      var response = await Axios.get(
-        "https://maptile1.herokuapp.com/tileset")
-      setSearchResults(response.data)
+      if (userSelected) {
+        var response = await Axios.get(
+          "https://maptile1.herokuapp.com/tileset")
+        setSearchResults(response.data)
+      }
+      else {
+        setSearchResults([]);
+      }
     }
 
     tilesetRes();
@@ -50,12 +55,15 @@ const SearchScreen = (props) => {
           </div>
           <div className="bg-maptile-background-mid w-10/12 h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
             <div className="flex flex-row flex-wrap justify-center mr-8 py-10 pl-10 ">
-              {searchResults.map((obj, index) =>
-                <TSSCard search={true} owner={obj.owner} name={obj.name} />
-              )}
+
+              {userSelected ? searchResults.length !== 0 ? searchResults.map((obj, index) =>
+                <TSSCard search={true} owner={obj.owner} name={obj.name} _id={obj._id} />) : <div>No Search Results</div>
+                :
+                <div>Maps</div>
+              }
             </div>
             <div className="absolute text-white top-10 mt-48 mr-10 right-4">
-              <div className="text-3xl font-bold text-center"> Tags</div>
+              <div className="text-3xl font-bold text-center">Tags</div>
               <div className="bg-maptile-background-mid w-full mt-5 h-[30rem] overflow-auto rounded-xl ">
                 <input className=" bg-maptile-background-light mt-5 w-3/4 flex ml-7 rounded-xl p-2"></input>
                 <div className="flex flex-col ml-7 mt-5 space-y-4">
@@ -74,14 +82,14 @@ const SearchScreen = (props) => {
 
       </main >
     </div >
-  ) : 
-  (
-    <Navigate
+  ) :
+    (
+      <Navigate
         to="/"
         replace
         state={{ from: location }}
-    />)
-  ;
+      />)
+    ;
 };
 
 export default SearchScreen;

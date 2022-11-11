@@ -16,6 +16,7 @@ router.post("/tileset/create", async (req, res) => {
     tileset_data: [],
     name: req.body.name,
     description: req.body.description,
+    tags: [],
     likes: 0,
     dislikes: 0,
     comments: [],
@@ -32,11 +33,18 @@ router.post("/tileset/create", async (req, res) => {
 
 // Delete Tileset
 router.post("/tileset/delete/:id", async (req, res) => {
-  if (req.session._id == undefined) {
-    res.status(400).json({ errorMessage: "Not logged in" });
-    return;
-  }
-  Tileset.findOneAndRemove({ _id: req.params.id, owner: req.session._id })
+  // if (req.session._id == undefined) {
+  //   res.status(400).json({ errorMessage: "Not logged in" });
+  //   return;
+  // }
+  var tileset = await Tileset.findById(req.params.id);
+  var user_id = tileset.owner;
+  var user = await User.findById(user_id);
+  // var index = user.tilesets.indexOf(req.params.id);
+  // user.tilesets = user.tilesets.splice(index, 1)
+  // user.save();
+  await User.updateOne({ _id: user_id }, { $pullAll: { tilesets: [req.params.id] } });
+  await Tileset.findOneAndRemove({ _id: req.params.id })
     .then(() => res.json({ message: "Tileset deleted" }))
     .catch((err) => {
       Tileset.findOne({ _id: req.params.id })
@@ -53,17 +61,17 @@ router.post("/tileset/delete/:id", async (req, res) => {
 
 // Update tileset
 router.post("/tileset/update/:id", async (req, res) => {
-  if (req.session._id == undefined) {
-    res.status(400).json({ errorMessage: "Not logged in" });
-    return;
-  }
+  // if (req.session._id == undefined) {
+  //   res.status(400).json({ errorMessage: "Not logged in" });
+  //   return;
+  // }
   var updates = {};
   updates.tileset_data = req.body.tileset_data;
   updates.name = req.body.name;
   updates.description = req.body.description;
   updates.public = req.body.public;
   var tileset = await Tileset.findOneAndUpdate(
-    { _id: req.params.id, owner: req.session._id },
+    { _id: req.params.id },
     { $set: updates },
     { new: true }
   );
@@ -92,6 +100,7 @@ router.get("/tileset/get/:id", async (req, res) => {
 router.get("/tileset/getUser/:id", async (req, res) => {
   var user = await User.findById(req.params.id);
   var usertilesets = [];
+  var usersharedtilesets = [];
   var tileset;
   await Promise.all(
     user.tilesets.map(async (obj, index) => {
@@ -99,7 +108,13 @@ router.get("/tileset/getUser/:id", async (req, res) => {
       usertilesets.push(tileset);
     })
   );
-  res.json({ usertilesets: usertilesets });
+  await Promise.all(
+    user.shared_tilesets.map(async (obj, index) => {
+      tileset = await Tileset.findById(obj);
+      usersharedtilesets.push(tileset);
+    })
+  );
+  res.json({ usertilesets: usertilesets, sharedtilesets: usersharedtilesets });
 });
 
 // Get all tilesets
@@ -109,3 +124,4 @@ router.get("/tileset", async (req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 module.exports = router;
+
