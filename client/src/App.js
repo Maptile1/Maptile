@@ -64,7 +64,7 @@ function App() {
               <TilesetDisplay
                 user={user}
                 setTheUser={setTheUser}
-                setOtherProfile={setOtherProfile}
+
               />
             }
           />
@@ -74,7 +74,7 @@ function App() {
               <MapDisplay
                 user={user}
                 setTheUser={setTheUser}
-                setOtherProfile={setOtherProfile}
+
               />
             }
           />
