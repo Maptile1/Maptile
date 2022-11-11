@@ -11,6 +11,25 @@ const { BlockBlobClient } = require('@azure/storage-blob')
 const getStream = require('into-stream')
 require('dotenv').config();
 
+// NODE MAILER 
+const nodeMailer = require('nodemailer');
+let mailTransporter = nodeMailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: process.env.EMAIL,
+        pass: process.env.EMAIL_PASS
+    }
+})
+const sendEmail = (details) => {
+    mailTransporter.sendMail(details, (err) => {
+        if(err){
+            console.log("ERROR SENDING EMAIL", err);
+        }
+        else{
+            console.log("email has sent.")
+        }
+    })
+}
 
 userRouter.route("/user/register").post(async (req, res) => {
     bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
@@ -92,7 +111,6 @@ userRouter.route("/user/get/:id").get(async (req, res) => {
 })
 
 userRouter.route("/user/email/:email").get(async (req, res) => {
-    console.log(req.params.email)
     var user = await User.find(
         {
             email: req.params.email
@@ -105,6 +123,16 @@ userRouter.route("/user/email/:email").get(async (req, res) => {
     else{
         res.status(400).json({ errorMessage: "Couldnt find user" })
     }
+})
+
+userRouter.route("/user/recover/:email").get(async (req, res) => {
+    let details = {
+        from: process.env.EMAIL,
+        to: req.params.email,
+        "subject": "Maptile Password Recovery Code",
+        "text": "12345", 
+    }
+    sendEmail(details)
 })
 
 userRouter.post("/user/update", async (req, res) => {

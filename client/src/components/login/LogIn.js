@@ -46,18 +46,31 @@ const LogIn = (props) => {
         function(response){
           let user = response.data.user[0];
           if(user !== undefined){
-            console.log(user);
             toggleForgotPasswordView(false)
             toggleEmailConfirmationView(true)
+            // SEND EMAIL WITH CODE
+            sendEmailCode(user.email);
           }
           else{
-            window.alert("User not found.")
+            window.alert("User with email " + email + " not found.")
           }
         }
       )
       .catch(function(error){
         window.alert(error.response.data.errorMessage)
       });
+  }
+
+  const sendEmailCode = (email) => {
+    Axios.get("http://localhost:8080/user/recover/" + email)
+    .then(
+      function(response){
+          console.log(response); 
+      }
+    )
+    .catch(function(error){
+          window.alert(error.response.data.errorMessage)
+    })
   }
 
   return (!forgotPasswordView && !resetPasswordView && !emailConfirmationView) ? (
