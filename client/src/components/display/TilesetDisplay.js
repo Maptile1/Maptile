@@ -14,6 +14,7 @@ const TilesetDisplay = (props) => {
     const nav = useNavigate()
     var [owner, setOwner] = useState(null)
     const [loading, setLoading] = useState(true);
+    const [tileset, setTileset] = useState(null);
     const [userPfp, setPfp] = useState("")
     const handleOtherUserProfile = () => {
         props.setOtherProfile(owner)
@@ -24,40 +25,42 @@ const TilesetDisplay = (props) => {
     useEffect(() => {
         const getOwner = async () => {
             setLoading(true)
+            console.log(location.state._id)
             let response = await Axios.get(
                 "https://maptile1.herokuapp.com/user/get/" + location.state.owner)
+            let tilesetdata = await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + location.state._id)
+            setTileset(tilesetdata.data.tileset);
             setOwner(response.data.user)
-            setPfp("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +  response.data.user._id)
+            setPfp("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + response.data.user._id)
             setLoading(false);
         }
         getOwner()
-    }, [location.state.owner]);
+    }, []);
 
-    console.log(owner);
     return (
         <div>
             {!loading &&
                 (<div>
                     <Sidebar />
                     <div class="container px-6 text-xl py-10 mx-auto text-white">
-                        <div class="text-center text-4xl font-bold">Epic Lava Tileset</div>
+                        <div class="text-center text-4xl font-bold">{tileset.name}</div>
                         <div class="grid grid-cols-5 grid-rows-2">
                             <div class="row-start-1 col-start-1 col-span-3 mt-10">
                                 <div class="flex">
-                                <img
-                                    style={{ width: 100, height: 120, borderRadius: 400 / 2 }}
-                                    class="w-full h-3/4 object-cover object-center border-2 border-maptile-green"
-                                    src={userPfp}
-                                    alt="blog"
-                                    onError={({currentTarget}) => {
-                                        currentTarget.onerror = null
-                                        currentTarget.src="https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
-                                    }}
-                                    onClick={() => handleOtherUserProfile()} />
+                                    <img
+                                        style={{ width: 100, height: 120, borderRadius: 400 / 2 }}
+                                        class="w-full h-3/4 object-cover object-center border-2 border-maptile-green"
+                                        src={userPfp}
+                                        alt="blog"
+                                        onError={({ currentTarget }) => {
+                                            currentTarget.onerror = null
+                                            currentTarget.src = "https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
+                                        }}
+                                        onClick={() => handleOtherUserProfile()} />
 
                                     <div class="flex flex-col justify-between ml-5">
                                         <div>{owner.userName}</div>
-                                        <div>Destiny Inspired Tileset</div>
+                                        <div>{tileset.description}</div>
                                     </div>
 
                                 </div>
@@ -151,7 +154,7 @@ const TilesetDisplay = (props) => {
                                     </Transition>
                                 </Menu>
                             </div>
-                            <div class="mt-10 row-start-2 col-span-3">Tags: Lava, Fire, Volcano, Red</div>
+                            <div class="mt-10 row-start-2 col-span-3">{tileset.tags}</div>
                             <div class="row-start-3 row-end-4 col-start-1 col-end-4 bg-white mb-10">
                                 <img class="object-cover w-full h-full mx-auto rounded-md lg:max-w-2xl" src="https://dicegrimorium.com/wp-content/uploads/2019/09/LavaPoolsPublic1JPG-1024x683.jpg" alt="" />
                             </div>

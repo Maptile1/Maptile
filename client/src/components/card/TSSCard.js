@@ -11,11 +11,9 @@ const TSSCard = (props) => {
     nav("/tileset_edit");
   };
   const handleTilesetDisplay = () => {
-    nav("/tilesetdisplay", { state: { owner: props.owner } });
+    nav("/tilesetdisplay", { state: { owner: props.owner, _id: props._id } });
   };
-
   const handleDelete = async () => {
-    console.log(props._id);
     props.handleDelete(props._id);
   };
 
@@ -23,14 +21,14 @@ const TSSCard = (props) => {
     <div class="max-w-sm rounded overflow-hidden mt-5 mx-14">
       {props.search ? (
         <img
-          onClick={handleTilesetDisplay}
+          onClick={() => handleTilesetDisplay()}
           class="w-full border border-white cursor-pointer"
           src="https://images.gnwcdn.com/2020/usgamer/A-Link-to-the-Past-Map-Header1-05292020.jpg/EG11/thumbnail/1920x1080/format/jpg/quality/65/the-20-best-in-game-maps.jpg"
           alt=""
         />
       ) : (
         <img
-          onClick={handleTilesetView}
+          onClick={() => handleTilesetView()}
           class="w-full border border-white cursor-pointer"
           src="https://images.gnwcdn.com/2020/usgamer/A-Link-to-the-Past-Map-Header1-05292020.jpg/EG11/thumbnail/1920x1080/format/jpg/quality/65/the-20-best-in-game-maps.jpg"
           alt=""
@@ -40,7 +38,7 @@ const TSSCard = (props) => {
       <div class="grid grid-cols-4">
         {props.search ? (
           <div
-            onClick={handleTilesetDisplay}
+            onClick={() => handleTilesetDisplay()}
             class="col-start-1 col-span-3 text-center ml-20 text-white text-xl underline mt-5 cursor-pointer"
           >
             {" "}
@@ -48,7 +46,7 @@ const TSSCard = (props) => {
           </div>
         ) : (
           <div
-            onClick={handleTilesetView}
+            onClick={() => handleTilesetView()}
             class="col-start-1 col-span-3 text-center text-white text-xl underline mt-5 cursor-pointer"
           >
             {" "}
@@ -80,11 +78,10 @@ const TSSCard = (props) => {
                     <Menu.Item>
                       {({ active }) => (
                         <button
-                          className={`${
-                            active
-                              ? "bg-violet-500 text-white"
-                              : "text-gray-900"
-                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                          className={`${active
+                            ? "bg-violet-500 text-white"
+                            : "text-gray-900"
+                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                         >
                           {active ? (
                             <MdDriveFileRenameOutline
@@ -105,11 +102,10 @@ const TSSCard = (props) => {
                       {({ active }) => (
                         <button
                           onClick={() => handleDelete()}
-                          className={`${
-                            active
-                              ? "bg-violet-500 text-white"
-                              : "text-gray-900"
-                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                          className={`${active
+                            ? "bg-violet-500 text-white"
+                            : "text-gray-900"
+                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                         >
                           {active ? (
                             <MdDelete
@@ -130,11 +126,10 @@ const TSSCard = (props) => {
                       {({ active }) => (
                         <button
                           onClick={handleTilesetView}
-                          className={`${
-                            active
-                              ? "bg-violet-500 text-white"
-                              : "text-gray-900"
-                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                          className={`${active
+                            ? "bg-violet-500 text-white"
+                            : "text-gray-900"
+                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                         >
                           {active ? (
                             <FiEdit

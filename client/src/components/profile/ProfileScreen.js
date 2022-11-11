@@ -15,6 +15,7 @@ const ProfileScreen = (props) => {
   const location = useLocation();
   const [loading, setLoading] = useState(true);
   var [userTilesets, setUserTilesets] = useState([]);
+
   const [userPfp, setPfp] = useState(
     "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
     user._id +
@@ -65,9 +66,9 @@ const ProfileScreen = (props) => {
               <div class="mt-5 text-left ml-2">{user.bio}</div>
             </div>
           </div>
-          <div class="col-start-6 row-start-4 col-span-5">
+          <div class="col-start-6 row-start-4 col-span-5 mt-[-30px]">
             <button
-              className=" w-full p-2 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl"
+              className="w-full p-2 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl"
               onClick={() => setProfileModal(true)}
             >
               <BiCog size={30} />
