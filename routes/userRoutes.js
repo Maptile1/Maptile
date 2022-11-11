@@ -91,6 +91,22 @@ userRouter.route("/user/get/:id").get(async (req, res) => {
     }
 })
 
+userRouter.route("/user/email/:email").get(async (req, res) => {
+    console.log(req.params.email)
+    var user = await User.find(
+        {
+            email: req.params.email
+        }
+    )
+    console.log(user)
+    if(user != null){
+        res.json({user: user})
+    }
+    else{
+        res.status(400).json({ errorMessage: "Couldnt find user" })
+    }
+})
+
 userRouter.post("/user/update", async (req, res) => {
     // if (req.session._id == undefined) {
     //     res.status(400).json({ errorMessage: "Not logged in" })
