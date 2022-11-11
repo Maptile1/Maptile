@@ -10,6 +10,7 @@ const EditTileset = (props) => {
     const [renameModalOpen, setRenameModal] = useState(false)
     var location = useLocation();
     const [tileset, setTileset] = useState(null);
+    const [tilesetName, setTilesetName] = useState(null);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         const getTileset = async () => {
@@ -17,18 +18,21 @@ const EditTileset = (props) => {
 
             let tilesetdata = await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + location.state._id)
             setTileset(tilesetdata.data.tileset);
+            setTilesetName(tilesetdata.data.tileset.name);
             setLoading(false);
         }
         getTileset()
     }, []);
-
+    const updateName = (name) => {
+        setTilesetName(name)
+    }
     return (
         <div>
             {!loading ? (
                 <div>
                     <Sidebar />
                     <main className="mx-auto flex flex-col min-h-screen w-full items-center justify-top bg-maptile-background-dark text-white">
-                        <div className="pt-5 text-center text-4xl font-bold text-white underline">{tileset.name}</div>
+                        <div className="pt-5 text-center text-4xl font-bold text-white underline">{tilesetName}</div>
                         <div className="flex flex-col h-[53rem] w-5/6 items-left justify-top ml-20 mt-10">
                             <EditTilesetMenu setShareModal={setShareModal} setRenameModal={setRenameModal} />
 
@@ -37,8 +41,8 @@ const EditTileset = (props) => {
                             </div>
 
                         </div>
-                        <ShareModal modalOpen={shareModalOpen} setShareModal={setShareModal} name={tileset.name} />
-                        <RenameModal renameModalOpen={renameModalOpen} setRenameModal={setRenameModal} tileset={tileset} />
+                        <ShareModal modalOpen={shareModalOpen} setShareModal={setShareModal} name={tilesetName} />
+                        <RenameModal updateName={updateName} renameModalOpen={renameModalOpen} setRenameModal={setRenameModal} tileset={tileset} />
                     </main>
                 </div>)
                 : <div></div>

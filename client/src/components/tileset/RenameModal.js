@@ -10,8 +10,7 @@ const RenameModal = (props) => {
     }
 
     const handleRename = async (e) => {
-        console.log(name);
-        await Axios.post(
+        let response = await Axios.post(
             "https://maptile1.herokuapp.com/tileset/update/" + tileset._id,
             {
                 tileset_data: tileset.tileset_data,
@@ -21,6 +20,7 @@ const RenameModal = (props) => {
 
             }
         )
+        props.updateName(response.data.tileset.name)
         props.setRenameModal(false);
 
     }
