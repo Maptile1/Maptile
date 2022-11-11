@@ -23,7 +23,7 @@ const EditTileset_Menu = (props) => {
             <Menu.Items className=" absolute bottom-200 left-0 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <Menu.Item>
                     {({ active }) => (
-                        <button onClick={() => props.setRenameModal(true)}
+                        <button onClick={() => props.setTilesetPropModal(true)}
                             className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
                                 } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                         >
@@ -38,7 +38,7 @@ const EditTileset_Menu = (props) => {
                                     aria-hidden="true"
                                 />
                             )}
-                            Rename
+                            Tileset Properties
                         </button>
                     )}
                 </Menu.Item>
