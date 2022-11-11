@@ -64,16 +64,16 @@ const ProfileScreen = (props) => {
             <div className="bg-maptile-background-mid mt-8 p2.5 rounded-xl w-full">
               <div class="mt-5 text-left ml-2">{user.bio}</div>
             </div>
-
+          </div>
+          <div class="col-start-6 row-start-4 col-span-5">
             <button
-              className="mt-8 flex flex-row p-2 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl"
+              className=" w-full p-2 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl"
               onClick={() => setProfileModal(true)}
             >
-              <BiCog />
-              <div className="ml-2 mt-[-4px]"> Settings </div>
+              <BiCog size={30} />
+              <div className="text-center text-white font-bold text-3xl mt-[-30px]"> Settings </div>
             </button>
           </div>
-
           <div class="col-start-6 row-start-3 mt-20 text-6xl justify-self-center text-white">
             <BsMapFill />
             <div class="mt-10">
@@ -95,9 +95,9 @@ const ProfileScreen = (props) => {
             </div>
             <div class="mt-4">Likes</div>
           </div>
-          <div class="row-start-6 text-white text-3xl col-start-2 pt-10 mt-10">Featured
+          <div class="row-start-4 text-white text-3xl col-start-2 pt-10 mt-10">Featured
           </div>
-          <div class="row-start-7 text-white text-3xl col-start-2 col-span-10" style={{ borderTop: "2px solid #fff ", marginRight: 20 }}></div>
+          <div class="row-start-5 text-white text-3xl col-start-2 col-span-10" style={{ borderTop: "2px solid #fff ", marginRight: 20 }}></div>
           <div class="mt-10 grid grid-cols-4 col-span-10 col-start-2 row-start-7 gap-5">
             {userTilesets.length !== 0 ?
               userTilesets.map((obj, index) => (
