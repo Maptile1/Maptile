@@ -41,7 +41,23 @@ const LogIn = (props) => {
   }
 
   const handleSendEmailCode = (email) => {
-      console.log(email);
+      Axios.get("http://localhost:8080/user/email/" + email)
+      .then(
+        function(response){
+          let user = response.data.user[0];
+          if(user !== undefined){
+            console.log(user);
+            toggleForgotPasswordView(false)
+            toggleEmailConfirmationView(true)
+          }
+          else{
+            window.alert("User not found.")
+          }
+        }
+      )
+      .catch(function(error){
+        window.alert(error.response.data.errorMessage)
+      });
   }
 
   return (!forgotPasswordView && !resetPasswordView && !emailConfirmationView) ? (
@@ -109,7 +125,7 @@ const LogIn = (props) => {
     forgotPasswordView ? (
       <ForgotPassword
         closeView={toggleForgotPasswordView}
-        toggleEmailConfirmationView={toggleEmailConfirmationView}
+        handleSendEmailCode={handleSendEmailCode}
       />
     )
       :

@@ -18,12 +18,6 @@ const ForgotPassword = (props) => {
         );
       }
 
-    const handleResetPassword = () => {
-        props.closeView();
-        props.toggleEmailConfirmationView(true);
-        props.handleSendEmailCode(email);
-    }
-
     return (
         <main
         class="mx-auto flex min-h-screen w-full items-center justify-center bg-maptile-background-dark text-white"
@@ -46,7 +40,7 @@ const ForgotPassword = (props) => {
             </div>
 
             <button 
-            onClick = {handleResetPassword}
+            onClick = {() => props.handleSendEmailCode(email)}
             className={`${!inputValid ? 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red rounded-xl' : 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl'}`}
           >
             SEND EMAIL
