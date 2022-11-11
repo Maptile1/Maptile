@@ -24,7 +24,6 @@ const ProfileScreen = (props) => {
   );
 
   const updatePfp = (newImage) => {
-    console.log(newImage);
     setPfp(newImage + "?=" + Math.random().toString().substring(2));
   };
 
@@ -40,7 +39,6 @@ const ProfileScreen = (props) => {
     getTilesets();
   }, []);
 
-  console.log(userTilesets);
   return user ? (
     <div>
       {!loading && (
@@ -58,7 +56,7 @@ const ProfileScreen = (props) => {
               onError={({ currentTarget }) => {
                 currentTarget.onerror = null;
                 updatePfp(
-                  "https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
+                  "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png"
                 );
               }}
             />

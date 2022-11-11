@@ -22,6 +22,10 @@ const TilesetDisplay = (props) => {
     }
     const location = useLocation();
 
+    const addToShared = () => {
+
+    }
+
     useEffect(() => {
         const getOwner = async () => {
             setLoading(true)
@@ -54,7 +58,7 @@ const TilesetDisplay = (props) => {
                                         alt="blog"
                                         onError={({ currentTarget }) => {
                                             currentTarget.onerror = null
-                                            currentTarget.src = "https://www.colorado.edu/today/sites/default/files/styles/medium/public/article-image/liu_s-photo.jpg?itok=l-mJPK65"
+                                            currentTarget.src = "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png"
                                         }}
                                         onClick={() => handleOtherUserProfile()} />
 
@@ -107,7 +111,7 @@ const TilesetDisplay = (props) => {
                                                 </Menu.Item>
                                                 <Menu.Item>
                                                     {({ active }) => (
-                                                        <button
+                                                        <button onClick={() => addToShared()}
                                                             className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
                                                                 } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                                         >
