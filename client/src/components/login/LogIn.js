@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import Axios from 'axios'
+import ForgotPassword from "../ForgotPassword/ForgotPassword";
+import ResetPassword from "../ResetPassword/ResetPassword";
+import EmailConfirmation from "../EmailConfirmation/EmailConfirmation";
+
 const LogIn = (props) => {
   const [input, setInput] = useState({ userName: '', password: '' });
   const [inputValid, setInputValid] = useState(false)
+  const [forgotPasswordView, toggleForgotPasswordView] = useState(false);
+  const [emailConfirmationView, toggleEmailConfirmationView] = useState(false);
+  const [resetPasswordView, toggleResetPasswordView] = useState(false);
 
   const updateInput = (e) => {
     const { name, value } = e.target;
@@ -33,7 +40,7 @@ const LogIn = (props) => {
     }
   }
 
-  return (
+  return (!forgotPasswordView && !resetPasswordView && !emailConfirmationView) ? (
     <main
       className="mx-auto flex min-h-screen w-full items-center justify-center bg-maptile-background-dark text-white"
     >
@@ -72,8 +79,8 @@ const LogIn = (props) => {
           </button>
 
           <button
-
-            className="transform text-center font-semibold text-white duration-300 hover:text-gray-300 underline"
+            onClick={() => toggleForgotPasswordView(true)}
+            class="transform text-center font-semibold text-white duration-300 hover:text-gray-300 underline"
           >FORGOT PASSWORD?
           </button>
 
@@ -93,7 +100,27 @@ const LogIn = (props) => {
         </section>
       </div>
     </main>
-  );
+  )
+    :
+    forgotPasswordView ? (
+      <ForgotPassword
+        closeView={toggleForgotPasswordView}
+        toggleEmailConfirmationView={toggleEmailConfirmationView}
+      />
+    )
+      :
+      emailConfirmationView ? (
+        <EmailConfirmation
+          toggleEmailConfirmationView={toggleEmailConfirmationView}
+          toggleForgotPasswordView={toggleForgotPasswordView}
+          toggleResetPasswordView={toggleResetPasswordView}
+        />
+      )
+        :
+        (
+          <ResetPassword />
+        )
+    ;
 };
 
 export default LogIn;
