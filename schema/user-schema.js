@@ -56,6 +56,10 @@ const userSchema = new Schema(
         accountCreated: {
             type: Date,
             required: true
+        },
+        recoveryCode: {
+            type: Number,
+            required: false
         }
     }
 )

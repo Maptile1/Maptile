@@ -125,12 +125,32 @@ userRouter.route("/user/email/:email").get(async (req, res) => {
     }
 })
 
-userRouter.route("/user/recover/:email").get(async (req, res) => {
+userRouter.route("/user/recover/:email").post(async (req, res) => {
+    // GENERATE CODE AND SAVE TO DB
+    let code = Math.floor(Math.random()*90000) + 10000;
+
+    var user = await User.find(
+        {
+            email: req.params.email
+        }
+    )
+    if(user != null){
+        res.json({user: user})
+    }
+    else{
+        res.status(400).json({ errorMessage: "Couldnt find user" })
+    }
+    console.log(user)
+    user.recoveryCode = code;
+
+    // UPDATE USER
+
+
     let details = {
         from: process.env.EMAIL,
         to: req.params.email,
         "subject": "Maptile Password Recovery Code",
-        "text": "12345", 
+        "text": code.toString(), 
     }
     sendEmail(details)
 })
