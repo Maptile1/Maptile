@@ -24,12 +24,6 @@ const Homescreen = (props) => {
     nav("/home", { replace: true })
   }
 
-  const handleForgotPassword = () => {
-
-
-
-  }
-
   const handleHomeScreenView = () => {
     toggleCreateAccountView(false);
     toggleLogInView(false);

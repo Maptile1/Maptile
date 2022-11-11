@@ -3,6 +3,24 @@ import React, { useState } from "react";
 const ResetPassword = (props) => {
 
     const [inputValid, setInputValid] = useState(false)
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
+    const checkValidPassword = (password, confirmPassword) => {
+        if(password === confirmPassword){
+            setInputValid(true);
+        }
+    }
+
+    const handlePasswordInput = (event) => {
+        setPassword(event.target.value);
+        checkValidPassword(password, confirmPassword);
+    }
+
+    const handleConfirmPasswordInput = (event) => {
+        setConfirmPassword(event.target.value);
+        checkValidPassword(password, confirmPassword);
+    }
 
     return (
         <main
@@ -20,6 +38,7 @@ const ResetPassword = (props) => {
                 name="password"
                 placeholder="Enter new password"
                 class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                onChange={handlePasswordInput}
               />
             </div>
 
@@ -31,6 +50,7 @@ const ResetPassword = (props) => {
                 name="password"
                 placeholder="Confirm new password"
                 class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                onChange={handleConfirmPasswordInput}
               />
             </div>
 

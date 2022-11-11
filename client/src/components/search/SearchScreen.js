@@ -26,7 +26,7 @@ const SearchScreen = (props) => {
     }
 
     tilesetRes();
-  }, []);
+  }, [userSelected]);
 
 
   const tags = ["Fire", "Water", "Awesome", "Big", "Small", "Great", "Earth", "City", "Lava", "Madison", "Castle", "Larger"]

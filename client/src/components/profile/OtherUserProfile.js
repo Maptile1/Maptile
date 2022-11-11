@@ -38,7 +38,7 @@ const OtherUserProfile = (props) => {
             setLoading(false);
         };
         getTilesets();
-    }, []);
+    }, [user._id]);
 
     return location.state.owner ? (
         <div>

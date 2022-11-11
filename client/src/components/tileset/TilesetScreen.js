@@ -34,7 +34,7 @@ const TilesetScreen = (props) => {
       setSharedTilesets(response.data.sharedtilesets)
     };
     getTilesets();
-  }, []);
+  }, [user]);
 
   const updateInput = (e) => {
     const { name, value } = e.target;
@@ -52,6 +52,7 @@ const TilesetScreen = (props) => {
     let response = await Axios.post(
       "https://maptile1.herokuapp.com/tileset/delete/" + id
     );
+    console.log(response);
     const getTilesets = async () => {
       var response = await Axios.get(
         "https://maptile1.herokuapp.com/tileset/getUser/" + user._id

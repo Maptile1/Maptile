@@ -39,7 +39,7 @@ const TilesetDisplay = (props) => {
             setLoading(false);
         }
         getOwner()
-    }, []);
+    }, [location.state._id, location.state.owner]);
 
     return (
         <div>
