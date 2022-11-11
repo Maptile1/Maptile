@@ -154,14 +154,14 @@ const TilesetDisplay = (props) => {
                                     </Transition>
                                 </Menu>
                             </div>
-                            <div class="mt-10 row-start-2 col-span-3">{tileset.tags}</div>
+                            <div class="mt-10 row-start-2 col-span-3">Tags: {tileset.tags.map((obj) => obj + " ")}</div>
                             <div class="row-start-3 row-end-4 col-start-1 col-end-4 bg-white mb-10">
                                 <img class="object-cover w-full h-full mx-auto rounded-md lg:max-w-2xl" src="https://dicegrimorium.com/wp-content/uploads/2019/09/LavaPoolsPublic1JPG-1024x683.jpg" alt="" />
                             </div>
                             <div class="flex flex-row gap-20 row-start-3 col-start-5">
-                                <div class="flex flex-col text-6xl font-bold"> <FaThumbsUp color={"green"} size={100} stroke={1} /><div class="mt-10">5 Likes</div></div>
+                                <div class="flex flex-col text-6xl font-bold"> <FaThumbsUp color={"green"} size={100} stroke={1} /><div class="mt-10">{tileset.likes} Likes</div></div>
 
-                                <div class="flex flex-col text-6xl font-bold">< FaThumbsDown color={"red"} size={100} /><div class="mt-10 ">5 Dislikes</div></div>
+                                <div class="flex flex-col text-6xl font-bold">< FaThumbsDown color={"red"} size={100} /><div class="mt-10 ">{tileset.dislikes} Dislikes</div></div>
                             </div>
 
 
