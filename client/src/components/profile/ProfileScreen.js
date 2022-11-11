@@ -78,14 +78,14 @@ const ProfileScreen = (props) => {
             <div class="mt-10">
               {user.maps.length}
             </div>
-            <div class="mt-4">Likes</div>
+            <div class="mt-4">Maps</div>
           </div>
           <div class="col-start-8 row-start-3 mt-20 text-6xl justify-self-center text-white">
             <BsFillPuzzleFill />
             <div class="mt-10">
               {user.tilesets.length}
             </div>
-            <div class="mt-4">Likes</div>
+            <div class="mt-4">Tilesets</div>
           </div>
           <div class="col-start-10 row-start-3 mt-20 text-6xl justify-self-center text-white">
             <BiLike />

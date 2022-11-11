@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 const TSSCard = (props) => {
   const nav = useNavigate();
   const handleTilesetView = () => {
-    nav("/tileset_edit");
+    nav("/tileset_edit", { state: { _id: props._id } });
   };
   const handleTilesetDisplay = () => {
     nav("/tilesetdisplay", { state: { owner: props.owner, _id: props._id } });

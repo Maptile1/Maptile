@@ -61,17 +61,17 @@ router.post("/tileset/delete/:id", async (req, res) => {
 
 // Update tileset
 router.post("/tileset/update/:id", async (req, res) => {
-  if (req.session._id == undefined) {
-    res.status(400).json({ errorMessage: "Not logged in" });
-    return;
-  }
+  // if (req.session._id == undefined) {
+  //   res.status(400).json({ errorMessage: "Not logged in" });
+  //   return;
+  // }
   var updates = {};
   updates.tileset_data = req.body.tileset_data;
   updates.name = req.body.name;
   updates.description = req.body.description;
   updates.public = req.body.public;
   var tileset = await Tileset.findOneAndUpdate(
-    { _id: req.params.id, owner: req.session._id },
+    { _id: req.params.id },
     { $set: updates },
     { new: true }
   );
@@ -124,3 +124,4 @@ router.get("/tileset", async (req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 module.exports = router;
+
