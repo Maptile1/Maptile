@@ -1,15 +1,13 @@
 import { BsMapFill, BsFillPuzzleFill } from "react-icons/bs";
-import { BiLike, BiCog } from "react-icons/bi";
+import { BiLike } from "react-icons/bi";
 import TilesetCard from "../card/TilesetCard";
 import Sidebar from "../sidebar/Sidebar";
 // import MapCard from "../card/MapCard";
 import { React, useState, useEffect } from "react";
-import ProfileEditModal from "./ProfileEditModal";
 import { Navigate, useLocation } from "react-router-dom";
 // import { isRouteErrorResponse } from "react-router-dom";
 import Axios from "axios";
 const ProfileScreen = (props) => {
-    const [modalOpen, setProfileModal] = useState(false);
 
     const user = props.user;
     const location = useLocation();
@@ -66,17 +64,27 @@ const ProfileScreen = (props) => {
                         </div>
                     </div>
 
-                    <div class="col-start-6 row-start-3 mt-20 text-6xl justify-self-center text-white">
+                    <div class="col-start-6 row-start-3 mt-20 text-6xl justify-self-center gap-10 text-white">
                         <BsMapFill />
-                        {user.maps.length} Maps
+                        <div class="mt-10">
+                            {user.maps.length}
+                        </div>
+                        <div class="mt-4">Maps</div>
+
                     </div>
                     <div class="col-start-8 row-start-3 mt-20 text-6xl justify-self-center text-white">
                         <BsFillPuzzleFill />
-                        {user.tilesets.length} Tilesets
+                        <div class="mt-10">
+                            {user.tilesets.length}
+                        </div>
+                        <div class="mt-4">Tilesets</div>
                     </div>
                     <div class="col-start-10 row-start-3 mt-20 text-6xl justify-self-center text-white">
                         <BiLike />
-                        {user.likes} Likes
+                        <div class="mt-10">
+                            {user.likes}
+                        </div>
+                        <div class="mt-4">Likes</div>
                     </div>
                     <div class="row-start-6 text-white text-3xl col-start-2 pt-10 mt-[-10px]">Featured
                     </div>
