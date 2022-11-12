@@ -61,7 +61,7 @@ const EmailConfirmation = (props) => {
                 name="number"
                 placeholder="Enter email confirmation code"
                 class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
-                maxlength="5"
+                maxLength="5"
                 onChange={handleChangeCode}
               />
             </div>

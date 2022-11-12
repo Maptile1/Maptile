@@ -75,7 +75,11 @@ const LogIn = (props) => {
     })
   }
 
-  const handleResetPassword = (password) => {
+  const handleResetPassword = (password, confirmPassword) => {
+      if(password !== confirmPassword){
+        window.alert("Passwords do not match.");
+        return;
+      }
       // UPDATE PASSWORD
       Axios.post(
         "https://maptile1.herokuapp.com/user/update",
