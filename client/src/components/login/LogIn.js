@@ -49,6 +49,7 @@ const LogIn = (props) => {
           if(user !== undefined){
             toggleForgotPasswordView(false)
             toggleEmailConfirmationView(true)
+            setUser(user);
             // SEND EMAIL WITH CODE
             sendEmailCode(user.email);
           }
@@ -87,26 +88,11 @@ const LogIn = (props) => {
         }
       ).then(function (response) {
           console.log(response);
+          window.alert("Successfully changed password!")
+          toggleResetPasswordView(false);
       })
       .catch(function (error) {
           window.alert(error.response.data.errorMessage)
-      })
-
-      Axios.post("https://maptile1.herokuapp.com/user/login",
-      {
-        userName: user.userName,
-        password: password,
-      },
-      {
-        headers: { Cookie: "_id=5" }
-      }
-    )
-      .then(function (response) {
-        window.alert("Successfully changed password!")
-        props.handleLogIn(response.data.user);
-      })
-      .catch(function (error) {
-        window.alert(error.response.data.errorMessage)
       })
   }
 
@@ -176,6 +162,7 @@ const LogIn = (props) => {
       <ForgotPassword
         closeView={toggleForgotPasswordView}
         handleSendEmailCode={handleSendEmailCode}
+        toggleEmailConfirmationView={toggleEmailConfirmationView}
       />
     )
       :
@@ -185,7 +172,8 @@ const LogIn = (props) => {
           toggleForgotPasswordView={toggleForgotPasswordView}
           toggleResetPasswordView={toggleResetPasswordView}
           handleSendEmailCode={handleSendEmailCode}
-          setUser = {setUser}
+          user={user}
+          setUser={setUser}
         />
       )
         :
