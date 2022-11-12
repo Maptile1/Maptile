@@ -17,12 +17,12 @@ const ResetPassword = (props) => {
 
     const handlePasswordInput = (event) => {
         setPassword(event.target.value);
-        checkValidPassword(password, confirmPassword);
+        checkValidPassword(event.target.value, confirmPassword);
     }
 
     const handleConfirmPasswordInput = (event) => {
         setConfirmPassword(event.target.value);
-        checkValidPassword(password, confirmPassword);
+        checkValidPassword(password, event.target.value);
     }
 
     return (
@@ -58,8 +58,8 @@ const ResetPassword = (props) => {
             </div>
 
             <button 
-            onClick={() => props.handleResetPassword(password)}
-            className={`${!inputValid ? 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red rounded-xl' : 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl'}`}
+            onClick={inputValid ? () => props.handleResetPassword(password) : null}
+            className={`${!inputValid ? 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red rounded-xl cursor-not-allowed' : 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl'}`}
           >
             UPDATE PASSWORD
           </button>
