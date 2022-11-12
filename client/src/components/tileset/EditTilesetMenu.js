@@ -20,7 +20,7 @@ const EditTileset_Menu = (props) => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
         >
-            <Menu.Items className=" absolute bottom-200 left-0 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <Menu.Items className=" absolute bottom-[-75px] left-[50px] rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <Menu.Item>
                     {({ active }) => (
                         <button onClick={() => props.setTilesetPropModal(true)}

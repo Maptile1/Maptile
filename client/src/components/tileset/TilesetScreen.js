@@ -65,6 +65,10 @@ const TilesetScreen = (props) => {
   const handleCreate = async (e) => {
     if (inputValid) {
       await Axios.post("https://maptile1.herokuapp.com/tileset/create", {
+        tile_width: input.tilewidth,
+        tile_height: input.tileheight,
+        tileset_width: input.tilesetwidth,
+        tileset_height: input.tilesetheight,
         name: input.name,
         description: "test",
         _id: props.user._id,
