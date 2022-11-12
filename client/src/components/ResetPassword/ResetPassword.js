@@ -10,6 +10,9 @@ const ResetPassword = (props) => {
         if(password === confirmPassword){
             setInputValid(true);
         }
+        else {
+          setInputValid(false);
+        }
     }
 
     const handlePasswordInput = (event) => {
