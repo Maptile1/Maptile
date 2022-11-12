@@ -10,6 +10,22 @@ const tilesetSchema = new Schema(
             type: [String],
             required: true
         },
+        tile_width: {
+            type: Number,
+            required: true
+        },
+        tile_height: {
+            type: Number,
+            required: true
+        },
+        tileset_width: {
+            type: Number,
+            required: true
+        },
+        tileset_height: {
+            type: Number,
+            required: true
+        },
         tags: {
             type: [String],
             required: true
