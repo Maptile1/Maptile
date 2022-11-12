@@ -10,6 +10,7 @@ const LogIn = (props) => {
   const [forgotPasswordView, toggleForgotPasswordView] = useState(false);
   const [emailConfirmationView, toggleEmailConfirmationView] = useState(false);
   const [resetPasswordView, toggleResetPasswordView] = useState(false);
+  const [user, setUser] = useState({});
 
   const updateInput = (e) => {
     const { name, value } = e.target;
@@ -71,6 +72,42 @@ const LogIn = (props) => {
     .catch(function(error){
           window.alert(error.response.data.errorMessage)
     })
+  }
+
+  const handleResetPassword = (password) => {
+      // UPDATE PASSWORD
+      Axios.post(
+        "https://maptile1.herokuapp.com/user/update",
+        {
+            _id: user._id,
+            userName: user.userName,
+            bio: user.bio,
+            email: user.email,
+            password: password
+        }
+      ).then(function (response) {
+          console.log(response);
+      })
+      .catch(function (error) {
+          window.alert(error.response.data.errorMessage)
+      })
+
+      Axios.post("https://maptile1.herokuapp.com/user/login",
+      {
+        userName: user.userName,
+        password: password,
+      },
+      {
+        headers: { Cookie: "_id=5" }
+      }
+    )
+      .then(function (response) {
+        window.alert("Successfully changed password!")
+        props.handleLogIn(response.data.user);
+      })
+      .catch(function (error) {
+        window.alert(error.response.data.errorMessage)
+      })
   }
 
   return (!forgotPasswordView && !resetPasswordView && !emailConfirmationView) ? (
@@ -148,11 +185,15 @@ const LogIn = (props) => {
           toggleForgotPasswordView={toggleForgotPasswordView}
           toggleResetPasswordView={toggleResetPasswordView}
           handleSendEmailCode={handleSendEmailCode}
+          setUser = {setUser}
         />
       )
         :
         (
-          <ResetPassword />
+          <ResetPassword 
+          user = {user}
+          handleResetPassword = {handleResetPassword}
+          />
         )
     ;
 };

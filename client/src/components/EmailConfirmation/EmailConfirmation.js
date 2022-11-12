@@ -42,6 +42,7 @@ const EmailConfirmation = (props) => {
           if(user !== undefined){
             if(Number(code) === user.recoveryCode){
               // continue to reset password
+              props.setUser(user);
               props.toggleEmailConfirmationView(false);
               props.toggleResetPasswordView(true);
           }

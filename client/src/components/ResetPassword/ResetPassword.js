@@ -55,6 +55,7 @@ const ResetPassword = (props) => {
             </div>
 
             <button 
+            onClick={() => props.handleResetPassword(password)}
             className={`${!inputValid ? 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red rounded-xl' : 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl'}`}
           >
             UPDATE PASSWORD
