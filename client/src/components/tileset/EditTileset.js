@@ -39,13 +39,14 @@ const EditTileset = (props) => {
         console.log(tileset.tileset_width)
         console.log(tileset)
         for(let i = 0; i < tileset.tileset_height;i++){
-            let row = []
+            let row = {row_id: i, row_data:[]}
             for(let j = 0; j < tileset.tileset_width;j++){
-                row.push({id: id_count, color: "white"})
+                row.row_data.push({id: id_count, color: "white"})
                 id_count++
             }
             initLayer.data.push(row) 
         }
+        console.log(initLayer)
         return initLayer
     }
 
@@ -65,6 +66,10 @@ const EditTileset = (props) => {
         if(mouseDown){
             e.target.fill(fillColor)
         }
+    }
+
+    const cellOnClick = (e) => {
+        e.target.fill(fillColor)
     }
 
     const updateFillColor = (color) => {
@@ -114,7 +119,7 @@ const EditTileset = (props) => {
                                         {tileset.tileset_data.map((layer) => {
                                             return(<Layer key={layer.layer}>
                                                 {layer.data.map((row, i) =>{
-                                                    return(row.map((cell)=> {
+                                                    return(row.row_data.map((cell)=> {
                                                         return(<Rect
                                                             x={(cell.id % tileset.tileset_width) * (20 * zoomLevel)}
                                                             y={(i % tileset.tileset_height) * (20 * zoomLevel)}
@@ -123,6 +128,7 @@ const EditTileset = (props) => {
                                                             fill={cell.color}
                                                             shadowBlur={1}
                                                             onMouseOver={cellmouseOver}
+                                                            onClick={cellOnClick}
                                                         />)
                                                     })
                                                     )
