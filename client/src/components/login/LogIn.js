@@ -62,7 +62,7 @@ const LogIn = (props) => {
   }
 
   const sendEmailCode = (email) => {
-    Axios.get("http://localhost:8080/user/recover/" + email)
+    Axios.post("http://localhost:8080/user/recover/" + email)
     .then(
       function(response){
           console.log(response); 

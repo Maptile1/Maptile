@@ -128,24 +128,21 @@ userRouter.route("/user/email/:email").get(async (req, res) => {
 userRouter.route("/user/recover/:email").post(async (req, res) => {
     // GENERATE CODE AND SAVE TO DB
     let code = Math.floor(Math.random()*90000) + 10000;
-
-    var user = await User.find(
-        {
-            email: req.params.email
-        }
-    )
-    if(user != null){
-        res.json({user: user})
+    let updates = {
+        recoveryCode: code
     }
-    else{
-        res.status(400).json({ errorMessage: "Couldnt find user" })
-    }
-    console.log(user)
-    user.recoveryCode = code;
-
     // UPDATE USER
-
-
+    var user = await User.findOneAndUpdate(
+        { email: req.params.email }, //temp
+        { $set: updates },
+        { new: true }
+    )
+    if (user != null) {
+        res.json({ user: user })
+    }
+    else {
+        res.status(400).json({ errorMessage: "User doesn't exist" })
+    }
     let details = {
         from: process.env.EMAIL,
         to: req.params.email,
