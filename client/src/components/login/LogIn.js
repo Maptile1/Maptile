@@ -42,7 +42,7 @@ const LogIn = (props) => {
   }
 
   const handleSendEmailCode = (email) => {
-      Axios.get("http://localhost:8080/user/email/" + email)
+      Axios.get("https://maptile1.herokuapp.com/user/email/" + email)
       .then(
         function(response){
           let user = response.data.user[0];
@@ -64,7 +64,7 @@ const LogIn = (props) => {
   }
 
   const sendEmailCode = (email) => {
-    Axios.post("http://localhost:8080/user/recover/" + email)
+    Axios.post("https://maptile1.herokuapp.com/user/recover/" + email)
     .then(
       function(response){
           console.log(response); 

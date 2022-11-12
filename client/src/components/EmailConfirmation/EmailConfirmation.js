@@ -19,7 +19,7 @@ const EmailConfirmation = (props) => {
     }
 
     const confirmResetPasswordCode = () => {
-      Axios.get("http://localhost:8080/user/email/" +  props.user.email)
+      Axios.get("https://maptile1.herokuapp.com/user/email/" +  props.user.email)
       .then(
         function(response){
           let user = response.data.user[0];
