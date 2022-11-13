@@ -4,7 +4,7 @@ import TilesetCard from "../card/TilesetCard";
 import Sidebar from "../sidebar/Sidebar";
 // import MapCard from "../card/MapCard";
 import { React, useState, useEffect } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useParams } from "react-router-dom";
 // import { isRouteErrorResponse } from "react-router-dom";
 import Axios from "axios";
 
@@ -12,6 +12,7 @@ Axios.defaults.withCredentials = true
 
 const OtherUserProfile = (props) => {
 
+    const {id} = useParams();
     const location = useLocation();
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState(null);
@@ -29,19 +30,26 @@ const OtherUserProfile = (props) => {
     };
 
     useEffect(() => {
+        const getUser = async () => {
+            setLoading(true);
+            await Axios.get("https://maptile1.herokuapp.com/user/get/" + id)
+            .then(response => {
+                setUser(response.data.user);
+                setLoading(false);
+            })
+        };
+        getUser();
         const getTilesets = async () => {
             setLoading(true);
-            var response = await Axios.get(
-                "https://maptile1.herokuapp.com/tileset/getUser/" + location.state.owner
-            );
-            var useresponse = await Axios.get("https://maptile1.herokuapp.com/user/get/" + location.state.owner
-            );
-            setUser(useresponse.data.user)
-            setUserTilesets(response.data.usertilesets);
-            setLoading(false);
-        };
+            await Axios.get("https://maptile1.herokuapp.com/tileset/getUser/" + location.state.owner)
+            .then(response => {
+                setUserTilesets(response.data.usertilesets);
+                console.log(response.data.usertilesets)
+                setLoading(false);
+            });
+        }
         getTilesets();
-    }, [location.state.owner]);
+    }, [location.state.owner, id]);
 
     return location.state.owner ? (
         <div>
@@ -96,15 +104,21 @@ const OtherUserProfile = (props) => {
                     <div class="row-start-7 text-white text-3xl col-start-2 col-span-10" style={{ borderTop: "2px solid #fff ", marginRight: 20 }}></div>
                     <div class="mt-10 grid grid-cols-4 col-span-10 col-start-2 row-start-7 gap-5">
                         {userTilesets.length !== 0 ?
-                            userTilesets.map((obj, index) => (
-                                <TilesetCard
-                                    key={obj}
-                                    name={obj.name}
-                                    description={obj.description}
-                                    owner={obj.owner}
-                                    _id={obj._id}
-                                />
-                            )) : <div> No tilesets</div>
+                            userTilesets.map((obj, index) => 
+                            {
+                                // console.log(obj)
+                                return (
+                                    <TilesetCard
+                                        key={obj}
+                                        name={obj.name}
+                                        description={obj.description}
+                                        owner={obj.owner}
+                                        _id={obj._id}
+                                    />
+                                )
+                            }
+                            ) 
+                            : <div> No tilesets</div>
                         }
                     </div>
                 </div>
