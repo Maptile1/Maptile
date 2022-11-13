@@ -7,6 +7,7 @@ import Axios from "axios";
 import { useLocation } from 'react-router-dom';
 import { Stage, Layer, Rect } from 'react-konva';
 import { SketchPicker } from 'react-color'
+import { BsFillBrushFill, BsFillEraserFill  } from "react-icons/bs";
 
 
 const EditTileset = (props) => {
@@ -17,6 +18,7 @@ const EditTileset = (props) => {
     const [loading, setLoading] = useState(true);
     const [fillColor, setFillColor] = useState("#000000")
     const [zoomLevel, setZoomLevel] = useState(1)
+    const [tool, setTool] = useState("brush")
     useEffect(() => {
         const getTileset = async () => {
             setLoading(true)
@@ -46,7 +48,6 @@ const EditTileset = (props) => {
             }
             initLayer.data.push(row) 
         }
-        console.log(initLayer)
         return initLayer
     }
 
@@ -64,12 +65,24 @@ const EditTileset = (props) => {
 
     const cellmouseOver = (e) => {
         if(mouseDown){
-            e.target.fill(fillColor)
+            if(tool === "brush"){
+                e.target.fill(fillColor)
+            }
+            else if(tool === "eraser"){
+                e.target.fill("white")
+            }
         }
     }
 
     const cellOnClick = (e) => {
-        e.target.fill(fillColor)
+        if(mouseDown){
+            if(tool === "brush"){
+                e.target.fill(fillColor)
+            }
+            else if(tool === "eraser"){
+                e.target.fill("white")
+            }
+        }
     }
 
     const updateFillColor = (color) => {
@@ -90,7 +103,7 @@ const EditTileset = (props) => {
         }
     }
 
-    
+    //mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[80px]
 
 
     return (
@@ -103,6 +116,10 @@ const EditTileset = (props) => {
                         <div className="flex flex-col h-[53rem] w-5/6 items-left justify-top ml-20 mt-10">
                             
                             <div className="grid grid-cols-10 w-full justify-items-end">
+                                <div className="col-start-1 justtify-items-start flex flex-row">
+                                    <BsFillBrushFill className={`${tool === "brush" ? 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[20px] text-maptile-green' : 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[20px]'}`} onClick={() => setTool("brush")}/>
+                                    <BsFillEraserFill className={`${tool === "eraser" ? 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[80px] text-maptile-green' : 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[80px]'}`} onClick={() => setTool("eraser")}/>
+                                </div>
                                 <div className="col-start-8 justify-items-start flex flex-row">
                                     <button className="text-4xl text-maptile-green cursor-pointer" onClick={()=>updateZoom(-1)}>-</button>
                                     <button className="ml-5 mr-[-40px] text-4xl text-maptile-green cursor-pointer"onClick={()=>updateZoom(1)}>+</button>
