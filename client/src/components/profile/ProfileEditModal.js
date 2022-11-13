@@ -25,7 +25,6 @@ const ProfileEditModal = (props) => {
                 await Axios.post(
                     "https://maptile1.herokuapp.com/user/update",
                     {
-                        _id: user._id,
                         userName: input.userName,
                         bio: input.bio,
                         email: input.email,
@@ -51,7 +50,6 @@ const ProfileEditModal = (props) => {
             await Axios.post(
                 "https://maptile1.herokuapp.com/user/update",
                 {
-                    _id: user._id,
                     userName: input.userName,
                     bio: input.bio,
                     email: input.email,

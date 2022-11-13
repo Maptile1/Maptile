@@ -153,10 +153,10 @@ userRouter.route("/user/recover/:email").post(async (req, res) => {
 })
 
 userRouter.post("/user/update", async (req, res) => {
-    // if (req.session._id == undefined) {
-    //     res.status(400).json({ errorMessage: "Not logged in" })
-    //     return
-    // }
+    if (req.session._id == undefined) {
+        res.status(400).json({ errorMessage: "Not logged in" })
+        return
+    }
     var updates = {}
     updates.userName = req.body.userName
     updates.email = req.body.email
@@ -165,7 +165,7 @@ userRouter.post("/user/update", async (req, res) => {
         bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
             updates.password = hash
             var user = await User.findOneAndUpdate(
-                { _id: req.body._id }, //temp
+                { _id: req.session._id }, //temp
                 { $set: updates },
                 { new: true }
             )
@@ -179,7 +179,7 @@ userRouter.post("/user/update", async (req, res) => {
     }
     else {
         var user = await User.findOneAndUpdate(
-            { _id: req.body._id }, //temp
+            { _id: req.session._id }, //temp
             { $set: updates },
             { new: true }
         )
