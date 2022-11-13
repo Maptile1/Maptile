@@ -4,6 +4,8 @@ import ForgotPassword from "../ForgotPassword/ForgotPassword";
 import ResetPassword from "../ResetPassword/ResetPassword";
 import EmailConfirmation from "../EmailConfirmation/EmailConfirmation";
 
+Axios.defaults.withCredentials = true
+
 const LogIn = (props) => {
   const [input, setInput] = useState({ userName: '', password: '' });
   const [inputValid, setInputValid] = useState(false)
@@ -19,17 +21,12 @@ const LogIn = (props) => {
     setInputValid(updated.userName !== '' && updated.password !== '' && updated.userName !== '');
   };
 
-  Axios.defaults.withCredentials = true
-
   const handleLogIn = async (e) => {
     if (inputValid) {
       await Axios.post("https://maptile1.herokuapp.com/user/login",
         {
           userName: input.userName,
           password: input.password,
-        },
-        {
-          headers: { Cookie: "_id=5" }
         }
       )
         .then(function (response) {
