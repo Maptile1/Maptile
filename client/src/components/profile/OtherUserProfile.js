@@ -30,16 +30,24 @@ const OtherUserProfile = (props) => {
     };
 
     useEffect(() => {
-        const getTilesets = async () => {
+        const getUser = async () => {
             setLoading(true);
-            await Axios.get("https://maptile1.herokuapp.com/user/get/" + id
-            )
+            await Axios.get("https://maptile1.herokuapp.com/user/get/" + id)
             .then(response => {
                 setUser(response.data.user);
-                setUserTilesets(response.data.user.tilesets);
+                setLoading(false);
             })
-            setLoading(false);
         };
+        getUser();
+        const getTilesets = async () => {
+            setLoading(true);
+            await Axios.get("https://maptile1.herokuapp.com/tileset/getUser/" + location.state.owner)
+            .then(response => {
+                setUserTilesets(response.data.usertilesets);
+                console.log(response.data.usertilesets)
+                setLoading(false);
+            });
+        }
         getTilesets();
     }, [location.state.owner, id]);
 
@@ -96,15 +104,21 @@ const OtherUserProfile = (props) => {
                     <div class="row-start-7 text-white text-3xl col-start-2 col-span-10" style={{ borderTop: "2px solid #fff ", marginRight: 20 }}></div>
                     <div class="mt-10 grid grid-cols-4 col-span-10 col-start-2 row-start-7 gap-5">
                         {userTilesets.length !== 0 ?
-                            userTilesets.map((obj, index) => (
-                                <TilesetCard
-                                    key={obj}
-                                    name={obj.name}
-                                    description={obj.description}
-                                    owner={obj.owner}
-                                    _id={obj._id}
-                                />
-                            )) : <div> No tilesets</div>
+                            userTilesets.map((obj, index) => 
+                            {
+                                // console.log(obj)
+                                return (
+                                    <TilesetCard
+                                        key={obj}
+                                        name={obj.name}
+                                        description={obj.description}
+                                        owner={obj.owner}
+                                        _id={obj._id}
+                                    />
+                                )
+                            }
+                            ) 
+                            : <div> No tilesets</div>
                         }
                     </div>
                 </div>
