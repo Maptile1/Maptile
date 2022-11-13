@@ -17,7 +17,7 @@ const EditTileset = (props) => {
     const [tileset, setTileset] = useState(null);
     const [loading, setLoading] = useState(true);
     const [fillColor, setFillColor] = useState("#000000")
-    const [zoomLevel, setZoomLevel] = useState(1)
+    const [zoomLevel, setZoomLevel] = useState(15)
     const [tool, setTool] = useState("brush")
     useEffect(() => {
         const getTileset = async () => {
@@ -101,14 +101,15 @@ const EditTileset = (props) => {
     }
 
     const updateZoom = (zoom) => {
+        console.log(zoomLevel)
         if(zoom === 1){
-            if(zoomLevel + 0.25 !== 2.25){
-                setZoomLevel(zoomLevel + 0.25)
+            if(zoomLevel + 5 !== 25){
+                setZoomLevel(zoomLevel + 5)
             }
         }
         if(zoom === -1){
-            if(zoomLevel - 0.25 !== 0){
-                setZoomLevel(zoomLevel - 0.25)
+            if(zoomLevel - 5 !== 5){
+                setZoomLevel(zoomLevel - 5)
             }
             
         }
@@ -143,18 +144,18 @@ const EditTileset = (props) => {
 
                             <div className="flex flew-row">
                                 <div className="bg-maptile-background-mid w-full h-[50rem] rounded-xl overflow-auto">
-                                    <Stage width={window.innerWidth} height={window.innerHeight}>
+                                    <Stage width={window.innerWidth} height={1400} scaleX={zoomLevel} scaleY={zoomLevel}>
                                         {tileset.tileset_data.map((layer) => {
                                             return(<Layer key={layer.layer}>
                                                 {layer.data.map((row, i) =>{
                                                     return(row.row_data.map((cell)=> {
                                                         return(<Rect
-                                                            x={(cell.id % tileset.tileset_width) * (20 * zoomLevel)}
-                                                            y={(i % tileset.tileset_height) * (20 * zoomLevel)}
-                                                            width={20 * zoomLevel}
-                                                            height={20 * zoomLevel}
+                                                            x={(cell.id % tileset.tileset_width)}
+                                                            y={(i % tileset.tileset_height)}
+                                                            width={1}
+                                                            height={1}
                                                             fill={cell.color}
-                                                            shadowBlur={1}
+                                                            shadowBlur={.05}
                                                             onMouseOver={cellmouseOver}
                                                             onClick={cellOnClick}
                                                         />)
