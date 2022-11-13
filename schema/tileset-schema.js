@@ -7,7 +7,7 @@ const tilesetSchema = new Schema(
             required: true
         },
         tileset_data: {
-            type: [String],
+            type: [Object],
             required: true
         },
         tile_width: {
