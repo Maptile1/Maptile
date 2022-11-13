@@ -6,10 +6,10 @@ const User = require("../schema/user-schema");
 
 // Create Tileset
 router.post("/tileset/create", async (req, res) => {
-  // if (req.session._id == undefined){
-  //     res.status(400).json({errorMessage: 'Not logged in'})
-  //     return;
-  // }
+  if (req.session._id == undefined){
+      res.status(400).json({errorMessage: 'Not logged in'})
+      return;
+  }
   var tilesetId = new ObjectId();
   var tileset = new Tileset({
     _id: tilesetId,
@@ -19,19 +19,21 @@ router.post("/tileset/create", async (req, res) => {
     tileset_width: req.body.tileset_width,
     tileset_height: req.body.tileset_height,
     name: req.body.name,
-    description: req.body.description,
+    description: 'Description',
     tags: [],
     likes: 0,
     dislikes: 0,
     comments: [],
     public: false,
     tilesetCreated: Date.now(),
-    owner: req.body._id,
+    owner: req.session._id,
   });
-  await tileset.save();
-  var user = await User.findById(req.body._id);
-  user.tilesets.push(tilesetId);
-  user.save();
+  tileset = await tileset.save();
+  var user = await User.findOneAndUpdate(
+    { _id: req.session._id },
+    { $addToSet: { tilesets: tileset._id } },
+    { new: true }
+  );
   res.json({ tileset: tileset, user: user });
 });
 

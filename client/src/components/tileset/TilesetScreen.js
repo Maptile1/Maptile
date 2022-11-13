@@ -73,8 +73,6 @@ const TilesetScreen = (props) => {
         tileset_width: input.tilesetwidth,
         tileset_height: input.tilesetheight,
         name: input.name,
-        description: "Empty",
-        _id: props.user._id,
       });
       const getTilesets = async () => {
         var response = await Axios.get(
