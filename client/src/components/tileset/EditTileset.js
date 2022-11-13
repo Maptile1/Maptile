@@ -63,6 +63,17 @@ const EditTileset = (props) => {
         --mouseDown;
     }
 
+    document.body.onwheel = function(e){
+        if(e.deltaY > 0 && e.altKey){
+            e.preventDefault()
+            updateZoom(-1)
+        }
+        else if(e.deltaY < 0 && e.altKey){
+            e.preventDefault()
+            updateZoom(1)
+        }
+    }
+
     const cellmouseOver = (e) => {
         if(mouseDown){
             if(tool === "brush"){
