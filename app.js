@@ -25,7 +25,7 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // middleware
 app.use(morgan('dev'));
-app.use(cors());
+app.use(cors({origin: ['http://localhost:3000', 'https://maptile.netlify.app'], credentials: true }));
 
 
 // user routes
