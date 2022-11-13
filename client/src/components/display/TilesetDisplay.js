@@ -6,12 +6,12 @@ import { BiEdit } from "react-icons/bi"
 import { MdOutlineContentCopy } from "react-icons/md"
 import { Fragment, useEffect, useState } from 'react'
 import Comment from "../comment/Comment";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Axios from 'axios'
 
 const TilesetDisplay = (props) => {
     const nav = useNavigate()
+    const {tileset_id} = useParams()
     var [owner, setOwner] = useState(null)
     const [loading, setLoading] = useState(true);
     const [tileset, setTileset] = useState(null);
@@ -27,19 +27,20 @@ const TilesetDisplay = (props) => {
     }
 
     useEffect(() => {
+        console.log(tileset_id)
         const getOwner = async () => {
             setLoading(true)
             console.log(location.state._id)
             let response = await Axios.get(
                 "https://maptile1.herokuapp.com/user/get/" + location.state.owner)
-            let tilesetdata = await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + location.state._id)
+            let tilesetdata = await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + tileset_id)
             setTileset(tilesetdata.data.tileset);
             setOwner(response.data.user)
             setPfp("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + response.data.user._id)
             setLoading(false);
         }
         getOwner()
-    }, [location.state._id, location.state.owner]);
+    }, [location.state._id, location.state.owner, tileset_id]);
 
     return (
         <div>
