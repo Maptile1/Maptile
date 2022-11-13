@@ -59,6 +59,16 @@ function App() {
             }
           />
           <Route
+            path="/tilesets/:id"
+            element={
+            <TilesetDisplay
+              user={user}
+              setTheUser={setTheUser}
+
+            />
+            }
+          />
+          <Route
             path="/tilesetdisplay"
             element={
               <TilesetDisplay
