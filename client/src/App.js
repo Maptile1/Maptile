@@ -52,7 +52,7 @@ function App() {
             element={<ProfileScreen user={user} setTheUser={setTheUser} />}
           />
           <Route
-            path="/other_user_profile"
+            path="/user/:id"
             element={
               <OtherUserProfile user={user} setTheUser={setTheUser}
               />

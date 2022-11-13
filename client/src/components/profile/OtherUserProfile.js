@@ -4,11 +4,12 @@ import TilesetCard from "../card/TilesetCard";
 import Sidebar from "../sidebar/Sidebar";
 // import MapCard from "../card/MapCard";
 import { React, useState, useEffect } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useParams } from "react-router-dom";
 // import { isRouteErrorResponse } from "react-router-dom";
 import Axios from "axios";
 const OtherUserProfile = (props) => {
 
+    const {id} = useParams();
     const location = useLocation();
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState(null);
@@ -28,17 +29,16 @@ const OtherUserProfile = (props) => {
     useEffect(() => {
         const getTilesets = async () => {
             setLoading(true);
-            var response = await Axios.get(
-                "https://maptile1.herokuapp.com/tileset/getUser/" + location.state.owner
-            );
-            var useresponse = await Axios.get("https://maptile1.herokuapp.com/user/get/" + location.state.owner
-            );
-            setUser(useresponse.data.user)
-            setUserTilesets(response.data.usertilesets);
+            await Axios.get("https://maptile1.herokuapp.com/user/get/" + id
+            )
+            .then(response => {
+                setUser(response.data.user);
+                setUserTilesets(response.data.user.tilesets);
+            })
             setLoading(false);
         };
         getTilesets();
-    }, [location.state.owner]);
+    }, [location.state.owner, id]);
 
     return location.state.owner ? (
         <div>
