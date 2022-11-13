@@ -4,6 +4,7 @@ import CreateTilesetModal from "./CreateTilesetModal";
 import TSSCard from "../card/TSSCard";
 import ShareModal from "../map/ShareModal";
 import Axios from "axios";
+
 const TilesetScreen = (props) => {
   const [userSelected, updateUserSelected] = useState(true);
   const [modalOpen, setModal] = useState(false);
@@ -70,7 +71,7 @@ const TilesetScreen = (props) => {
         tileset_width: input.tilesetwidth,
         tileset_height: input.tilesetheight,
         name: input.name,
-        description: "test",
+        description: "Empty",
         _id: props.user._id,
       });
       const getTilesets = async () => {

@@ -78,29 +78,6 @@ const TSSCard = (props) => {
                     <Menu.Item>
                       {({ active }) => (
                         <button
-                          className={`${active
-                            ? "bg-violet-500 text-white"
-                            : "text-gray-900"
-                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                        >
-                          {active ? (
-                            <MdDriveFileRenameOutline
-                              className="mr-2 h-5 w-5"
-                              aria-hidden="true"
-                            />
-                          ) : (
-                            <MdDriveFileRenameOutline
-                              className="mr-2 h-5 w-5"
-                              aria-hidden="true"
-                            />
-                          )}
-                          Rename
-                        </button>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <button
                           onClick={() => handleDelete()}
                           className={`${active
                             ? "bg-violet-500 text-white"
@@ -169,9 +146,11 @@ const TSSCard = (props) => {
                                         </Menu.Item> */}
                   </div>
                 </Menu.Items>
+
               </Transition>
             </Menu>
           )}
+
         </div>
       </div>
     </div>
