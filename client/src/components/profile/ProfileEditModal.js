@@ -2,6 +2,8 @@ import Modal from "react-modal";
 import React, { useState } from "react";
 import Axios from "axios";
 
+Axios.defaults.withCredentials = true
+
 const ProfileEditModal = (props) => {
     var user = props.user;
     const [input, setInput] = useState({

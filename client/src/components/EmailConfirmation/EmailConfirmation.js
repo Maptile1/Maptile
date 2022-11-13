@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Axios from 'axios';
 
+Axios.defaults.withCredentials = true
+
 const EmailConfirmation = (props) => {
 
     const [inputValid, setInputValid] = useState(false)

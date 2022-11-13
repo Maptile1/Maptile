@@ -4,6 +4,8 @@ import TSSCard from "../card/TSSCard";
 import Axios from "axios";
 import { Navigate, useLocation } from "react-router-dom";
 
+Axios.defaults.withCredentials = true
+
 const SearchScreen = (props) => {
   const [userSelected, updateUserSelected] = useState(true)
   var [searchResults, setSearchResults] = useState([])
