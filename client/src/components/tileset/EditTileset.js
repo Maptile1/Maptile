@@ -103,7 +103,7 @@ const EditTileset = (props) => {
     const updateZoom = (zoom) => {
         console.log(zoomLevel)
         if(zoom === 1){
-            if(zoomLevel + 5 !== 25){
+            if(zoomLevel + 5 !== 35){
                 setZoomLevel(zoomLevel + 5)
             }
         }
@@ -144,7 +144,7 @@ const EditTileset = (props) => {
 
                             <div className="flex flew-row">
                                 <div className="bg-maptile-background-mid w-full h-[50rem] rounded-xl overflow-auto">
-                                    <Stage width={window.innerWidth} height={1400} scaleX={zoomLevel} scaleY={zoomLevel}>
+                                    <Stage width={tileset.tileset_width * zoomLevel} height={tileset.tileset_height * zoomLevel} scaleX={zoomLevel} scaleY={zoomLevel}>
                                         {tileset.tileset_data.map((layer) => {
                                             return(<Layer key={layer.layer}>
                                                 {layer.data.map((row, i) =>{
