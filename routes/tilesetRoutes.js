@@ -62,26 +62,29 @@ router.post("/tileset/delete/:id", async (req, res) => {
 
 // Update tileset
 router.post("/tileset/update/:id", async (req, res) => {
-  // if (req.session._id == undefined) {
-  //   res.status(400).json({ errorMessage: "Not logged in" });
-  //   return;
-  // }
+  if (req.session._id == undefined) {
+    res.status(400).json({ errorMessage: "Not logged in" });
+    return;
+  }
   var updates = {};
   updates.tileset_data = req.body.tileset_data;
   updates.name = req.body.name;
   updates.description = req.body.description;
   updates.public = req.body.public;
   var tileset = await Tileset.findOneAndUpdate(
-    { _id: req.params.id },
+    {$or:[{_id: req.params.id, shared_tilesets: {$in: [req.session._id]}}, 
+    {_id: req.params.id, owner: req.session._id}] },
     { $set: updates },
     { new: true }
   );
   if (tileset != null) {
     res.json({ tileset: tileset });
-  } else {
+  } 
+  else {
     if ((await Tileset.findById(req.params.id)) != null) {
-      res.status(400).json({ errorMessage: "Not permitted to editle" });
-    } else {
+      res.status(400).json({ errorMessage: "Not permitted to edit" });
+    } 
+    else {
       res.status(400).json({ errorMessage: "Tileset does not exist" });
     }
   }
