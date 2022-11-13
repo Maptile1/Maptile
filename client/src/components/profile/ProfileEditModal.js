@@ -71,7 +71,6 @@ const ProfileEditModal = (props) => {
         const file = e.target.files[0]
         const formData = new FormData()
         formData.append('image', file)
-        formData.append('_id', user._id)
 
         await Axios.post("https://maptile1.herokuapp.com/user/image", formData)
             .then(function (response) {
