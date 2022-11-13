@@ -10,7 +10,7 @@ app.use(express.json({limit: '10mb'}));
 
 const session = require('express-session')
 const MongoStore = require('connect-mongo');
-app.use(session({secret: 'dfgdfgdfgdfgsdf', saveUninitialized: false,
+app.use(session({secret: 'dfgdfgdfgdfgsdf', 
   resave: false, 
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI+ '/sessions'}),
   cookie: {sameSite: 'none'}}));
@@ -25,7 +25,7 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // middleware
 app.use(morgan('dev'));
-app.use(cors({origin: true, credentials: true}));
+app.use(cors({origin: ['http://localhost:3000', 'https://maptile.netlify.app'], credentials: true }));
 
 
 // user routes
