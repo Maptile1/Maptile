@@ -64,7 +64,6 @@ function App() {
             <TilesetDisplay
               user={user}
               setTheUser={setTheUser}
-
             />
             }
           />
