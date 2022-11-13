@@ -32,7 +32,7 @@ const TilesetPropModal = (props) => {
         let response = await Axios.post(
             "https://maptile1.herokuapp.com/tileset/update/" + tileset._id,
             {
-                tileset_data: tileset.tileset_data,
+                tileset_data: tileset.tileset_data[0].data,
                 name: input.name,
                 description: input.description,
                 public: tileset.public

@@ -8,6 +8,7 @@ import { useLocation } from 'react-router-dom';
 import { Stage, Layer, Rect } from 'react-konva';
 import { SketchPicker } from 'react-color'
 import { BsFillBrushFill, BsFillEraserFill } from "react-icons/bs";
+import { FiSave } from "react-icons/fi"
 
 
 const EditTileset = (props) => {
@@ -33,7 +34,7 @@ const EditTileset = (props) => {
         }
         getTileset()
     }, [location.state._id]);
-    console.log(tileset.tileset_data[0].data)
+
     const initTileset = (tileset) => {
         let initLayer = { layer: 1, data: [] }
         let id_count = 0
@@ -114,23 +115,22 @@ const EditTileset = (props) => {
 
         }
     }
-    const stageRef = React.useRef(null);
-    //mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[80px]
 
-    const exportTileset = () => {
-        const uri = stageRef.toDataURL();
-        downloadURI(uri, 'stage.png')
+
+    const saveTileset = async () => {
+        let response = await Axios.post(
+            "https://maptile1.herokuapp.com/tileset/update/" + tileset._id,
+            {
+                tileset_data: tileset.tileset_data[0].data,
+                name: tileset.name,
+                description: tileset.description,
+                public: tileset.public
+
+            }
+        )
+        console.log(response);
     }
 
-
-    const downloadURI = (uri, name) => {
-        var link = document.createElement('a');
-        link.download = name;
-        link.href = uri;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
     return (
         <div>
             {!loading ? (
@@ -141,23 +141,24 @@ const EditTileset = (props) => {
                         <div className="flex flex-col h-[53rem] w-5/6 items-left justify-top ml-20 mt-10">
 
                             <div className="grid grid-cols-10 w-full justify-items-end">
-                                <div className="col-start-1 justtify-items-start flex flex-row">
+                                <div className="col-start-1 justify-items-start flex flex-row">
                                     <BsFillBrushFill className={`${tool === "brush" ? 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[20px] text-maptile-green' : 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[20px]'}`} onClick={() => setTool("brush")} />
                                     <BsFillEraserFill className={`${tool === "eraser" ? 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[80px] text-maptile-green' : 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[80px]'}`} onClick={() => setTool("eraser")} />
+                                    <FiSave onClick={() => saveTileset()} className="mt-[10px] h-5 w-5 text-maptile-green" />
                                 </div>
                                 <div className="col-start-8 justify-items-start flex flex-row">
                                     <button className="text-4xl text-maptile-green cursor-pointer" onClick={() => updateZoom(-1)}>-</button>
                                     <button className="ml-5 mr-[-40px] text-4xl text-maptile-green cursor-pointer" onClick={() => updateZoom(1)}>+</button>
                                 </div>
                                 <div className="col-start-10 flex flex-row ">
-                                    <EditTilesetMenu exportTileset={exportTileset} setShareModal={setShareModal} setTilesetPropModal={setTilesetPropModal} />
+                                    <EditTilesetMenu setShareModal={setShareModal} setTilesetPropModal={setTilesetPropModal} />
                                 </div>
 
                             </div>
 
                             <div className="flex flew-row">
                                 <div className="bg-maptile-background-mid w-full h-[50rem] rounded-xl overflow-auto">
-                                    <Stage ref={stageRef} width={tileset.tileset_width * zoomLevel} height={tileset.tileset_height * zoomLevel} scaleX={zoomLevel} scaleY={zoomLevel}>
+                                    <Stage width={tileset.tileset_width * zoomLevel} height={tileset.tileset_height * zoomLevel} scaleX={zoomLevel} scaleY={zoomLevel}>
                                         {tileset.tileset_data.map((layer) => {
                                             return (<Layer key={layer.layer}>
                                                 {layer.data.map((row, i) => {
