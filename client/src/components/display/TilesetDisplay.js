@@ -13,7 +13,7 @@ Axios.defaults.withCredentials = true
 
 const TilesetDisplay = (props) => {
     const nav = useNavigate()
-    const {tileset_id} = useParams()
+    const { id } = useParams()
     var [owner, setOwner] = useState(null)
     const [loading, setLoading] = useState(true);
     const [tileset, setTileset] = useState(null);
@@ -29,20 +29,26 @@ const TilesetDisplay = (props) => {
     }
 
     useEffect(() => {
-        console.log(tileset_id)
+        console.log("TILESET ID: ", id)
         const getOwner = async () => {
             setLoading(true)
-            console.log(location.state._id)
-            let response = await Axios.get(
+            console.log("USER ID: ", location.state.owner)
+            await Axios.get(
                 "https://maptile1.herokuapp.com/user/get/" + location.state.owner)
-            let tilesetdata = await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + tileset_id)
-            setTileset(tilesetdata.data.tileset);
-            setOwner(response.data.user)
-            setPfp("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + response.data.user._id)
+            .then(response => {
+                console.log(response.data.user)
+                setOwner(response.data.user)
+                setPfp("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" + response.data.user._id)
+            })
+            await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + id)
+            .then(response => {
+                console.log(response.data.tileset);
+                setTileset(response.data.tileset);
+            })
             setLoading(false);
         }
         getOwner()
-    }, [location.state._id, location.state.owner, tileset_id]);
+    }, [location.state._id, location.state.owner, id]);
 
     return (
         <div>

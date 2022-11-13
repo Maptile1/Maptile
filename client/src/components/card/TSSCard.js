@@ -11,7 +11,7 @@ const TSSCard = (props) => {
     nav("/tileset_edit", { state: { _id: props._id } });
   };
   const handleTilesetDisplay = () => {
-    nav("/tilesetdisplay", { state: { owner: props.owner, _id: props._id } });
+    nav("/tilesets/" + props._id, { state: { owner: props.owner, _id: props._id } });
   };
   const handleDelete = async () => {
     props.handleDelete(props._id);
