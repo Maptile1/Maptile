@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const multer = require('multer')
 const inMemoryStorage = multer.memoryStorage()
-const uploadStrategy = multer({ storage: inMemoryStorage }).any() //temp
+const uploadStrategy = multer({ storage: inMemoryStorage }).single('image')
 const { BlockBlobClient } = require('@azure/storage-blob')
 const getStream = require('into-stream')
 require('dotenv').config();
@@ -165,7 +165,7 @@ userRouter.post("/user/update", async (req, res) => {
         bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
             updates.password = hash
             var user = await User.findOneAndUpdate(
-                { _id: req.session._id }, //temp
+                { _id: req.session._id },
                 { $set: updates },
                 { new: true }
             )
@@ -179,7 +179,7 @@ userRouter.post("/user/update", async (req, res) => {
     }
     else {
         var user = await User.findOneAndUpdate(
-            { _id: req.session._id }, //temp
+            { _id: req.session._id },
             { $set: updates },
             { new: true }
         )
@@ -193,16 +193,15 @@ userRouter.post("/user/update", async (req, res) => {
 })
 
 userRouter.post('/user/image', uploadStrategy, async (req, res) => {
-    // if (req.session._id == undefined) {
-    //     res.status(400).json({ errorMessage: "Not logged in" })
-    //     return
-    // }
-    const blobName = req.body._id //temp
+    if (req.session._id == undefined) {
+        res.status(400).json({ errorMessage: "Not logged in" })
+        return
+    }
+    const blobName = req.session._id
     const blobService = new BlockBlobClient(process.env.AZURE_STORAGE_CONNECTION_STRING, 'maptile-profile-images', blobName)
-    stream = getStream(req.files[0].buffer)
-    streamLength = req.files[0].buffer.length
-    const options = { blobHTTPHeaders: { blobContentType: req.files[0].mimetype } };
-    console.log(options)
+    stream = getStream(req.file.buffer)
+    streamLength = req.file.buffer.length
+    const options = { blobHTTPHeaders: { blobContentType: req.file.mimetype } };
     blobService.uploadStream(stream, streamLength, undefined, options)
         .then(() => { res.json({ message: 'successful upload' }) })
         .catch((err) => { res.status(400).json({ errorMessage: err }) })

@@ -7,6 +7,9 @@ import { React, useState, useEffect } from "react";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 // import { isRouteErrorResponse } from "react-router-dom";
 import Axios from "axios";
+
+Axios.defaults.withCredentials = true
+
 const OtherUserProfile = (props) => {
 
     const {id} = useParams();

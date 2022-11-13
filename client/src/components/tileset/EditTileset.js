@@ -10,6 +10,7 @@ import { SketchPicker } from 'react-color'
 import { BsFillBrushFill, BsFillEraserFill } from "react-icons/bs";
 import { FiSave } from "react-icons/fi"
 
+Axios.defaults.withCredentials = true
 
 const EditTileset = (props) => {
     const [shareModalOpen, setShareModal] = useState(false)

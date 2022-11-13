@@ -10,6 +10,7 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Axios from 'axios'
 
 Axios.defaults.withCredentials = true
+
 const TilesetDisplay = (props) => {
     const nav = useNavigate()
     const { id } = useParams()

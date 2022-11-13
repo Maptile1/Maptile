@@ -8,6 +8,9 @@ import ProfileEditModal from "./ProfileEditModal";
 import { Navigate, useLocation } from "react-router-dom";
 // import { isRouteErrorResponse } from "react-router-dom";
 import Axios from "axios";
+
+Axios.defaults.withCredentials = true
+
 const ProfileScreen = (props) => {
   const [modalOpen, setProfileModal] = useState(false);
 

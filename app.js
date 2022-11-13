@@ -11,7 +11,7 @@ app.use(express.json({limit: '10mb'}));
 const session = require('express-session')
 const MongoStore = require('connect-mongo');
 app.use(session({secret: 'dfgdfgdfgdfgsdf', 
-  resave: false, 
+  resave: false, saveUninitialized: true,
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI+ '/sessions'}),
   cookie: {sameSite: 'none'}}));
 // db

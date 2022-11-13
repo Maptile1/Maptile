@@ -1,6 +1,9 @@
 import Modal from 'react-modal';
 import React, { useState, useRef } from 'react';
 import Axios from "axios";
+
+Axios.defaults.withCredentials = true
+
 const TilesetPropModal = (props) => {
     var tileset = props.tileset
     const [input, setInput] = useState({
