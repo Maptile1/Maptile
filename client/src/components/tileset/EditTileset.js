@@ -102,6 +102,24 @@ const EditTileset = (props) => {
         setFillColor(color.hex)
     }
 
+    const stageRef = React.useRef(null);
+
+    const downloadURI = (uri, name) => {
+        var link = document.createElement('a');
+        link.download = name;
+        link.href = uri;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+    }
+
+    const exportTileset = () => {
+        var dataURL = stageRef.current.toDataURL();
+        downloadURI(dataURL, tileset.name + '.png');
+    }
+
+
     const updateZoom = (zoom) => {
         console.log(zoomLevel)
         if (zoom === 1) {
@@ -152,14 +170,14 @@ const EditTileset = (props) => {
                                     <button className="ml-5 mr-[-40px] text-4xl text-maptile-green cursor-pointer" onClick={() => updateZoom(1)}>+</button>
                                 </div>
                                 <div className="col-start-10 flex flex-row ">
-                                    <EditTilesetMenu setShareModal={setShareModal} setTilesetPropModal={setTilesetPropModal} />
+                                    <EditTilesetMenu exportTileset={exportTileset} setShareModal={setShareModal} setTilesetPropModal={setTilesetPropModal} />
                                 </div>
 
                             </div>
 
                             <div className="flex flew-row">
                                 <div className="bg-maptile-background-mid w-full h-[50rem] rounded-xl overflow-auto">
-                                    <Stage width={tileset.tileset_width * zoomLevel} height={tileset.tileset_height * zoomLevel} scaleX={zoomLevel} scaleY={zoomLevel}>
+                                    <Stage ref={stageRef} width={tileset.tileset_width * zoomLevel} height={tileset.tileset_height * zoomLevel} scaleX={zoomLevel} scaleY={zoomLevel}>
                                         {tileset.tileset_data.map((layer) => {
                                             return (<Layer key={layer.layer}>
                                                 {layer.data.map((row, i) => {
