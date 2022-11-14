@@ -5,11 +5,10 @@ import TilesetPropModal from "./TilesetPropModal"
 import React, { useState, useEffect } from "react"
 import Axios from "axios";
 import { useLocation } from 'react-router-dom';
-import { Stage, Layer, Rect, Image, Line } from 'react-konva';
+import { Stage, Layer, Rect,Line } from 'react-konva';
 import { SketchPicker } from 'react-color'
 import { BsFillBrushFill, BsFillEraserFill, BsPaintBucket } from "react-icons/bs";
 import { FiSave } from "react-icons/fi"
-import useImage from 'use-image';
 
 Axios.defaults.withCredentials = true
 
@@ -22,6 +21,8 @@ const EditTileset = (props) => {
     const [fillColor, setFillColor] = useState("#000000")
     const [zoomLevel, setZoomLevel] = useState(15)
     const [tool, setTool] = useState("brush")
+    const [showDividers, setShowDividers] = useState(true)
+    const [dividers, setDividers] = useState(null)
 
     useEffect(() => {
         const getTileset = async () => {
@@ -29,8 +30,11 @@ const EditTileset = (props) => {
 
             let tilesetdata = await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + location.state._id)
 
-            if (tilesetdata.data.tileset.tileset_data.length === 0) {
+            if ((tilesetdata.data.tileset.tileset_data.length === 0) && (localStorage.getItem('imgData') === null)) {
                 tilesetdata.data.tileset.tileset_data.push(initTileset(tilesetdata.data.tileset))
+            }
+            else if ((localStorage.getItem('imgData') !== null) && (tilesetdata.data.tileset.tileset_data.length === 0)){
+                tilesetdata.data.tileset.tileset_data.push(initImportTileset(tilesetdata.data.tileset))
             }
             setTileset(tilesetdata.data.tileset);
             setLoading(false);
@@ -38,26 +42,34 @@ const EditTileset = (props) => {
         getTileset()
     }, [location.state._id]);
 
-    const dividers = [];
+    
     useEffect(() => {
-        if (tileset != null){
+        const newdividers = [];
+        if (tileset !== null){
             for (var i = tileset.tile_width; i < tileset.tileset_width; i += tileset.tile_width){
                 var points = [0, i, tileset.tileset_height, i];
-                dividers.push(<Line stroke='red' points={points} strokeWidth='0.05'></Line>)
+                newdividers.push(<Line stroke='red' points={points} strokeWidth='0.05'></Line>)
             }
-            for (var i = tileset.tile_height; i < tileset.tileset_height; i += tileset.tile_height){
-                var points = [i, 0, i, tileset.tileset_width];
-                dividers.push(<Line stroke='red' points={points} strokeWidth='0.05'></Line>)
+            for (var j = tileset.tile_height; j < tileset.tileset_height; j += tileset.tile_height){
+                var points2 = [j, 0, j, tileset.tileset_width];
+                newdividers.push(<Line stroke='red' points={points2} strokeWidth='0.05'></Line>)
             }
+            setDividers(newdividers)
         }
     }, [tileset])
+
+    useEffect(()=>{
+        if(zoomLevel === 1 && showDividers === false){
+            var dataURL = stageRef.current.toDataURL();
+            downloadURI(dataURL, 'maptile_tileset.png');
+            setZoomLevel(15)
+            setShowDividers(true)
+        }
+    },[zoomLevel, showDividers])
 
     const initTileset = (tileset) => {
         let initLayer = { layer: 1, data: [] }
         let id_count = 0
-        console.log(tileset.tileset_height)
-        console.log(tileset.tileset_width)
-        console.log(tileset)
         for (let i = 0; i < tileset.tileset_height; i++) {
             let row = { row_id: i, row_data: [] }
             for (let j = 0; j < tileset.tileset_width; j++) {
@@ -67,6 +79,41 @@ const EditTileset = (props) => {
             initLayer.data.push(row)
         }
         return initLayer
+    }
+
+    const initImportTileset = (tileset) => {
+        var dataImage = localStorage.getItem('imgData');
+        var image = document.createElement('img');
+        image.src = dataImage;
+        var canvas = document.createElement('canvas');
+        canvas.width = tileset.tileset_width;
+        canvas.height = tileset.tileset_height;
+
+        var context = canvas.getContext('2d');
+        context.drawImage(image, 0, 0);
+
+        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+        let initLayer = { layer: 1, data: [] }
+        let id_count = 0
+        for (let i = 0; i < tileset.tileset_height; i++) {
+            let row = { row_id: i, row_data: [] }
+            for (let j = 0; j < tileset.tileset_width; j++) {
+                row.row_data.push({ id: id_count, color: rgbToHex(imageData.data[(id_count*4)],imageData.data[(id_count*4)+1],imageData.data[(id_count*4)+2]) })
+                id_count++
+            }
+            initLayer.data.push(row)
+        }
+        return initLayer
+    }
+
+    const rgbToHex = (r, g, b) => {
+        return "#" + valueToHex(r) + valueToHex(g) + valueToHex(b);
+    }
+
+    const valueToHex = (c) => {
+        let hex = c.toString(16);
+        return hex.length === 1 ? "0" + hex : hex;
     }
 
     const updateTileset = (tileset) => {
@@ -179,8 +226,12 @@ const EditTileset = (props) => {
     }
 
     const exportTileset = () => {
-        var dataURL = stageRef.current.toDataURL();
-        downloadURI(dataURL, tileset.name + '.png');
+        //let prevZoom = zoomLevel
+        setZoomLevel(1)
+        setShowDividers(false)
+        
+        // setZoomLevel(prevZoom)
+        // setShowDividers(true)
     }
 
 
@@ -214,12 +265,36 @@ const EditTileset = (props) => {
         console.log(response);
     }
 
-    const TilesetImage = () => {
-        var dataImage = localStorage.getItem('imgData');
-        console.log(dataImage);
-        return <img className="invisible" alt="" src={dataImage} />;
+    // const TilesetImage = () => {
+    //     var dataImage = localStorage.getItem('imgData');
+    //     if(dataImage === null){
+    //         console.log("no Image!")
+    //     }
+    //     else{
+    //         var image = document.createElement('img');
+    //         image.src = dataImage;
+    //         var canvas = document.createElement('canvas');
+    //         canvas.width = tileset.tileset_width;
+    //         canvas.height = tileset.tileset_height;
 
-    };
+    //         var context = canvas.getContext('2d');
+    //         context.drawImage(image, 0, 0);
+
+    //         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+    //         // Now you can access pixel data from imageData.data.
+    //         // It's a one-dimensional array of RGBA values.
+    //         // Here's an example of how to get a pixel's color at (x,y)
+    //         // var index = (y*imageData.width + x) * 4;
+    //         var red = imageData.data[0];
+    //         var green = imageData.data[1];
+    //         var blue = imageData.data[2];
+    //         var alpha = imageData.data[3];
+    //         console.log(red, green, blue, alpha)
+    //     }
+    //     return <img className="hidden" alt="" src={dataImage} />;
+
+    // };
 
     return (
         <div>
@@ -272,7 +347,7 @@ const EditTileset = (props) => {
                                             </Layer>)
                                         })}
                                         <Layer>
-                                            {dividers}
+                                            {showDividers && dividers}
                                         </Layer>
                                     </Stage>
                                 </div>
@@ -286,7 +361,6 @@ const EditTileset = (props) => {
                             </div>
 
                         </div>
-                        {TilesetImage()}
                         <ShareModal modalOpen={shareModalOpen} setShareModal={setShareModal} name={tileset.name} />
                         <TilesetPropModal updateTileset={updateTileset} tilesetPropModalOpen={tilesetPropModalOpen} setTilesetPropModal={setTilesetPropModal} tileset={tileset} />
                     </main>
