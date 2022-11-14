@@ -1,6 +1,6 @@
 import Sidebar from "../sidebar/Sidebar";
 import React, { useState, useEffect } from "react";
-import TSSCard from "../card/TSSCard";
+import SearchCard from "../card/SearchCard";
 import Axios from "axios";
 import { Navigate, useLocation } from "react-router-dom";
 
@@ -56,26 +56,27 @@ const SearchScreen = (props) => {
             <div className={`${!userSelected ? tab_selected : tab_unselected}`} onClick={() => updateUserSelected(false)}>Maps</div>
           </div>
           <div className="bg-maptile-background-mid w-10/12 h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
-            <div className="flex flex-row flex-wrap justify-center mr-8 py-10 pl-10 ">
+            <div className="flex flex-row flex-wrap px-5 py-5 pl-10 ml-12  ">
 
               {userSelected ? searchResults.length !== 0 ? searchResults.map((obj, index) =>
-                <TSSCard search={true} owner={obj.owner} name={obj.name} _id={obj._id} />) : <div>No Search Results</div>
+                <SearchCard search={true} owner={obj.owner} name={obj.name} _id={obj._id} />) : <div>No Search Results</div>
                 :
                 <div>Maps</div>
               }
             </div>
-            <div className="absolute text-white top-10 mt-48 mr-10 right-4">
-              <div className="text-3xl font-bold text-center">Tags</div>
-              <div className="bg-maptile-background-mid w-full mt-5 h-[30rem] overflow-auto rounded-xl ">
-                <input className=" bg-maptile-background-light mt-5 w-3/4 flex ml-7 rounded-xl p-2"></input>
-                <div className="flex flex-col ml-7 mt-5 space-y-4">
-                  {tags.map((obj, index) =>
-                    <div>
-                      <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-green-100 bg-black rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                      <label for="default-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{obj}</label>
-                    </div>
-                  )}
-                </div>
+          </div>
+          <div className="absolute text-white top-10 mt-48 mr-10 right-4">
+            <div className="text-3xl font-bold text-center">Tags</div>
+            <div className="bg-maptile-background-mid w-full mt-5 h-[30rem] overflow-auto rounded-xl ">
+              <input className=" bg-maptile-background-light mt-5 w-3/4 flex ml-7 rounded-xl p-2"></input>
+              <div className="flex flex-col ml-7 mt-5 space-y-4">
+                {tags.map((obj, index) =>
+                  <div>
+                    <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-green-100 bg-black rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                    <label for="default-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{obj}</label>
+                  </div>
+                )}
+
               </div>
             </div>
 

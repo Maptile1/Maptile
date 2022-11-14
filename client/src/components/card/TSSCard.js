@@ -4,7 +4,7 @@ import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
-import { React, useState, useEffect} from 'react';
+import { React, useState, useEffect } from 'react';
 
 const TSSCard = (props) => {
   const nav = useNavigate();
@@ -21,7 +21,7 @@ const TSSCard = (props) => {
   };
 
   useEffect(() => {
-    setImage("https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" + props._id + "?=" + Math.random().toString().substring(2)) 
+    setImage("https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" + props._id + "?=" + Math.random().toString().substring(2))
   }, [props._id])
 
   return (
@@ -29,8 +29,8 @@ const TSSCard = (props) => {
       {props.search ? (
         <img
           onClick={() => handleTilesetDisplay()}
-          class="w-full h-full border border-white cursor-pointer object-cover object-center"
-          style={{"image-rendering" : "pixelated"}}
+          class="w-full h-3/4 border border-white cursor-pointer object-cover object-center"
+          style={{ "image-rendering": "pixelated" }}
           src={image}
           alt=""
           onError={({ currentTarget }) => {
@@ -46,7 +46,7 @@ const TSSCard = (props) => {
           class="w-full border border-white cursor-pointer object-cover object-center"
           src={image}
           alt=""
-          style={{"image-rendering" : "pixelated"}}
+          style={{ "image-rendering": "pixelated" }}
           onError={({ currentTarget }) => {
             currentTarget.onerror = null;
             setImage(
@@ -144,27 +144,6 @@ const TSSCard = (props) => {
                         </button>
                       )}
                     </Menu.Item>
-                    {/* <Menu.Item>
-                                            {({ active }) => (
-                                                <button onClick={() => props.setShareModal(true)}
-                                                    className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
-                                                        } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                                >
-                                                    {active ? (
-                                                        <BiShareAlt
-                                                            className="mr-2 h-5 w-5"
-                                                            aria-hidden="true"
-                                                        />
-                                                    ) : (
-                                                        <BiShareAlt
-                                                            className="mr-2 h-5 w-5"
-                                                            aria-hidden="true"
-                                                        />
-                                                    )}
-                                                    Share
-                                                </button>
-                                            )}
-                                        </Menu.Item> */}
                   </div>
                 </Menu.Items>
 
@@ -174,7 +153,7 @@ const TSSCard = (props) => {
 
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 
