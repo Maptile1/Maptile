@@ -167,31 +167,37 @@ userRouter.post("/user/update", async (req, res) => {
     if (req.body.password != undefined) {
         bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
             updates.password = hash
-            var user = await User.findOneAndUpdate(
+            User.findOneAndUpdate(
                 { _id: req.session._id },
                 { $set: updates },
                 { new: true }
             )
+            .then((user => {
+                if (user != null) {
+                    res.json({ user: user })
+                }
+                else {
+                    res.status(400).json({ errorMessage: "User doesn't exist" })
+                }
+            }))
+            .catch((err) => {res.status(400).json({errorMessage: err})})
+        })
+    }
+    else {
+        User.findOneAndUpdate(
+            { _id: req.session._id },
+            { $set: updates },
+            { new: true }
+        )
+        .then((user => {
             if (user != null) {
                 res.json({ user: user })
             }
             else {
                 res.status(400).json({ errorMessage: "User doesn't exist" })
             }
-        })
-    }
-    else {
-        var user = await User.findOneAndUpdate(
-            { _id: req.session._id },
-            { $set: updates },
-            { new: true }
-        )
-        if (user != null) {
-            res.json({ user: user })
-        }
-        else {
-            res.status(400).json({ errorMessage: "User doesn't exist" })
-        }
+        }))
+        .catch((err) => {res.status(400).json({errorMessage: err})})
     }
 })
 
