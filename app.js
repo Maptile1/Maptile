@@ -13,7 +13,7 @@ const MongoStore = require('connect-mongo');
 app.use(session({secret: 'dfgdfgdfgdfgsdf', 
   resave: false, saveUninitialized: true,
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI+ '/sessions'}),
-  cookie: {sameSite: 'none'}}));
+  cookie: {sameSite: 'none', secure: true}}));
 // db
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
