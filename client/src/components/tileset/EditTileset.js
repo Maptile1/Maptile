@@ -76,10 +76,15 @@ const EditTileset = (props) => {
         }
     }
 
+    const updateTilesetData = (id, color) => {
+        tileset.tileset_data[0].data[Math.floor(id/tileset.tileset_height)].row_data[id%tileset.tileset_width].color = color
+    }
+
     const cellmouseOver = (e) => {
         if (mouseDown) {
             if (tool === "brush") {
                 e.target.fill(fillColor)
+                updateTilesetData(Number(e.target.name()), fillColor)
             }
             else if (tool === "eraser") {
                 e.target.fill("white")
@@ -91,6 +96,7 @@ const EditTileset = (props) => {
         if (mouseDown) {
             if (tool === "brush") {
                 e.target.fill(fillColor)
+                updateTilesetData(Number(e.target.name()), fillColor)
             }
             else if (tool === "eraser") {
                 e.target.fill("white")
@@ -140,7 +146,7 @@ const EditTileset = (props) => {
         let response = await Axios.post(
             "https://maptile1.herokuapp.com/tileset/update/" + tileset._id,
             {
-                tileset_data: tileset.tileset_data[0].data,
+                tileset_data: tileset.tileset_data,
                 name: tileset.name,
                 description: tileset.description,
                 public: tileset.public
@@ -181,8 +187,9 @@ const EditTileset = (props) => {
                                         {tileset.tileset_data.map((layer) => {
                                             return (<Layer key={layer.layer}>
                                                 {layer.data.map((row, i) => {
-                                                    return (row.row_data.map((cell) => {
+                                                    return (row.row_data.map((cell, j) => {
                                                         return (<Rect
+                                                            name={cell.id.toString()}
                                                             x={(cell.id % tileset.tileset_width)}
                                                             y={(i % tileset.tileset_height)}
                                                             width={1}
