@@ -5,10 +5,11 @@ import TilesetPropModal from "./TilesetPropModal"
 import React, { useState, useEffect } from "react"
 import Axios from "axios";
 import { useLocation } from 'react-router-dom';
-import { Stage, Layer, Rect } from 'react-konva';
+import { Stage, Layer, Rect, Image } from 'react-konva';
 import { SketchPicker } from 'react-color'
 import { BsFillBrushFill, BsFillEraserFill } from "react-icons/bs";
 import { FiSave } from "react-icons/fi"
+import useImage from 'use-image';
 
 Axios.defaults.withCredentials = true
 
@@ -77,7 +78,7 @@ const EditTileset = (props) => {
     }
 
     const updateTilesetData = (id, color) => {
-        tileset.tileset_data[0].data[Math.floor(id/tileset.tileset_height)].row_data[id%tileset.tileset_width].color = color
+        tileset.tileset_data[0].data[Math.floor(id / tileset.tileset_height)].row_data[id % tileset.tileset_width].color = color
     }
 
     const cellmouseOver = (e) => {
@@ -156,6 +157,11 @@ const EditTileset = (props) => {
         console.log(response);
     }
 
+    const LionImage = () => {
+        const [image] = useImage('https://konvajs.org/assets/lion.png');
+        return <Image image={image} />;
+    };
+
     return (
         <div>
             {!loading ? (
@@ -202,8 +208,10 @@ const EditTileset = (props) => {
                                                     })
                                                     )
                                                 })}
+                                                {/* <LionImage /> */}
                                             </Layer>)
                                         })}
+
                                     </Stage>
                                 </div>
                                 <div className="flex flex-col w-1/6 ml-2 h-[50rem]">
@@ -219,10 +227,10 @@ const EditTileset = (props) => {
                         <ShareModal modalOpen={shareModalOpen} setShareModal={setShareModal} name={tileset.name} />
                         <TilesetPropModal updateTileset={updateTileset} tilesetPropModalOpen={tilesetPropModalOpen} setTilesetPropModal={setTilesetPropModal} tileset={tileset} />
                     </main>
-                </div>)
+                </div >)
                 : <div></div>
             }
-        </div>
+        </div >
     )
 }
 
