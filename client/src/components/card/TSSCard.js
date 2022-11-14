@@ -4,9 +4,11 @@ import { FiEdit } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
+import { React, useState, useEffect} from 'react';
 
 const TSSCard = (props) => {
   const nav = useNavigate();
+  const [image, setImage] = useState("https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" + props._id + "?=" + Math.random().toString().substring(2))
   const handleTilesetView = () => {
     nav("/tileset_edit", { state: { _id: props._id } });
   };
@@ -18,21 +20,39 @@ const TSSCard = (props) => {
     props.handleDelete(props._id);
   };
 
+  useEffect(() => {
+    setImage("https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" + props._id + "?=" + Math.random().toString().substring(2)) 
+  }, [props._id])
+
   return (
     <div class="max-w-sm rounded overflow-hidden mt-5 mx-14">
       {props.search ? (
         <img
           onClick={() => handleTilesetDisplay()}
-          class="w-full border border-white cursor-pointer"
-          src="https://images.gnwcdn.com/2020/usgamer/A-Link-to-the-Past-Map-Header1-05292020.jpg/EG11/thumbnail/1920x1080/format/jpg/quality/65/the-20-best-in-game-maps.jpg"
+          class="w-full h-full border border-white cursor-pointer object-cover object-center"
+          style={{"image-rendering" : "pixelated"}}
+          src={image}
           alt=""
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null;
+            setImage(
+              "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/6372801adf17e9e9316f1b4c"
+            );
+          }}
         />
       ) : (
         <img
           onClick={() => handleTilesetView()}
-          class="w-full border border-white cursor-pointer"
-          src="https://images.gnwcdn.com/2020/usgamer/A-Link-to-the-Past-Map-Header1-05292020.jpg/EG11/thumbnail/1920x1080/format/jpg/quality/65/the-20-best-in-game-maps.jpg"
+          class="w-full border border-white cursor-pointer object-cover object-center"
+          src={image}
           alt=""
+          style={{"image-rendering" : "pixelated"}}
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null;
+            setImage(
+              "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/6372801adf17e9e9316f1b4c"
+            );
+          }}
         />
       )}
 

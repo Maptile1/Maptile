@@ -167,8 +167,16 @@ const TilesetDisplay = (props) => {
                                 </Menu>
                             </div>
                             <div class="mt-10 row-start-2 col-span-3">Tags: {tileset.tags.map((obj) => obj + " ")}</div>
-                            <div class="row-start-3 row-end-4 col-start-1 col-end-4 bg-white mb-10">
-                                <img class="object-cover w-full h-full mx-auto rounded-md lg:max-w-2xl" src="https://dicegrimorium.com/wp-content/uploads/2019/09/LavaPoolsPublic1JPG-1024x683.jpg" alt="" />
+                            <div class="row-start-3 row-end-4 col-start-1 col-end-4 mb-10">
+                                <img class="object-cover w-full h-full mx-auto rounded-md lg:max-w-2xl" 
+                                src={"https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" + tileset._id} 
+                                alt="" 
+                                style={{"image-rendering" : "pixelated"}}
+                                onError={({ currentTarget }) => {
+                                    currentTarget.onerror = null;
+                                    currentTarget.src="https://maptilefiles.blob.core.windows.net/maptile-tileset-image/6372801adf17e9e9316f1b4c"                                    
+                                  }}
+                                />
                             </div>
                             <div class="flex flex-row gap-20 row-start-3 col-start-5">
                                 <div class="flex flex-col text-6xl font-bold"> <FaThumbsUp color={"green"} size={100} stroke={1} /><div class="mt-10">{tileset.likes} Likes</div></div>
