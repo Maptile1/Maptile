@@ -12,7 +12,7 @@ const CreateTilesetModal = (props) => {
     });
   }
   const readURL = (event) => {
-    var file = event.target.files[0]
+    var file = event.target.files[0];
     getBase64(file).then(base64 => {
       localStorage["imgData"] = base64;
       console.debug("file stored", base64);

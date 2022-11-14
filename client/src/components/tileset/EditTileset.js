@@ -126,7 +126,7 @@ const EditTileset = (props) => {
             }
             initLayer.data.push(row)
         }
-        console.log("Inital Layer:",initLayer)
+        console.log("Inital Layer:", initLayer)
         return initLayer
     }
 
@@ -353,7 +353,7 @@ const EditTileset = (props) => {
         <div>
             {!loading ? (
                 <div>
-                    <Sidebar />
+                    <Sidebar setTheUser={props.setTheUser} />
                     <main className="mx-auto flex flex-col min-h-screen w-full items-center justify-top bg-maptile-background-dark text-white">
                         <div className="pt-5 text-center text-4xl font-bold text-white underline">{tileset.name}</div>
                         <div className="flex flex-col h-[53rem] w-5/6 items-left justify-top ml-20 mt-10">
