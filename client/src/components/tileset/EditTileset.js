@@ -26,6 +26,7 @@ const EditTileset = (props) => {
     const [undoStack] = useState([])
     const [redoStack] = useState([])
     const [download, setDownload] = useState(false);
+    const [mouseDown, setMouseDown] = useState(0)
 
     useEffect(() => {
         const getTileset = async () => {
@@ -150,12 +151,12 @@ const EditTileset = (props) => {
         setTileset(tileset)
     }
 
-    var mouseDown = 0;
+    
     document.body.onmousedown = function () {
-        ++mouseDown;
+        setMouseDown(1)
     }
     document.body.onmouseup = function () {
-        --mouseDown;
+        setMouseDown(0)
     }
 
     document.body.onwheel = function (e) {
@@ -209,7 +210,7 @@ const EditTileset = (props) => {
     }
 
     const cellmouseOver = (e) => {
-        if (mouseDown) {
+        if (mouseDown === 1) {
             if (tool === "brush") {
                 addAction(e.target, e.target.fill(), fillColor)
                 e.target.fill(fillColor)
@@ -365,7 +366,7 @@ const EditTileset = (props) => {
                         <div className="pt-5 text-center text-4xl font-bold text-white underline">{tileset.name}</div>
                         <div className="flex flex-col h-[53rem] w-5/6 items-left justify-top ml-20 mt-10">
 
-                            <div className="grid grid-cols-10 w-full justify-items-end">
+                            <div className="grid grid-cols-10 w-full justify-items-end select-none">
                                 <div className="col-start-1 justify-items-start flex flex-row">
                                     <BsFillBrushFill className={`${tool === "brush" ? 'mr-2 h-5 w-5 cursor-pointer mt-[14px] text-maptile-green' : 'mr-2 h-5 w-5 cursor-pointer mt-[14px]'}`} onClick={() => setTool("brush")} />
                                     <BsFillEraserFill className={`${tool === "eraser" ? 'mr-2 h-5 w-5 cursor-pointer mt-[14px] text-maptile-green' : 'mr-2 h-5 w-5 cursor-pointer mt-[14px]'}`} onClick={() => setTool("eraser")} />
@@ -406,6 +407,7 @@ const EditTileset = (props) => {
                                                             fill={cell.color}
                                                             shadowBlur={.05}
                                                             onMouseOver={cellmouseOver}
+                                                            onMouseDown={cellOnClick}
                                                             onClick={cellOnClick}
                                                         />)
                                                     })
