@@ -39,13 +39,7 @@ const CreateTilesetModal = (props) => {
           className="w-full border-none bg-maptile-background-light outline-none placeholder:italic focus:outline-none text-white h-14 p-2.5 rounded-xl"
           onBlur={props.updateInput}
         />
-        <input type='file' id="upload" placeholder="Upload a Tileset" className="w-full border-none bg-maptile-background-light mt-5 mb-5 outline-none placeholder:italic focus:outline-none text-white h-14 p-2.5 rounded-xl" onChange={readURL} />
-        <input
-          type="text"
-          name="name"
-          placeholder="Choose Tileset (Optional)"
-          className="w-full border-none bg-maptile-background-light outline-none placeholder:italic focus:outline-none text-white h-14 p-2.5 rounded-xl"
-        />
+        <input type='file' id="upload" placeholder="Upload a Tileset" className="w-full border-none bg-maptile-background-light mt-5 outline-none placeholder:italic focus:outline-none text-white h-14 p-2.5 rounded-xl" onChange={readURL} />
         <div className="grid grid-cols-5 grid-rows-2 place-items-left w-full">
           <div className="text-white mt-8 text-left row-start-1 underline">Tile Width:</div>
           <input
