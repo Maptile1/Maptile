@@ -7,7 +7,7 @@ import Axios from "axios";
 import { useLocation } from 'react-router-dom';
 import { Stage, Layer, Rect, Image } from 'react-konva';
 import { SketchPicker } from 'react-color'
-import { BsFillBrushFill, BsFillEraserFill } from "react-icons/bs";
+import { BsFillBrushFill, BsFillEraserFill, BsPaintBucket } from "react-icons/bs";
 import { FiSave } from "react-icons/fi"
 import useImage from 'use-image';
 
@@ -81,6 +81,41 @@ const EditTileset = (props) => {
         tileset.tileset_data[0].data[Math.floor(id / tileset.tileset_height)].row_data[id % tileset.tileset_width].color = color
     }
 
+    const fillUtil = (screen, x, y, color) => {
+        if(x < 0 || x >= tileset.tileset_width || y < 0 || y >= tileset.tileset_height){
+            return
+        }
+        if(screen.data[y].row_data[x].color !== color){
+            return
+        }
+
+        screen.data[y].row_data[x].color = fillColor
+
+        fillUtil(screen, x + 1, y, color)
+        fillUtil(screen, x - 1, y, color)
+        fillUtil(screen, x, y + 1, color)
+        fillUtil(screen, x, y - 1, color)
+    }
+
+    const fill = (e) => {
+        let cellid = Number(e.target.name())
+        let color = e.target.fill()
+        if(color === fillColor){
+            return
+        }
+        let x = cellid % tileset.tileset_width
+        let y = Math.floor(cellid/tileset.tileset_height)
+
+        let tileset_clone = {...tileset}
+        let data_clone = tileset_clone.tileset_data
+
+        data_clone[0].data[y].row_data[x].color = color
+
+        fillUtil(data_clone[0], x, y, color)
+
+        setTileset(tileset_clone)
+    }
+
     const cellmouseOver = (e) => {
         if (mouseDown) {
             if (tool === "brush") {
@@ -89,20 +124,27 @@ const EditTileset = (props) => {
             }
             else if (tool === "eraser") {
                 e.target.fill("white")
+                updateTilesetData(Number(e.target.name()), "white")
             }
         }
     }
 
     const cellOnClick = (e) => {
-        if (mouseDown) {
-            if (tool === "brush") {
-                e.target.fill(fillColor)
-                updateTilesetData(Number(e.target.name()), fillColor)
-            }
-            else if (tool === "eraser") {
-                e.target.fill("white")
-            }
+        
+        if (tool === "brush") {
+            e.target.fill(fillColor)
+            updateTilesetData(Number(e.target.name()), fillColor)
+            fill(e)
         }
+        else if (tool === "eraser") {
+            e.target.fill("white")
+            updateTilesetData(Number(e.target.name()), "white")
+        }
+        else if (tool === "fill"){
+            console.log(fillColor)
+            fill(e)
+        }
+        
     }
 
     const updateFillColor = (color) => {
@@ -173,15 +215,17 @@ const EditTileset = (props) => {
 
                             <div className="grid grid-cols-10 w-full justify-items-end">
                                 <div className="col-start-1 justify-items-start flex flex-row">
-                                    <BsFillBrushFill className={`${tool === "brush" ? 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[20px] text-maptile-green' : 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[20px]'}`} onClick={() => setTool("brush")} />
-                                    <BsFillEraserFill className={`${tool === "eraser" ? 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[80px] text-maptile-green' : 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[80px]'}`} onClick={() => setTool("eraser")} />
-                                    <FiSave onClick={() => saveTileset()} className="mt-[10px] h-5 w-5 text-maptile-green" />
+                                    <BsFillBrushFill className={`${tool === "brush" ? 'mr-2 h-5 w-5 cursor-pointer mt-[10px] text-maptile-green' : 'mr-2 h-5 w-5 cursor-pointer mt-[10px]'}`} onClick={() => setTool("brush")} />
+                                    <BsFillEraserFill className={`${tool === "eraser" ? 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[20px] text-maptile-green' : 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[20px]'}`} onClick={() => setTool("eraser")} />
+                                    <BsPaintBucket className={`${tool === "fill" ? 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[40px] text-maptile-green' : 'mr-2 h-5 w-5 cursor-pointer mt-[10px] mr-[40px]'}`} onClick={() => setTool("fill")} />
+                                    
                                 </div>
                                 <div className="col-start-8 justify-items-start flex flex-row">
                                     <button className="text-4xl text-maptile-green cursor-pointer" onClick={() => updateZoom(-1)}>-</button>
                                     <button className="ml-5 mr-[-40px] text-4xl text-maptile-green cursor-pointer" onClick={() => updateZoom(1)}>+</button>
                                 </div>
                                 <div className="col-start-10 flex flex-row ">
+                                    <FiSave onClick={() => saveTileset()} className="mt-[10px] h-5 w-5 text-maptile-green" />
                                     <EditTilesetMenu exportTileset={exportTileset} setShareModal={setShareModal} setTilesetPropModal={setTilesetPropModal} />
                                 </div>
 
