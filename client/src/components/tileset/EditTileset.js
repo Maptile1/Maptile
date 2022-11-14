@@ -114,6 +114,7 @@ const EditTileset = (props) => {
         context.drawImage(image, 0, 0);
 
         var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        console.log("Image Data:", imageData)
 
         let initLayer = { layer: 1, data: [] }
         let id_count = 0
@@ -125,6 +126,7 @@ const EditTileset = (props) => {
             }
             initLayer.data.push(row)
         }
+        console.log("Inital Layer:",initLayer)
         return initLayer
     }
 
