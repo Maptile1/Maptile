@@ -258,8 +258,8 @@ const EditTileset = (props) => {
                 tileset_data: tileset.tileset_data,
                 name: tileset.name,
                 description: tileset.description,
-                public: tileset.public
-
+                public: tileset.public,
+                tags: tileset.tags
             }
         )
         console.log(response);

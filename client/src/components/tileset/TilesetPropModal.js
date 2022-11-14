@@ -15,7 +15,7 @@ const TilesetPropModal = (props) => {
         const updated = { ...input, [name]: value };
         setInput(updated);
     };
-    const [tags, setTags] = useState([])
+    const [tags, setTags] = useState(tileset.tags)
     const tagRef = useRef(null)
 
     const addTag = () => {
@@ -38,7 +38,8 @@ const TilesetPropModal = (props) => {
                 tileset_data: tileset.tileset_data,
                 name: input.name,
                 description: input.description,
-                public: tileset.public
+                public: tileset.public,
+                tags: tags
 
             }
         )
