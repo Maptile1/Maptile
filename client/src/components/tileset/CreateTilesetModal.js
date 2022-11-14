@@ -1,9 +1,32 @@
 import Modal from 'react-modal';
-
 const CreateTilesetModal = (props) => {
 
   const buttonInvalid = 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red rounded-xl w-2/3 mt-10 shadow-lg underline'
   const buttonValid = 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl w-2/3 mt-10 text-white shadow-lg underline'
+  function getBase64Image(img) {
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, img.width, img.height);
+
+    var dataURL = canvas.toDataURL("image/png");
+
+    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+  }
+
+  const readURL = () => {
+    var image = document.getElementById('upload');
+    image.addEventListener("load", function () {
+      var imgData = getBase64Image(image);
+      localStorage.setItem("imgData", imgData);
+      console.log(imgData);
+    })
+  }
+
+
+
   return (
     <Modal isOpen={props.modalOpen} onRequestClose={props.handleClose} contentLabel="Create Tileset"
       className="createModal bg-maptile-background-mid w-1/3 h-2/3 rounded-xl"
@@ -19,7 +42,7 @@ const CreateTilesetModal = (props) => {
           className="w-full border-none bg-maptile-background-light outline-none placeholder:italic focus:outline-none text-white h-14 p-2.5 rounded-xl"
           onBlur={props.updateInput}
         />
-        <div className="text-white mt-8 w-full text-left underline">Upload a Tileset:</div>
+        <input type='file' id="upload" placeholder="Upload a Tileset" className="w-full border-none bg-maptile-background-light mt-5 mb-5 outline-none placeholder:italic focus:outline-none text-white h-14 p-2.5 rounded-xl" onChange={() => readURL()} />
         <input
           type="text"
           name="name"

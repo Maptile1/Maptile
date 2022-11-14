@@ -157,7 +157,7 @@ const EditTileset = (props) => {
         console.log(response);
     }
 
-    const LionImage = () => {
+    const TilesetImage = () => {
         const [image] = useImage('https://konvajs.org/assets/lion.png');
         return <Image image={image} />;
     };
@@ -208,7 +208,7 @@ const EditTileset = (props) => {
                                                     })
                                                     )
                                                 })}
-                                                {/* <LionImage /> */}
+                                                {TilesetImage}
                                             </Layer>)
                                         })}
 
