@@ -3,6 +3,12 @@ const router = express.Router();
 const Tileset = require("../schema/tileset-schema");
 const ObjectId = require("mongodb").ObjectId;
 const User = require("../schema/user-schema");
+const multer = require('multer')
+const inMemoryStorage = multer.memoryStorage()
+const uploadStrategy = multer({ storage: inMemoryStorage }).single('image')
+const { BlockBlobClient } = require('@azure/storage-blob')
+const getStream = require('into-stream')
+require('dotenv').config();
 
 // Create Tileset
 router.post("/tileset/create", async (req, res) => {
@@ -128,5 +134,17 @@ router.get("/tileset", async (req, res) => {
     .then((tilesets) => res.json(tilesets))
     .catch((err) => res.status(400).json("Error: " + err));
 });
+
+router.post('/tileset/image/:id', uploadStrategy, async (req, res) => {
+  const blobName = req.params.id
+  const blobService = new BlockBlobClient(process.env.AZURE_STORAGE_CONNECTION_STRING, 'maptile-tileset-image', blobName)
+  stream = getStream(req.file.buffer)
+  streamLength = req.file.buffer.length
+  const options = { blobHTTPHeaders: { blobContentType: req.file.mimetype } };
+  blobService.uploadStream(stream, streamLength, undefined, options)
+      .then(() => { res.json({ message: 'successful upload' }) })
+      .catch((err) => { res.status(400).json({ errorMessage: err }) })
+})
+
 module.exports = router;
 
