@@ -1,28 +1,25 @@
 import Modal from 'react-modal';
+import TilesetPropModal from './TilesetPropModal';
 const CreateTilesetModal = (props) => {
 
   const buttonInvalid = 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red rounded-xl w-2/3 mt-10 shadow-lg underline'
   const buttonValid = 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl w-2/3 mt-10 text-white shadow-lg underline'
-  function getBase64Image(img) {
-    var canvas = document.createElement("canvas");
-    canvas.width = img.width;
-    canvas.height = img.height;
-
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0, img.width, img.height);
-
-    var dataURL = canvas.toDataURL("image/png");
-
-    return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+      reader.readAsDataURL(file);
+    });
   }
-
-  const readURL = () => {
-    var image = document.getElementById('upload');
-    image.addEventListener("load", function () {
-      var imgData = getBase64Image(image);
-      localStorage.setItem("imgData", imgData);
-      console.log(imgData);
-    })
+  const readURL = (event) => {
+    var file = event.target.files[0]
+    getBase64(file).then(base64 => {
+      localStorage["imgData"] = base64;
+      console.debug("file stored", base64);
+    });
+    // localStorage.setItem("imgData", imgData);
+    // console.log(imgData);
   }
 
 
@@ -42,7 +39,7 @@ const CreateTilesetModal = (props) => {
           className="w-full border-none bg-maptile-background-light outline-none placeholder:italic focus:outline-none text-white h-14 p-2.5 rounded-xl"
           onBlur={props.updateInput}
         />
-        <input type='file' id="upload" placeholder="Upload a Tileset" className="w-full border-none bg-maptile-background-light mt-5 mb-5 outline-none placeholder:italic focus:outline-none text-white h-14 p-2.5 rounded-xl" onChange={() => readURL()} />
+        <input type='file' id="upload" placeholder="Upload a Tileset" className="w-full border-none bg-maptile-background-light mt-5 mb-5 outline-none placeholder:italic focus:outline-none text-white h-14 p-2.5 rounded-xl" onChange={readURL} />
         <input
           type="text"
           name="name"

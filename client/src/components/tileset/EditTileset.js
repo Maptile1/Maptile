@@ -158,8 +158,10 @@ const EditTileset = (props) => {
     }
 
     const TilesetImage = () => {
-        const [image] = useImage('https://konvajs.org/assets/lion.png');
-        return <Image image={image} />;
+        var dataImage = localStorage.getItem('imgData');
+        console.log(dataImage);
+        return <img className="invisible" alt="" src={dataImage} />;
+
     };
 
     return (
@@ -208,7 +210,6 @@ const EditTileset = (props) => {
                                                     })
                                                     )
                                                 })}
-                                                {TilesetImage}
                                             </Layer>)
                                         })}
 
@@ -224,6 +225,7 @@ const EditTileset = (props) => {
                             </div>
 
                         </div>
+                        {TilesetImage()}
                         <ShareModal modalOpen={shareModalOpen} setShareModal={setShareModal} name={tileset.name} />
                         <TilesetPropModal updateTileset={updateTileset} tilesetPropModalOpen={tilesetPropModalOpen} setTilesetPropModal={setTilesetPropModal} tileset={tileset} />
                     </main>
