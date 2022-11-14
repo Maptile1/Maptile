@@ -36,6 +36,7 @@ const ProfileEditModal = (props) => {
                     .then(function (response) {
 
                         props.updateUser(response.data.user)
+                        window.alert("Password changed");
                     })
                     .catch(function (error) {
                         window.alert(error.response.data.errorMessage)
