@@ -7,7 +7,7 @@ import Axios from "axios";
 import { useLocation } from 'react-router-dom';
 import { Stage, Layer, Rect,Line } from 'react-konva';
 import { SketchPicker } from 'react-color'
-import { BsFillBrushFill, BsFillEraserFill, BsPaintBucket, BsArrowCounterclockwise, BsArrowClockwise} from "react-icons/bs";
+import { BsFillBrushFill, BsFillEraserFill, BsPaintBucket, BsArrowCounterclockwise, BsArrowClockwise, BsEyedropper} from "react-icons/bs";
 import { FiSave } from "react-icons/fi"
 
 Axios.defaults.withCredentials = true
@@ -208,8 +208,10 @@ const EditTileset = (props) => {
             updateTilesetData(Number(e.target.name()), "white")
         }
         else if (tool === "fill"){
-            console.log(fillColor)
             fill(e)
+        }
+        else if (tool === "eyedropper"){
+            setFillColor(e.target.fill())
         }
         
     }
@@ -346,6 +348,9 @@ const EditTileset = (props) => {
                                 <div className="col-start-8 justify-items-start flex flex-row">
                                     <button className="text-4xl text-maptile-green cursor-pointer" onClick={() => updateZoom(-1)}>-</button>
                                     <button className="ml-5 mr-[-40px] text-4xl text-maptile-green cursor-pointer" onClick={() => updateZoom(1)}>+</button>
+                                </div>
+                                <div className="col-start-9 flex flex-row ">
+                                    <BsEyedropper className={`${tool === "eyedropper" ? 'mr-2 h-5 w-5 cursor-pointer mt-[14px] mr-[40px] text-maptile-green' : 'mr-2 h-5 w-5 cursor-pointer mt-[14px] mr-[40px]'}`} onClick={() => setTool("eyedropper")} />
                                 </div>
                                 <div className="col-start-10 flex flex-row ">
                                     <FiSave onClick={() => saveTileset()} className="mt-[10px] h-5 w-5 text-maptile-green" />
