@@ -27,7 +27,7 @@ const TilesetCard = (props) => {
           }}
           onClick={()=>handleTilesetView()}
         />
-      <div class="px-6 py-4">
+      <div class="px-6 py-4 cursor-pointer" onClick={()=>handleTilesetView()}>
         <div class="font-bold text-white text-xl mb-2">{props.name}</div>
         <p class="text-white text-base">{props.description}</p>
       </div>

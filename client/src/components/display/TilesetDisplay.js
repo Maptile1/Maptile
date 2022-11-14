@@ -166,7 +166,7 @@ const TilesetDisplay = (props) => {
                                     </Transition>
                                 </Menu>
                             </div>
-                            <div class="mt-10 row-start-2 col-span-3">Tags: {tileset.tags.map((obj) => obj + " ")}</div>
+                            <div class="mt-10 row-start-2 col-span-3">Tags: {tileset.tags.join(", ")}</div>
                             <div class="row-start-3 row-end-4 col-start-1 col-end-4 mb-10">
                                 <img class="object-cover w-full h-full mx-auto rounded-md lg:max-w-2xl" 
                                 src={"https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" + tileset._id} 

@@ -72,7 +72,7 @@ const ProfileScreen = (props) => {
               className="w-full p-2 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl"
               onClick={() => setProfileModal(true)}
             >
-              <BiCog size={30} />
+              <BiCog size={30} className="text-white mt-[8px]"/>
               <div className="text-center text-white font-bold text-3xl mt-[-30px]"> Settings </div>
             </button>
           </div>
