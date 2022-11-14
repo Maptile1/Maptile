@@ -1,5 +1,4 @@
 import Modal from 'react-modal';
-import TilesetPropModal from './TilesetPropModal';
 const CreateTilesetModal = (props) => {
 
   const buttonInvalid = 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red rounded-xl w-2/3 mt-10 shadow-lg underline'

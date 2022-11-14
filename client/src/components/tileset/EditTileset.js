@@ -5,9 +5,9 @@ import TilesetPropModal from "./TilesetPropModal"
 import React, { useState, useEffect } from "react"
 import Axios from "axios";
 import { useLocation } from 'react-router-dom';
-import { Stage, Layer, Rect,Line } from 'react-konva';
+import { Stage, Layer, Rect, Line } from 'react-konva';
 import { SketchPicker } from 'react-color'
-import { BsFillBrushFill, BsFillEraserFill, BsPaintBucket, BsArrowCounterclockwise, BsArrowClockwise, BsEyedropper} from "react-icons/bs";
+import { BsFillBrushFill, BsFillEraserFill, BsPaintBucket, BsArrowCounterclockwise, BsArrowClockwise, BsEyedropper } from "react-icons/bs";
 import { FiSave } from "react-icons/fi"
 
 Axios.defaults.withCredentials = true
@@ -23,8 +23,8 @@ const EditTileset = (props) => {
     const [tool, setTool] = useState("brush")
     const [showDividers, setShowDividers] = useState(true)
     const [dividers, setDividers] = useState(null)
-    const [undoStack, setUndoStack] = useState([])
-    const [redoStack, setRedo] = useState([])
+    const [undoStack] = useState([])
+    const [redoStack] = useState([])
     const [download, setDownload] = useState(false);
 
     useEffect(() => {
@@ -36,7 +36,7 @@ const EditTileset = (props) => {
             if ((tilesetdata.data.tileset.tileset_data.length === 0) && (localStorage.getItem('imgData') === null)) {
                 tilesetdata.data.tileset.tileset_data.push(initTileset(tilesetdata.data.tileset))
             }
-            else if ((localStorage.getItem('imgData') !== null) && (tilesetdata.data.tileset.tileset_data.length === 0)){
+            else if ((localStorage.getItem('imgData') !== null) && (tilesetdata.data.tileset.tileset_data.length === 0)) {
                 tilesetdata.data.tileset.tileset_data.push(initImportTileset(tilesetdata.data.tileset))
             }
             setTileset(tilesetdata.data.tileset);
@@ -45,15 +45,15 @@ const EditTileset = (props) => {
         getTileset()
     }, [location.state._id]);
 
-    
+
     useEffect(() => {
         const newdividers = [];
-        if (tileset !== null){
-            for (var i = tileset.tile_width; i < tileset.tileset_width; i += tileset.tile_width){
+        if (tileset !== null) {
+            for (var i = tileset.tile_width; i < tileset.tileset_width; i += tileset.tile_width) {
                 var points = [0, i, tileset.tileset_height, i];
                 newdividers.push(<Line stroke='red' points={points} strokeWidth='0.05'></Line>)
             }
-            for (var j = tileset.tile_height; j < tileset.tileset_height; j += tileset.tile_height){
+            for (var j = tileset.tile_height; j < tileset.tileset_height; j += tileset.tile_height) {
                 var points2 = [j, 0, j, tileset.tileset_width];
                 newdividers.push(<Line stroke='red' points={points2} strokeWidth='0.05'></Line>)
             }
@@ -61,32 +61,32 @@ const EditTileset = (props) => {
         }
     }, [tileset])
 
-    useEffect(()=>{
-        if(zoomLevel === 1 && showDividers === false && download){
+    useEffect(() => {
+        if (zoomLevel === 1 && showDividers === false && download) {
             var dataURL = stageRef.current.toDataURL();
             downloadURI(dataURL, 'maptile_tileset.png');
             setDownload(false)
             setZoomLevel(15)
             setShowDividers(true)
         }
-        else if(zoomLevel === 1 && showDividers === false && !download){
+        else if (zoomLevel === 1 && showDividers === false && !download) {
             stageRef.current.toBlob()
-            .then((img) => {
-                const formData = new FormData()
-                formData.append('image', img)
+                .then((img) => {
+                    const formData = new FormData()
+                    formData.append('image', img)
 
-                Axios.post("https://maptile1.herokuapp.com/tileset/image/" + tileset._id, formData)
-                .then(function (response) {
-                    console.log(response)
+                    Axios.post("https://maptile1.herokuapp.com/tileset/image/" + tileset._id, formData)
+                        .then(function (response) {
+                            console.log(response)
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        })
+                    setZoomLevel(15)
+                    setShowDividers(true)
                 })
-                .catch(function (error) {
-                    console.log(error)
-                })
-                setZoomLevel(15)
-                setShowDividers(true)
-            })
         }
-    },[zoomLevel, showDividers])
+    }, [zoomLevel, showDividers])
 
     const initTileset = (tileset) => {
         let initLayer = { layer: 1, data: [] }
@@ -120,7 +120,7 @@ const EditTileset = (props) => {
         for (let i = 0; i < tileset.tileset_height; i++) {
             let row = { row_id: i, row_data: [] }
             for (let j = 0; j < tileset.tileset_width; j++) {
-                row.row_data.push({ id: id_count, color: rgbToHex(imageData.data[(id_count*4)],imageData.data[(id_count*4)+1],imageData.data[(id_count*4)+2]) })
+                row.row_data.push({ id: id_count, color: rgbToHex(imageData.data[(id_count * 4)], imageData.data[(id_count * 4) + 1], imageData.data[(id_count * 4) + 2]) })
                 id_count++
             }
             initLayer.data.push(row)
@@ -165,10 +165,10 @@ const EditTileset = (props) => {
     }
 
     const fillUtil = (screen, x, y, color) => {
-        if(x < 0 || x >= tileset.tileset_width || y < 0 || y >= tileset.tileset_height){
+        if (x < 0 || x >= tileset.tileset_width || y < 0 || y >= tileset.tileset_height) {
             return
         }
-        if(screen.data[y].row_data[x].color !== color){
+        if (screen.data[y].row_data[x].color !== color) {
             return
         }
 
@@ -183,13 +183,13 @@ const EditTileset = (props) => {
     const fill = (e) => {
         let cellid = Number(e.target.name())
         let color = e.target.fill()
-        if(color === fillColor){
+        if (color === fillColor) {
             return
         }
         let x = cellid % tileset.tileset_width
-        let y = Math.floor(cellid/tileset.tileset_height)
+        let y = Math.floor(cellid / tileset.tileset_height)
 
-        let tileset_clone = {...tileset}
+        let tileset_clone = { ...tileset }
         let data_clone = tileset_clone.tileset_data
 
         data_clone[0].data[y].row_data[x].color = color
@@ -215,7 +215,7 @@ const EditTileset = (props) => {
     }
 
     const cellOnClick = (e) => {
-        
+
         if (tool === "brush") {
             addAction(e.target, e.target.fill(), fillColor)
             e.target.fill(fillColor)
@@ -226,21 +226,21 @@ const EditTileset = (props) => {
             e.target.fill("white")
             updateTilesetData(Number(e.target.name()), "white")
         }
-        else if (tool === "fill"){
+        else if (tool === "fill") {
             fill(e)
         }
-        else if (tool === "eyedropper"){
+        else if (tool === "eyedropper") {
             setFillColor(e.target.fill())
         }
-        
+
     }
 
     const addAction = (target, prevColor, newColor) => {
-        undoStack.push({target:target, prevColor:prevColor, newColor:newColor})
+        undoStack.push({ target: target, prevColor: prevColor, newColor: newColor })
     }
 
     const undoAction = () => {
-        if(undoStack.length !== 0){
+        if (undoStack.length !== 0) {
             let action = undoStack.pop()
             action.target.fill(action.prevColor)
             updateTilesetData(Number(action.target.name()), action.prevColor)
@@ -249,7 +249,7 @@ const EditTileset = (props) => {
     }
 
     const redoAction = () => {
-        if(redoStack.length !== 0){
+        if (redoStack.length !== 0) {
             let action = redoStack.pop()
             action.target.fill(action.newColor)
             updateTilesetData(Number(action.target.name()), action.newColor)
@@ -278,7 +278,7 @@ const EditTileset = (props) => {
         setDownload(true)
         setZoomLevel(1)
         setShowDividers(false)
-        
+
         // setZoomLevel(prevZoom)
         // setShowDividers(true)
     }
@@ -361,11 +361,11 @@ const EditTileset = (props) => {
                                     <BsFillBrushFill className={`${tool === "brush" ? 'mr-2 h-5 w-5 cursor-pointer mt-[14px] text-maptile-green' : 'mr-2 h-5 w-5 cursor-pointer mt-[14px]'}`} onClick={() => setTool("brush")} />
                                     <BsFillEraserFill className={`${tool === "eraser" ? 'mr-2 h-5 w-5 cursor-pointer mt-[14px] text-maptile-green' : 'mr-2 h-5 w-5 cursor-pointer mt-[14px]'}`} onClick={() => setTool("eraser")} />
                                     <BsPaintBucket className={`${tool === "fill" ? 'mr-2 h-5 w-5 cursor-pointer mt-[14px] mr-[60px] text-maptile-green' : 'mr-2 h-5 w-5 cursor-pointer mt-[14px] mr-[60px]'}`} onClick={() => setTool("fill")} />
-                                    
+
                                 </div>
                                 <div className="col-start-2 justify-items-start flex flex-row">
-                                    <BsArrowCounterclockwise className="mr-2 h-5 w-5 cursor-pointer mt-[15px]" onClick={()=>undoAction()} />
-                                    <BsArrowClockwise className="mr-2 h-5 w-5 cursor-pointer mt-[15px] mr-[140px]" onClick={()=>redoAction()} />
+                                    <BsArrowCounterclockwise className="mr-2 h-5 w-5 cursor-pointer mt-[15px]" onClick={() => undoAction()} />
+                                    <BsArrowClockwise className="mr-2 h-5 w-5 cursor-pointer mt-[15px] mr-[140px]" onClick={() => redoAction()} />
                                 </div>
                                 <div className="col-start-8 justify-items-start flex flex-row">
                                     <button className="text-4xl text-maptile-green cursor-pointer" onClick={() => updateZoom(-1)}>-</button>
