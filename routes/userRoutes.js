@@ -48,8 +48,11 @@ userRouter.route("/user/register").post(async (req, res) => {
             featured: [],
             accountCreated: Date.now(),
         })
-        await user.save()
-            .then((user) => { res.json({ user: user }) })
+        user = await user.save()
+            .then((user) => { 
+                req.session._id = user._id
+                res.json({ user: user }) 
+            })
             .catch((err) => { res.json({ errorMessage: err.message }) })
     })
 })
