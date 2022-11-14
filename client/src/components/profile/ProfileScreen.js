@@ -41,7 +41,7 @@ const ProfileScreen = (props) => {
     };
     getTilesets();
   }, [user._id]);
-
+  console.log(userTilesets)
   return user ? (
     <div>
       {!loading && (
@@ -72,7 +72,7 @@ const ProfileScreen = (props) => {
               className="w-full p-2 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl"
               onClick={() => setProfileModal(true)}
             >
-              <BiCog size={30} className="text-white mt-[8px]"/>
+              <BiCog size={30} className="text-white mt-[8px]" />
               <div className="text-center text-white font-bold text-3xl mt-[-30px]"> Settings </div>
             </button>
           </div>
@@ -86,7 +86,7 @@ const ProfileScreen = (props) => {
           <div class="col-start-8 row-start-3 mt-20 text-6xl justify-self-center text-white">
             <BsFillPuzzleFill />
             <div class="mt-10">
-              {user.tilesets.length}
+              {userTilesets.length}
             </div>
             <div class="mt-4">Tilesets</div>
           </div>
