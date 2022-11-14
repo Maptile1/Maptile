@@ -19,8 +19,7 @@ const ForgotPassword = (props) => {
       }
 
     const handleResetPassword = () => {
-        props.closeView();
-        props.toggleEmailConfirmationView(true);
+        props.toggleResetPasswordView(true);
         props.handleSendEmailCode(email);
     }
 

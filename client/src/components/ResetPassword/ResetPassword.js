@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const ResetPassword = (props) => {
 
+    const [code, setCode] = useState("");
     const [inputValid, setInputValid] = useState(false)
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -26,14 +27,29 @@ const ResetPassword = (props) => {
       }
     }
 
+    const handleChangeCode = (event) => {
+        setCode(event.target.value);
+    }
+
     return (
         <main
         class="mx-auto flex min-h-screen w-full items-center justify-center bg-maptile-background-dark text-white"
       >
-        <div class="bg-maptile-purple flex w-[40rem] h-[22rem] justify-center align-middle shadow-md rounded-lg">
+        <div class="bg-maptile-purple flex w-[40rem] h-[26rem] justify-center align-middle shadow-md rounded-lg">
           <section class="flex w-[30rem] flex-col space-y-10 mt-10">
             <div class="text-center text-4xl font-medium">Create New Password</div>
-
+            <div
+              class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
+            >
+              <input
+                type="number"
+                name="number"
+                placeholder="Enter email confirmation code"
+                class="w-full border-none bg-transparent outline-none placeholder:italic focus:outline-none"
+                maxLength="5"
+                onChange={handleChangeCode}
+              />
+            </div>
             <div
               class="w-full transform border-b-2 bg-transparent text-lg duration-300 focus-within:border-indigo-500"
             >
@@ -59,7 +75,7 @@ const ResetPassword = (props) => {
             </div>
 
             <button 
-            onClick={inputValid ? () => props.handleResetPassword(password, confirmPassword) : null}
+            onClick={inputValid ? () => props.handleResetPassword(password, confirmPassword, code) : null}
             className={`${!inputValid ? 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-red-unselected hover:bg-maptile-red rounded-xl cursor-not-allowed' : 'transform rounded-sm py-2 font-bold duration-300 bg-maptile-green-highlight hover:bg-maptile-green rounded-xl'}`}
           >
             UPDATE PASSWORD

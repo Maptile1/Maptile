@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Axios from 'axios'
 import ForgotPassword from "../ForgotPassword/ForgotPassword";
 import ResetPassword from "../ResetPassword/ResetPassword";
-import EmailConfirmation from "../EmailConfirmation/EmailConfirmation";
 
 Axios.defaults.withCredentials = true
 
@@ -10,7 +9,6 @@ const LogIn = (props) => {
   const [input, setInput] = useState({ userName: '', password: '' });
   const [inputValid, setInputValid] = useState(false)
   const [forgotPasswordView, toggleForgotPasswordView] = useState(false);
-  const [emailConfirmationView, toggleEmailConfirmationView] = useState(false);
   const [resetPasswordView, toggleResetPasswordView] = useState(false);
   const [user, setUser] = useState({});
 
@@ -45,7 +43,7 @@ const LogIn = (props) => {
           let user = response.data.user[0];
           if(user !== undefined){
             toggleForgotPasswordView(false)
-            toggleEmailConfirmationView(true)
+            toggleResetPasswordView(true)
             setUser(user);
             // SEND EMAIL WITH CODE
             sendEmailCode(user.email);
@@ -72,20 +70,19 @@ const LogIn = (props) => {
     })
   }
 
-  const handleResetPassword = (password, confirmPassword) => {
+  const handleResetPassword = (password, confirmPassword, code) => {
+      console.log(code);
       if(password !== confirmPassword){
         window.alert("Passwords do not match.");
         return;
       }
       // UPDATE PASSWORD
       Axios.post(
-        "https://maptile1.herokuapp.com/user/update",
+        "https://maptile1.herokuapp.com/user/reset",
         {
-            _id: user._id,
-            userName: user.userName,
-            bio: user.bio,
             email: user.email,
-            password: password
+            password: password,
+            recoveryCode: Number(code)
         }
       ).then(function (response) {
           console.log(response);
@@ -97,7 +94,7 @@ const LogIn = (props) => {
       })
   }
 
-  return (!forgotPasswordView && !resetPasswordView && !emailConfirmationView) ? (
+  return (!forgotPasswordView && !resetPasswordView) ? (
     <main
       className="mx-auto flex min-h-screen w-full items-center justify-center bg-maptile-background-dark text-white"
     >
@@ -163,25 +160,15 @@ const LogIn = (props) => {
       <ForgotPassword
         closeView={toggleForgotPasswordView}
         handleSendEmailCode={handleSendEmailCode}
-        toggleEmailConfirmationView={toggleEmailConfirmationView}
+        toggleResetPasswordView = {toggleResetPasswordView}
       />
     )
       :
-      emailConfirmationView ? (
-        <EmailConfirmation
-          toggleEmailConfirmationView={toggleEmailConfirmationView}
-          toggleForgotPasswordView={toggleForgotPasswordView}
-          toggleResetPasswordView={toggleResetPasswordView}
-          handleSendEmailCode={handleSendEmailCode}
-          user={user}
-          setUser={setUser}
-        />
-      )
-        :
         (
           <ResetPassword 
           user = {user}
           handleResetPassword = {handleResetPassword}
+          toggleResetPasswordView = {toggleResetPasswordView}
           />
         )
     ;
