@@ -17,7 +17,7 @@ const EditTileset = (props) => {
     const [tilesetPropModalOpen, setTilesetPropModal] = useState(false)
     var location = useLocation();
     const [tileset, setTileset] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true)
     const [fillColor, setFillColor] = useState("#000000")
     const [zoomLevel, setZoomLevel] = useState(15)
     const [tool, setTool] = useState("brush")
@@ -29,7 +29,7 @@ const EditTileset = (props) => {
 
     useEffect(() => {
         const getTileset = async () => {
-            setLoading(true)
+            
 
             let tilesetdata = await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + location.state._id)
 
@@ -37,11 +37,13 @@ const EditTileset = (props) => {
                 tilesetdata.data.tileset.tileset_data.push(initTileset(tilesetdata.data.tileset))
             }
             else if ((localStorage.getItem('imgData') !== null) && (tilesetdata.data.tileset.tileset_data.length === 0)) {
-                tilesetdata.data.tileset.tileset_data.push(initImportTileset(tilesetdata.data.tileset))
+                //tilesetdata.data.tileset.tileset_data.push(initImportTileset(tilesetdata.data.tileset))
+                initImportTileset(tilesetdata.data.tileset)
             }
             setTileset(tilesetdata.data.tileset);
             setLoading(false);
         }
+        setLoading(true)
         getTileset()
     }, [location.state._id]);
 
@@ -105,29 +107,34 @@ const EditTileset = (props) => {
     const initImportTileset = (tileset) => {
         var dataImage = localStorage.getItem('imgData');
         var image = document.createElement('img');
+        console.log(dataImage)
         image.src = dataImage;
-        var canvas = document.createElement('canvas');
-        canvas.width = tileset.tileset_width;
-        canvas.height = tileset.tileset_height;
+        image.onload = function() {
+            console.log("loaded")
+            var canvas = document.createElement('canvas');
+            canvas.width = tileset.tileset_width;
+            canvas.height = tileset.tileset_height;
 
-        var context = canvas.getContext('2d');
-        context.drawImage(image, 0, 0);
+            var context = canvas.getContext('2d');
+            context.drawImage(image, 0, 0);
 
-        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-        console.log("Image Data:", imageData)
+            var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            console.log("Image Data:", imageData)
 
-        let initLayer = { layer: 1, data: [] }
-        let id_count = 0
-        for (let i = 0; i < tileset.tileset_height; i++) {
-            let row = { row_id: i, row_data: [] }
-            for (let j = 0; j < tileset.tileset_width; j++) {
-                row.row_data.push({ id: id_count, color: rgbToHex(imageData.data[(id_count * 4)], imageData.data[(id_count * 4) + 1], imageData.data[(id_count * 4) + 2]) })
-                id_count++
+            let initLayer = { layer: 1, data: [] }
+            let id_count = 0
+            for (let i = 0; i < tileset.tileset_height; i++) {
+                let row = { row_id: i, row_data: [] }
+                for (let j = 0; j < tileset.tileset_width; j++) {
+                    row.row_data.push({ id: id_count, color: rgbToHex(imageData.data[(id_count * 4)], imageData.data[(id_count * 4) + 1], imageData.data[(id_count * 4) + 2]) })
+                    id_count++
+                }
+                initLayer.data.push(row)
             }
-            initLayer.data.push(row)
+            console.log("Inital Layer:",initLayer)
+            //return initLayer
+            tileset.tileset_data.push(initLayer)
         }
-        console.log("Inital Layer:",initLayer)
-        return initLayer
     }
 
     const rgbToHex = (r, g, b) => {
