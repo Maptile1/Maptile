@@ -10,10 +10,12 @@ app.use(express.json({limit: '10mb'}));
 
 const session = require('express-session')
 const MongoStore = require('connect-mongo');
+app.set('trust proxy', 1)
 app.use(session({secret: 'dfgdfgdfgdfgsdf', 
   resave: false, saveUninitialized: true,
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI+ '/sessions'}),
-  cookie: {sameSite: 'none', secure: true}}));
+  cookie: { sameSite: 'none', secure: true }}));
+
 // db
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
