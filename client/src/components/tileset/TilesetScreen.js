@@ -37,6 +37,9 @@ const TilesetScreen = (props) => {
       setSharedTilesets(response.data.sharedtilesets)
     };
     getTilesets();
+    if(localStorage.getItem('imgData') !== null){
+      localStorage.removeItem('imgData')
+    }
   }, [user]);
 
   const updateInput = (e) => {
