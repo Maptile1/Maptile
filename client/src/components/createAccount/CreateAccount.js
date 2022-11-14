@@ -18,18 +18,19 @@ const CreateAccount = (props) => {
     const handleRegister = async (e) => {
         if (inputValid) {
             await Axios.post("https://maptile1.herokuapp.com/user/register",
-            {
-                userName: input.userName,
-                email: input.email,
-                password: input.password,
-            })
-            .then(function(response){
-                props.handleLogIn(response.data.user);
-            })
-            .catch(function(error){
-                window.alert(error.response.data.errorMessage)
-            })
-            
+                {
+                    userName: input.userName,
+                    email: input.email,
+                    password: input.password,
+                })
+                .then(function (response) {
+                    props.handleLogIn(response.data.user);
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    window.alert(error.response.data.errorMessage)
+                })
+
         }
 
     }

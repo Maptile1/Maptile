@@ -76,10 +76,15 @@ const EditTileset = (props) => {
         }
     }
 
+    const updateTilesetData = (id, color) => {
+        tileset.tileset_data[0].data[Math.floor(id/tileset.tileset_height)].row_data[id%tileset.tileset_width].color = color
+    }
+
     const cellmouseOver = (e) => {
         if (mouseDown) {
             if (tool === "brush") {
                 e.target.fill(fillColor)
+                updateTilesetData(Number(e.target.name()), fillColor)
             }
             else if (tool === "eraser") {
                 e.target.fill("white")
@@ -91,6 +96,7 @@ const EditTileset = (props) => {
         if (mouseDown) {
             if (tool === "brush") {
                 e.target.fill(fillColor)
+                updateTilesetData(Number(e.target.name()), fillColor)
             }
             else if (tool === "eraser") {
                 e.target.fill("white")
@@ -101,6 +107,24 @@ const EditTileset = (props) => {
     const updateFillColor = (color) => {
         setFillColor(color.hex)
     }
+
+    const stageRef = React.useRef(null);
+
+    const downloadURI = (uri, name) => {
+        var link = document.createElement('a');
+        link.download = name;
+        link.href = uri;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+    }
+
+    const exportTileset = () => {
+        var dataURL = stageRef.current.toDataURL();
+        downloadURI(dataURL, tileset.name + '.png');
+    }
+
 
     const updateZoom = (zoom) => {
         console.log(zoomLevel)
@@ -122,7 +146,7 @@ const EditTileset = (props) => {
         let response = await Axios.post(
             "https://maptile1.herokuapp.com/tileset/update/" + tileset._id,
             {
-                tileset_data: tileset.tileset_data[0].data,
+                tileset_data: tileset.tileset_data,
                 name: tileset.name,
                 description: tileset.description,
                 public: tileset.public
@@ -152,19 +176,20 @@ const EditTileset = (props) => {
                                     <button className="ml-5 mr-[-40px] text-4xl text-maptile-green cursor-pointer" onClick={() => updateZoom(1)}>+</button>
                                 </div>
                                 <div className="col-start-10 flex flex-row ">
-                                    <EditTilesetMenu setShareModal={setShareModal} setTilesetPropModal={setTilesetPropModal} />
+                                    <EditTilesetMenu exportTileset={exportTileset} setShareModal={setShareModal} setTilesetPropModal={setTilesetPropModal} />
                                 </div>
 
                             </div>
 
                             <div className="flex flew-row">
                                 <div className="bg-maptile-background-mid w-full h-[50rem] rounded-xl overflow-auto">
-                                    <Stage width={tileset.tileset_width * zoomLevel} height={tileset.tileset_height * zoomLevel} scaleX={zoomLevel} scaleY={zoomLevel}>
+                                    <Stage ref={stageRef} width={tileset.tileset_width * zoomLevel} height={tileset.tileset_height * zoomLevel} scaleX={zoomLevel} scaleY={zoomLevel}>
                                         {tileset.tileset_data.map((layer) => {
                                             return (<Layer key={layer.layer}>
                                                 {layer.data.map((row, i) => {
-                                                    return (row.row_data.map((cell) => {
+                                                    return (row.row_data.map((cell, j) => {
                                                         return (<Rect
+                                                            name={cell.id.toString()}
                                                             x={(cell.id % tileset.tileset_width)}
                                                             y={(i % tileset.tileset_height)}
                                                             width={1}
