@@ -25,6 +25,7 @@ const EditTileset = (props) => {
     const [dividers, setDividers] = useState(null)
     const [undoStack, setUndoStack] = useState([])
     const [redoStack, setRedo] = useState([])
+    const [download, setDownload] = useState(false);
 
     useEffect(() => {
         const getTileset = async () => {
@@ -61,11 +62,29 @@ const EditTileset = (props) => {
     }, [tileset])
 
     useEffect(()=>{
-        if(zoomLevel === 1 && showDividers === false){
+        if(zoomLevel === 1 && showDividers === false && download){
             var dataURL = stageRef.current.toDataURL();
             downloadURI(dataURL, 'maptile_tileset.png');
+            setDownload(false)
             setZoomLevel(15)
             setShowDividers(true)
+        }
+        else if(zoomLevel === 1 && showDividers === false && !download){
+            stageRef.current.toBlob()
+            .then((img) => {
+                const formData = new FormData()
+                formData.append('image', img)
+
+                Axios.post("https://maptile1.herokuapp.com/tileset/image/" + tileset._id, formData)
+                .then(function (response) {
+                    console.log(response)
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+                setZoomLevel(15)
+                setShowDividers(true)
+            })
         }
     },[zoomLevel, showDividers])
 
@@ -256,6 +275,7 @@ const EditTileset = (props) => {
 
     const exportTileset = () => {
         //let prevZoom = zoomLevel
+        setDownload(true)
         setZoomLevel(1)
         setShowDividers(false)
         
@@ -291,6 +311,8 @@ const EditTileset = (props) => {
                 tags: tileset.tags
             }
         )
+        setZoomLevel(1)
+        setShowDividers(false)
         console.log(response);
     }
 
