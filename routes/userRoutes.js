@@ -201,6 +201,30 @@ userRouter.post("/user/update", async (req, res) => {
     }
 })
 
+userRouter.post("/user/reset", async (req, res) => {
+    var updates = {}
+    if (req.body.password == undefined){
+        res.status(400).json({errorMessage: 'No password given'})
+    }
+    bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
+        updates.password = hash
+        User.findOneAndUpdate(
+            { email: req.body.email, recoveryCode: req.body.recoveryCode },
+            { $set: updates },
+            { new: true }
+        )
+        .then((user => {
+            if (user != null) {
+                res.json({ user: user })
+            }
+            else {
+                res.status(400).json({ errorMessage: "Wrong code" })
+            }
+        }))
+        .catch((err) => {res.status(400).json({errorMessage: err})})
+    })
+})
+
 userRouter.post('/user/image', uploadStrategy, async (req, res) => {
     if (req.session._id == undefined) {
         res.status(400).json({ errorMessage: "Not logged in" })
