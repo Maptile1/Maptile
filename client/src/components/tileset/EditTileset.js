@@ -5,7 +5,7 @@ import TilesetPropModal from "./TilesetPropModal"
 import React, { useState, useEffect } from "react"
 import Axios from "axios";
 import { useLocation } from 'react-router-dom';
-import { Stage, Layer, Rect, Image } from 'react-konva';
+import { Stage, Layer, Rect, Image, Line } from 'react-konva';
 import { SketchPicker } from 'react-color'
 import { BsFillBrushFill, BsFillEraserFill, BsPaintBucket } from "react-icons/bs";
 import { FiSave } from "react-icons/fi"
@@ -22,6 +22,7 @@ const EditTileset = (props) => {
     const [fillColor, setFillColor] = useState("#000000")
     const [zoomLevel, setZoomLevel] = useState(15)
     const [tool, setTool] = useState("brush")
+
     useEffect(() => {
         const getTileset = async () => {
             setLoading(true)
@@ -36,6 +37,20 @@ const EditTileset = (props) => {
         }
         getTileset()
     }, [location.state._id]);
+
+    const dividers = [];
+    useEffect(() => {
+        if (tileset != null){
+            for (var i = tileset.tile_width; i < tileset.tileset_width; i += tileset.tile_width){
+                var points = [0, i, tileset.tileset_height, i];
+                dividers.push(<Line stroke='red' points={points} strokeWidth='0.05'></Line>)
+            }
+            for (var i = tileset.tile_height; i < tileset.tileset_height; i += tileset.tile_height){
+                var points = [i, 0, i, tileset.tileset_width];
+                dividers.push(<Line stroke='red' points={points} strokeWidth='0.05'></Line>)
+            }
+        }
+    }, [tileset])
 
     const initTileset = (tileset) => {
         let initLayer = { layer: 1, data: [] }
@@ -255,7 +270,9 @@ const EditTileset = (props) => {
                                                 {TilesetImage}
                                             </Layer>)
                                         })}
-
+                                        <Layer>
+                                            {dividers}
+                                        </Layer>
                                     </Stage>
                                 </div>
                                 <div className="flex flex-col w-1/6 ml-2 h-[50rem]">
