@@ -39,13 +39,13 @@ const Sidebar = (props) => {
   };
 
   return (
-    <aside className="w-40" aria-label="Sidebar">
+    <aside className="w-40 z-10" aria-label="Sidebar">
       <div className="py-5 px-3 bg-maptile-green rounded dark:bg-maptile-green top-0 fixed bottom-0">
         <ul className="space-y-10">
-          <li className="w-12 h-12">
+          <div className="w-12 h-12">
             <img src="maptile-logo.png" className="object-fit " alt="logo" />
-          </li>
-          <li>
+          </div>
+          <div>
             <div
               name="Home"
               className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white "
@@ -57,43 +57,43 @@ const Sidebar = (props) => {
                 </div>
               </button>
             </div>
-          </li>
-          <li>
+          </div>
+          <div>
             <div className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white ">
               <button id="sidebar-Tileset" onClick={handleClick}>
                 {" "}
                 <BsFillPuzzleFill size={iconsize} style={iconStyles} />
               </button>
             </div>
-          </li>
-          <li>
+          </div>
+          <div>
             <div className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white ">
               <button id="sidebar-Map" onClick={handleClick}>
                 <BsMapFill size={iconsize} style={iconStyles} />
               </button>
             </div>
-          </li>
-          <li>
+          </div>
+          <div>
             <div className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white ">
               <button id="sidebar-Search" onClick={handleClick}>
                 <BsSearch size={iconsize} style={iconStyles} />
               </button>
             </div>
-          </li>
-          <li className="pt-60">
+          </div>
+          <div className="pt-60">
             <div className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white ">
               <button id="sidebar-Profile" onClick={handleClick}>
                 <BsFillPersonBadgeFill size={iconsize} style={iconStyles} />
               </button>
             </div>
-          </li>
-          <li>
+          </div>
+          <div>
             <div className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white ">
               <button id="sidebar-LogOut" onClick={handleClick}>
                 <BsPower size={iconsize} style={iconStyles} />
               </button>
             </div>
-          </li>
+          </div>
         </ul>
       </div>
     </aside>

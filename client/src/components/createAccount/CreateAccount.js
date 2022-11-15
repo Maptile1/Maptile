@@ -37,9 +37,19 @@ const CreateAccount = (props) => {
 
     return (
         <main
-            className="mx-auto flex min-h-screen w-full items-center justify-center bg-maptile-background-dark text-white"
+            className="mx-auto flex min-h-screen w-full items-center justify-center bg-maptile-background-dark text-white circles"
         >
-            <div className="bg-maptile-purple flex w-[40rem] h-[35rem] justify-center align-middle shadow-md rounded-lg">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <div className="bg-maptile-purple flex w-[40rem] h-[35rem] justify-center align-middle shadow-md rounded-lg z-10">
                 <section className="flex w-[30rem] flex-col space-y-10 mt-10">
                     <div className="text-center text-4xl font-medium">Create Account</div>
 
