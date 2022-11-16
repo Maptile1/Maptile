@@ -9,7 +9,7 @@ import { Navigate, useLocation } from "react-router-dom";
 // import { isRouteErrorResponse } from "react-router-dom";
 import Axios from "axios";
 
-Axios.defaults.withCredentials = true
+Axios.defaults.withCredentials = true;
 
 const ProfileScreen = (props) => {
   const [modalOpen, setProfileModal] = useState(false);
@@ -21,9 +21,9 @@ const ProfileScreen = (props) => {
 
   const [userPfp, setPfp] = useState(
     "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
-    user._id +
-    "?=" +
-    Math.random().toString().substring(2)
+      user._id +
+      "?=" +
+      Math.random().toString().substring(2)
   );
 
   const updatePfp = (newImage) => {
@@ -41,7 +41,7 @@ const ProfileScreen = (props) => {
     };
     getTilesets();
   }, [user._id]);
-  console.log(userTilesets)
+  console.log(userTilesets);
   return user ? (
     <div>
       {!loading && (
@@ -73,35 +73,36 @@ const ProfileScreen = (props) => {
               onClick={() => setProfileModal(true)}
             >
               <BiCog size={30} className="text-white mt-[8px]" />
-              <div className="text-center text-white font-bold text-3xl mt-[-30px]"> Settings </div>
+              <div className="text-center text-white font-bold text-3xl mt-[-30px]">
+                {" "}
+                Settings{" "}
+              </div>
             </button>
           </div>
           <div class="col-start-6 row-start-3 mt-20 text-6xl justify-self-center text-white">
             <BsMapFill />
-            <div class="mt-10">
-              {user.maps.length}
-            </div>
+            <div class="mt-10">{user.maps.length}</div>
             <div class="mt-4">Maps</div>
           </div>
           <div class="col-start-8 row-start-3 mt-20 text-6xl justify-self-center text-white">
             <BsFillPuzzleFill />
-            <div class="mt-10">
-              {userTilesets.length}
-            </div>
+            <div class="mt-10">{userTilesets.length}</div>
             <div class="mt-4">Tilesets</div>
           </div>
           <div class="col-start-10 row-start-3 mt-20 text-6xl justify-self-center text-white">
             <BiLike />
-            <div class="mt-10">
-              {user.likes}
-            </div>
+            <div class="mt-10">{user.likes}</div>
             <div class="mt-4">Likes</div>
           </div>
-          <div class="row-start-4 text-white text-3xl col-start-2 pt-10 mt-10">Featured
+          <div class="row-start-4 text-white text-3xl col-start-2 pt-10 mt-10">
+            Featured
           </div>
-          <div class="row-start-5 text-white text-3xl col-start-2 col-span-10" style={{ borderTop: "2px solid #fff ", marginRight: 20 }}></div>
+          <div
+            class="row-start-5 text-white text-3xl col-start-2 col-span-10"
+            style={{ borderTop: "2px solid #fff ", marginRight: 20 }}
+          ></div>
           <div class="mt-10 grid grid-cols-4 col-span-10 col-start-2 row-start-7 gap-5">
-            {userTilesets.length !== 0 ?
+            {userTilesets.length !== 0 ? (
               userTilesets.map((obj, index) => (
                 <TilesetCard
                   key={obj}
@@ -110,8 +111,10 @@ const ProfileScreen = (props) => {
                   owner={obj.owner}
                   _id={obj._id}
                 />
-              )) : <div> No tilesets</div>
-            }
+              ))
+            ) : (
+              <div> No tilesets</div>
+            )}
           </div>
 
           <ProfileEditModal

@@ -1,117 +1,142 @@
-import { useNavigate } from "react-router-dom";
 import Sidebar from "../sidebar/Sidebar";
+import {FaHeart, FaClock, FaChartLine} from "react-icons/fa";
+import {React, useState, useEffect, useRef} from "react";
+import TopPostCard from "../card/TopPostCard";
 
 const Home = (props) => {
-  const nav = useNavigate()
+    //const nav = useNavigate();
+    const [topSlides, setTopSlides] = useState([
+        {name: "slide1", color: "maptile-green"},
+        {name: "slide2", color: "orange"},
+        {name: "slide3", color: "yellow"},
+        {name: "slide4", color: "green"},
+        {name: "slide5", color: "blue"},
+        {name: "slide6", color: "purple"},
+        {name: "slide7", color: "purple"},
+        {name: "slide8", color: "purple"},
+        {name: "slide9", color: "purple"},
+        {name: "slide10", color: "purple"}
+    ]);
+    const [topSlideIndex, setTopSlideIndex] = useState(0);
+    const timeoutRef = useRef(null)
 
-  const handleClick = (e) => {
-    const { id } = e.currentTarget
-    if (id === "home-Tileset") {
-      nav("/user_tilesets")
+    const resetTimeout = () => {
+        if(timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
     }
-    if (id === "home-Map") {
-      nav("/user_maps")
-    }
-    if (id === "home-Search") {
-      nav("/search")
-    }
-    if (id === "home-Profile") {
-      nav("/user_profile")
-    }
-    if (id === "toptileset") {
-      nav("/tilesetdisplay")
-    }
-    if (id === "topmap") {
-      nav("/mapdisplay")
-    }
-  }
 
-  return <div>
-    <div className="circles">
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <Sidebar setTheUser={props.setTheUser} />
-      <div class="container px-6 py-10 mx-auto z-10">
-      
-        <h1 class="text-3xl font-semibold text-white capitalize lg:text-4xl dark:text-white">On Maptile</h1>
+    useEffect(()=>{
+        resetTimeout();
+        timeoutRef.current = setTimeout(
+            () => 
+                setTopSlideIndex((prevIndex) =>
+                    prevIndex === 4 ? 0 : prevIndex + 1
+                ),
+            5000
+        );
+        return()=> {
+            resetTimeout();
+        };
+    }, [topSlideIndex, topSlides.length])
 
-        <div class="grid grid-cols-1 gap-8 mt-8 md:mt-16 md:grid-cols-2 z-20">
-          <div class="lg:flex z-30">
-            <img class="object-cover w-full h-56 rounded-lg lg:w-64 z-40" src="https://cdn.dribbble.com/users/1514670/screenshots/17817496/media/260fa9c895a14133f8821e173b130c14.jpg?compress=1&resize=400x300" alt="" />
+    // ! Probably gonna delete this, keeping just in case
+    // const handleClick = (e) => {
+    //     const {id} = e.currentTarget;
+    //     if (id === "home-Tileset") {
+    //         nav("/user_tilesets");
+    //     }
+    //     if (id === "home-Map") {
+    //         nav("/user_maps");
+    //     }
+    //     if (id === "home-Search") {
+    //         nav("/search");
+    //     }
+    //     if (id === "home-Profile") {
+    //         nav("/user_profile");
+    //     }
+    //     if (id === "toptileset") {
+    //         nav("/tilesetdisplay");
+    //     }
+    //     if (id === "topmap") {
+    //         nav("/mapdisplay");
+    //     }
+    // };
 
-            <div class="flex flex-col justify-between py-6 lg:mx-6">
-              <button id="home-Tileset" class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={handleClick}>
-                Create your Tilesets
-              </button>
+    return (
+        <div>
+            <div className="circles">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <Sidebar setTheUser={props.setTheUser} />
+                <div className="container px-6 py-10 mx-auto w-screen h-screen space-y-5">
+                    {/* <h1 class="text-3xl font-semibold text-white capitalize lg:text-4xl dark:text-white">On Maptile</h1> */}
+                    <div className="bg-maptile-background-mid w-full h-1/3 rounded-3xl z-30 overflow-hidden relative space-y-2">
+                        <div className="bg-gradient-to-br from-maptile-green to-maptile-green-alt w-full h-[64px] drop-shadow-lg">
+                            <div className="text-white text-4xl shadow-2xl pt-2.5 pl-4 text-shadow-lg h-full w-full flex flex-row">
+                                Top Posts
+                                <FaChartLine className="ml-3 mt-1" />
+                            </div>
+                        </div>
+                        <div className="relative flex flex-row w-full">
+                            <div className="w-[100px] h-[300px] bottom-2 relative z-40 bg-gradient-to-r from-maptile-background-mid"></div>
+                            <div className="w-[100px] h-[300px] left-[1288px] bottom-2 relative z-40 float-right bg-gradient-to-l from-maptile-background-mid"></div>
+                        </div>
+                        
+                        <div className="flex flex-row relative bottom-[300px] w-full h-2/3 justify-start transition-transform ease-in-out duration-1000" style={{transform: `translate3d(${-topSlideIndex * 100}%,0,0)`}}>
+                            {topSlides.map((slide, i) => {
+                                if (i % 2 === 0) {
+                                    return (
+                                        <div className="flex flex-row w-full h-full space-x-5 justify-center flex-shrink-0">
+                                            <TopPostCard name={slide.name} color={slide.color} />
+                                            <TopPostCard name={topSlides[i + 1].name} color={topSlides[i + 1].color} />
+                                        </div>
+                                    );
+                                } else {
+                                    return "";
+                                }
+                            })}
+                        </div>
+                        <div className="w-full h-[10px] flex flex-row relative justify-center space-x-1 bottom-[300px]">
+                            {topSlides.map((_, i) => {
+                                if (i % 2 === 0) {
+                                    return <div className={`w-[10px] h-[10px] inline-block rounded-full cursor-pointer ${topSlideIndex === i / 2 ? "bg-maptile-green" : "bg-[#c4c4c4]"}`} onClick={() => setTopSlideIndex(i / 2)}></div>;
+                                } else {
+                                    return "";
+                                }
+                            })}
+                        </div>
+                    </div>
+                    <div className="flex flex-row z-30 w-full h-2/3 space-x-[50px]">
+                        <div className="bg-maptile-background-mid w-1/2 rounded-3xl z-30 overflow-hidden">
+                            <div className="bg-gradient-to-br from-maptile-green to-maptile-green-alt w-full h-[64px] drop-shadow-lg">
+                                <div className="text-white text-4xl shadow-2xl pt-2.5 pl-4 text-shadow-lg h-full w-full flex flex-row">
+                                    Recent
+                                    <FaClock className="ml-3 mt-1" />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="bg-maptile-background-mid w-[50%] rounded-3xl z-30 overflow-hidden">
+                            <div className="bg-gradient-to-tr from-maptile-green-alt to-maptile-green w-full h-[64px] drop-shadow-lg">
+                                <div className="text-white text-4xl shadow-2xl pt-2.5 pl-4 text-shadow-lg h-full w-full flex flex-row">
+                                    Liked
+                                    <FaHeart className="ml-3 mt-1" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <div class="lg:flex z-30">
-            <img class="object-cover w-full h-56 rounded-lg lg:w-64" src="https://cdn.dribbble.com/users/1068771/screenshots/6339347/map4_4x.jpg?compress=1&resize=400x300" alt="" />
-
-            <div class="flex flex-col justify-between py-6 lg:mx-6">
-              <button id="home-Map" class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={handleClick}>
-                Create your Maps
-              </button>
-            </div>
-          </div>
-
-          <div class="lg:flex z-30">
-            <img class="object-cover w-full h-56 rounded-lg lg:w-64" src="https://content.presentermedia.com/files/clipart/00001000/1813/searching_stick_figure_800_wht.jpg" alt="" />
-
-            <div class="flex flex-col justify-between py-6 lg:mx-6">
-              <button id="home-Search" class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={handleClick}>
-                Search Tilesets/Maps
-              </button>
-
-            </div>
-          </div>
-
-          <div class="lg:flex z-30">
-            <img class="object-cover w-full h-56 rounded-lg lg:w-64" src="https://cdn3.iconfinder.com/data/icons/my-business-icons/200/BusinessIcon-03-512.png" alt="" />
-
-            <div class="flex flex-col justify-between py-6 lg:mx-6">
-              <button id="home-Profile" class="text-xl font-semibold text-white hover:underline dark:text-white " onClick={handleClick}>
-                Profile Page
-              </button>
-            </div>
-          </div>
-
-          <div class="lg:flex z-30">
-            <img class="object-cover w-full h-56 rounded-lg lg:w-64" id="toptileset" src="https://dicegrimorium.com/wp-content/uploads/2019/09/LavaPoolsPublic1JPG-1024x683.jpg" alt="" onClick={handleClick} />
-
-            <div class="flex flex-col justify-between py-6 lg:mx-6">
-              <div class="text-xl font-semibold text-white hover:underline dark:text-white ">
-                Today's Top Tileset
-              </div>
-              <span class="text-lg text-white">The Lava Tileset</span>
-              <span class="text-sm text-white">Looking to make your next Lava Map?</span>
-            </div>
-          </div>
-
-          <div class="lg:flex z-30">
-            <img class="object-cover w-full h-56 rounded-lg lg:w-64" id="topmap" src="https://images.gnwcdn.com/2020/usgamer/A-Link-to-the-Past-Map-Header1-05292020.jpg/EG11/thumbnail/1920x1080/format/jpg/quality/65/the-20-best-in-game-maps.jpg" onClick={handleClick} alt="" />
-
-            <div class="flex flex-col justify-between py-6 lg:mx-6">
-              <div class="text-xl font-semibold text-white hover:underline dark:text-white ">
-                Today's Top Map
-              </div>
-              <span class="text-lg text-white">The GREATEST MAP</span>
-              <span class="text-sm text-white">This map is perfect for large and pocket games</span>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </div>
+    );
 };
 
 export default Home;
