@@ -43,6 +43,20 @@ router.post("/comment/update/:id", async (req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
+// Get all comments from Tileset
+router.get("/comment/tileset/:id", async (req, res) => {
+    let comments = [];
+    var tileset = await Tileset.findById(req.params.id);
+    for(let comment_id in tileset.comments){
+        Comment.findById(comment_id)
+        .then((comment) => {
+            comments.add(comment);
+        })
+        .catch((err) => res.status(400).json("Error: " + err));
+    }
+    res.json({comments: comments, tileset: tileset })
+});
+
 // Get Comment
 router.get("/comment/:id", async (req, res) => {
   Comment.findById(req.params.id)
