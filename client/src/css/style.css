@@ -184,3 +184,29 @@
     transition: ease-in-out 1000ms;
   }
   
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; 
+    scrollbar-width: none;
+  }
+
+
+  .top-card{
+    height: 95%;
+  }
+
+  .top-image-card {
+    height: 90%;
+    width: 90%
+  }
+
+  .header-card {
+    height: 10.75%;
+  }
+
+  .rl-scroll-card {
+    height: 89.25%;
+  }
