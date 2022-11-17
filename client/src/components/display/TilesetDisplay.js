@@ -69,30 +69,16 @@ const TilesetDisplay = (props) => {
           setTileset(response.data.tileset);
         }
       ); 
-      await Axios.get("https://maptile1.herokuapp.com/" + id).then(
+      await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
         (response) => {
-          console.log("COMMENT:", response.data);
+            console.log("COMMENTS:", response.data.comments)
+            setComments(response.data.comments)
         }
       ); 
       setLoading(false);
     };
     getOwner();
-    // const getComments = async () => {
-    //     setLoading(true);
-    //     await Axios.get("http://localhost:8080/comment/" + id)
-    //     .then((response) => {
-    //         console.log(response)
-    //         if(response.data.comments != null){
-    //             setComments(response.data.comments)
-    //         }
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     })
-    //     setLoading(false);
-    // }
-    // getComments();
-  }, [location.state._id, location.state.owner, id, comments]);
+  }, [location.state._id, location.state.owner, id]);
 
   return (
     <div>
@@ -257,11 +243,11 @@ const TilesetDisplay = (props) => {
                 {
                   comments.map((obj, index)=>
                     <Comment
-                      owner={obj._id}
-                      date={obj}
+                      owner={obj.owner}
+                      date={obj.date}
                       comment_text={obj.comment_text}
-                    />
-                    )
+                    /> 
+                    ) 
                 }
               </div>
 
