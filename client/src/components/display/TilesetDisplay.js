@@ -4,7 +4,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { BsSave } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 import { MdOutlineContentCopy } from "react-icons/md";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useRef } from "react";
 import Comment from "../comment/Comment";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Axios from "axios";
@@ -20,6 +20,7 @@ const TilesetDisplay = (props) => {
   const [userPfp, setPfp] = useState("");
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
+  const commentRef = useRef(null);
 
   const handleOtherUserProfile = () => {
     nav("/user/" + location.state.owner, {
@@ -46,7 +47,19 @@ const TilesetDisplay = (props) => {
       .catch((err) => {
         console.log(err);
       })
+      // REFETCH
+      commentRef.current.value = ""
+      getComments();
   };
+
+  const getComments = async () => {
+    await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
+        (response) => {
+            console.log("COMMENTS:", response.data.comments)
+            setComments(response.data.comments)
+        }
+      ); 
+  }
 
   useEffect(() => {
     console.log("TILESET ID: ", id);
@@ -257,6 +270,7 @@ const TilesetDisplay = (props) => {
                     <h2 class="px-4 pt-3 pb-2  text-lg">Add A Comment</h2>
                     <div class="w-full  px-3 mb-2 mt-2">
                       <textarea
+                        ref={commentRef}
                         onChange={handleCommentChange}
                         class="bg-gray-700 rounded border border-white leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-white focus:outline-none focus:bg-gray-600"
                         name="body"
