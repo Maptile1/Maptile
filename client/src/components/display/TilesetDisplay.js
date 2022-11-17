@@ -75,7 +75,7 @@ const TilesetDisplay = (props) => {
 
     const getComments = async () => {
         setLoading(true);
-        await Axios.get("https://maptile1.herokuapp.com/comment/:id")
+        await Axios.get("https://maptile1.herokuapp.com/comment/" + id)
         .then((response) => {
             setComments(response.data.comments);
         })
@@ -85,7 +85,7 @@ const TilesetDisplay = (props) => {
         setLoading(false);
     }
     getComments();
-  }, [location.state._id, location.state.owner, id]);
+  }, [location.state._id, location.state.owner, id, comments]);
 
   return (
     <div>
