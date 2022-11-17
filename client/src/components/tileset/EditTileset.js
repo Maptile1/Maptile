@@ -27,6 +27,7 @@ const EditTileset = (props) => {
     const [redoStack] = useState([]);
     const [download, setDownload] = useState(false);
     const [mouseDown, setMouseDown] = useState(0);
+    const [mousePos, setMousePos] = useState({x: 0, y: 0})
 
     useEffect(() => {
         const getTileset = async () => {
@@ -185,9 +186,9 @@ const EditTileset = (props) => {
         fillUtil(screen, x, y - 1, color);
     };
 
-    const fill = (e) => {
-        let cellid = Number(e.target.name());
-        let color = e.target.fill();
+    const fill = (mPos) => {
+        let cellid = (Math.floor(mPos.y / zoomLevel) * tileset.tileset_width) + Math.floor(mPos.x / zoomLevel)
+        let color = tileset.tileset_data[0].data[Math.floor(mPos.y / zoomLevel)].row_data[Math.floor(mPos.x/zoomLevel)].color
         if (color === fillColor) {
             return;
         }
@@ -240,13 +241,14 @@ const EditTileset = (props) => {
             prevColor: prevColor,
             newColor: newColor,
         });
+        console.log(undoStack)
     };
 
     const undoAction = () => {
         if (undoStack.length !== 0) {
             let action = undoStack.pop();
-            action.target.fill(action.prevColor);
-            updateTilesetData(Number(action.target.name()), action.prevColor);
+            console.log(action.target, action.prevColor)
+            updateTilesetData(action.target, action.prevColor);
             redoStack.push(action);
         }
     };
@@ -254,8 +256,7 @@ const EditTileset = (props) => {
     const redoAction = () => {
         if (redoStack.length !== 0) {
             let action = redoStack.pop();
-            action.target.fill(action.newColor);
-            updateTilesetData(Number(action.target.name()), action.newColor);
+            updateTilesetData(action.target, action.newColor);
             undoStack.push(action);
         }
     };
@@ -311,6 +312,60 @@ const EditTileset = (props) => {
         setShowDividers(false);
         console.log(response);
     };
+
+    const handleMouseMove = (e) => {
+        //console.log(Math.floor(e.target.getStage().getPointerPosition().x / zoomLevel))
+        let mPos = e.target.getStage().getPointerPosition()
+        let tile = tileset.tileset_data[0].data[Math.floor(mPos.y / zoomLevel)].row_data[Math.floor(mPos.x/zoomLevel)]
+        if(mouseDown === 1){
+            if (tool === "brush") {
+                if(tile.color !== fillColor){
+                    addAction((Math.floor(mPos.y / zoomLevel) * tileset.tileset_width) + Math.floor(mPos.x / zoomLevel), tile.color, fillColor);
+                    tile.color = fillColor;
+                }
+            } else if (tool === "eraser") {
+                if(tile.color !== "white"){
+                    addAction((Math.floor(mPos.y / zoomLevel) * tileset.tileset_width) + Math.floor(mPos.x / zoomLevel), tile.color, "white");
+                    tile.color = "white";
+                }
+            } else if (tool === "fill") {
+                if(tile.color !== fillColor){
+                    fill(mPos);
+                }
+            } else if (tool === "eyedropper") {
+                if(tile.color !== fillColor)
+                setFillColor(tile.color);
+            }
+        }
+        setMousePos(e.target.getStage().getPointerPosition())
+    }
+
+    const handleStageClick = (e) => {
+        //console.log(Math.floor(e.target.getStage().getPointerPosition().x / zoomLevel))
+        let mPos = e.target.getStage().getPointerPosition()
+        let tile = tileset.tileset_data[0].data[Math.floor(mPos.y / zoomLevel)].row_data[Math.floor(mPos.x/zoomLevel)]
+        if(mouseDown === 1){
+            if (tool === "brush") {
+                if(tile.color !== fillColor){
+                    addAction((Math.floor(mPos.y / zoomLevel) * tileset.tileset_width) + Math.floor(mPos.x / zoomLevel), tile.color, fillColor);
+                    tile.color = fillColor;
+                }
+            } else if (tool === "eraser") {
+                if(tile.color !== "white"){
+                    addAction((Math.floor(mPos.y / zoomLevel) * tileset.tileset_width) + Math.floor(mPos.x / zoomLevel), tile.color, "white");
+                    tile.color = "white";
+                }
+            } else if (tool === "fill") {
+                if(tile.color !== fillColor){
+                    fill(mPos);
+                }
+            } else if (tool === "eyedropper") {
+                if(tile.color !== fillColor)
+                setFillColor(tile.color);
+            }
+        }
+        setMousePos(e.target.getStage().getPointerPosition())
+    }
 
     return (
         <div>
@@ -387,10 +442,12 @@ const EditTileset = (props) => {
                                         height={tileset.tileset_height * zoomLevel}
                                         scaleX={zoomLevel}
                                         scaleY={zoomLevel}
+                                        onMouseMove={handleMouseMove}
+                                        onClick={handleStageClick}
                                     >
                                         {tileset.tileset_data.map((layer) => {
                                             return (
-                                                <Layer key={layer.layer}>
+                                                <Layer key={layer.layer} listening={false}>
                                                     {layer.data.map((row, i) => {
                                                         return row.row_data.map((cell, j) => {
                                                             return (
@@ -402,9 +459,9 @@ const EditTileset = (props) => {
                                                                     height={1}
                                                                     fill={cell.color}
                                                                     shadowBlur={0.05}
-                                                                    onMouseOver={cellmouseOver}
-                                                                    onMouseDown={cellOnClick}
-                                                                    onClick={cellOnClick}
+                                                                    // onMouseOver={cellmouseOver}
+                                                                    // onMouseDown={cellOnClick}
+                                                                    // onClick={cellOnClick}
                                                                     perfectDrawEnabled={false}
                                                                 />
                                                             );
