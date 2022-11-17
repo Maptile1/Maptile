@@ -5,9 +5,13 @@ const ObjectId = require("mongodb").ObjectId;
 
 // Comment Create
 router.post("/comment/create", async (req, res) => {
+  if (req.session._id == undefined){
+    res.status(400).json({errorMessage: 'Not logged in'})
+    return;
+  }
   var comment = new Comment({
     _id: new ObjectId(),
-    owner: req.session.id, //placeholder for when authentication is done
+    owner: req.session._id, 
     comment_text: req.body.comment_text,
     comment_date: new Date(),
     likes: 0,

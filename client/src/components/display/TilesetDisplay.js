@@ -18,6 +18,8 @@ const TilesetDisplay = (props) => {
   const [loading, setLoading] = useState(true);
   const [tileset, setTileset] = useState(null);
   const [userPfp, setPfp] = useState("");
+  const [comment, setComment] = useState("");
+
   const handleOtherUserProfile = () => {
     nav("/user/" + location.state.owner, {
       state: { owner: location.state.owner },
@@ -26,6 +28,23 @@ const TilesetDisplay = (props) => {
   const location = useLocation();
 
   const addToShared = () => {};
+
+  const handleCommentChange = (event) => {
+      setComment(event.target.value);
+  }
+
+  const handleAddComment = async () => {
+      await Axios.post("https://maptile1.herokuapp.com/comment/create", 
+      {
+        comment_text: comment
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  };
 
   useEffect(() => {
     console.log("TILESET ID: ", id);
@@ -52,12 +71,6 @@ const TilesetDisplay = (props) => {
     };
     getOwner();
   }, [location.state._id, location.state.owner, id]);
-
-  const handleAddComment = async () => {
-    var comment = document.getElementById("commenttext");
-    console.log(comment.value); // add the comment api call
-    comment.value = "";
-  };
 
   return (
     <div>
@@ -219,16 +232,15 @@ const TilesetDisplay = (props) => {
 
               <div class="row-start-4 mt-5 col-span-5 ">
                 Comments
-                <Comment
-                  owner={"Joe Schmo"}
-                  date={"October 30 2021 at 8:00pm"}
-                  comment_text={"I love the red volcanos"}
-                />
-                <Comment
-                  owner={"Joe Schmo"}
-                  date={"October 30 2021 at 8:00pm"}
-                  comment_text={"This tileset is great for my map"}
-                />
+                {
+                  tileset.comments.map((obj, index)=>
+                    <Comment
+                      owner={"JOE"}
+                      date={"October 30 2021 at 8:00pm"}
+                      comment_text={"I love the red volcanos"}
+                    />
+                    )
+                }
               </div>
 
               <div class="row-start-5 col-start-1 col-span-5 shadow-lg mt-2 w-full">
@@ -237,6 +249,7 @@ const TilesetDisplay = (props) => {
                     <h2 class="px-4 pt-3 pb-2  text-lg">Add A Comment</h2>
                     <div class="w-full  px-3 mb-2 mt-2">
                       <textarea
+                        onChange={handleCommentChange}
                         class="bg-gray-700 rounded border border-white leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-white focus:outline-none focus:bg-gray-600"
                         name="body"
                         placeholder="Type Your Comment"
