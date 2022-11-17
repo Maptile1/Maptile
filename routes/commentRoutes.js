@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Comment = require("../schema/comment-schema.js");
 const ObjectId = require("mongodb").ObjectId;
+const Tileset = require("../schema/tileset-schema");
 
 // Comment Create
 router.post("/comment/create", async (req, res) => {
@@ -19,12 +20,12 @@ router.post("/comment/create", async (req, res) => {
     post: req.body.post
   });
   await comment.save();
-  // var user = await User.findOneAndUpdate(
-  //   { _id: req.session._id },
-  //   { $addToSet: { tilesets: tileset._id } },
-  //   { new: true }
-  // );
-  res.json({ payload: { comment: comment } });
+  var tileset = await Tileset.findOneAndUpdate(
+    { _id: comment.post },
+    { $addToSet: { comments: comment._id } },
+    { new: true }
+  );
+  res.json({ payload: { comment: comment, tileset: tileset } });
 });
 
 // Comment update

@@ -36,7 +36,8 @@ const TilesetDisplay = (props) => {
   const handleAddComment = async () => {
       await Axios.post("https://maptile1.herokuapp.com/comment/create", 
       {
-        comment_text: comment
+        comment_text: comment,
+        post: id
       })
       .then((response) => {
         console.log(response);
