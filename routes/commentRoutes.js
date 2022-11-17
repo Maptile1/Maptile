@@ -45,16 +45,20 @@ router.post("/comment/update/:id", async (req, res) => {
 
 // Get all comments from Tileset
 router.get("/comment/:id", async (req, res) => {
-    let comments = [];
-    var tileset = await Tileset.findById(req.params.id);
-    for(let comment_id in tileset.comments){
-        Comment.findById(comment_id)
-        .then((comment) => {
-            comments.add(comment);
-        })
-        .catch((err) => res.status(400).json("Error: " + err));
-    }
-    res.json({comments: comments, tileset: tileset })
+  if (req.session._id == undefined){
+    res.status(400).json({errorMessage: 'Not logged in'})
+    return;
+  }
+  let tileset = await Tileset.findById(req.params.id);
+  let comments = []  
+  var comment;
+  await Promise.all(
+    tileset.comments.map(async (obj, index) => {
+      comment = await Comment.findById(obj);
+      comments.push(comment);
+    })
+  );
+  res.json({comments: comments})
 });
 
 // Get Comment
@@ -65,11 +69,11 @@ router.get("/comment/:id", async (req, res) => {
 // });
 
 // Get all comments
-router.get("/comment", async (req, res) => {
-  Comment.find()
-    .then((comments) => res.json(comments))
-    .catch((err) => res.status(400).json("Error: " + err));
-});
+// router.get("/comment", async (req, res) => {
+//   Comment.find()
+//     .then((comments) => res.json(comments))
+//     .catch((err) => res.status(400).json("Error: " + err));
+// });
 
 // Delete comment
 router.post("/comment/delete/:id", async (req, res) => {

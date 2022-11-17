@@ -65,26 +65,33 @@ const TilesetDisplay = (props) => {
       });
       await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + id).then(
         (response) => {
-          console.log(response.data.tileset);
+          console.log("TILESET:", response.data.tileset);
           setTileset(response.data.tileset);
         }
-      );
+      ); 
+      await Axios.get("https://maptile1.herokuapp.com/" + id).then(
+        (response) => {
+          console.log("COMMENT:", response.data);
+        }
+      ); 
       setLoading(false);
     };
     getOwner();
-
-    const getComments = async () => {
-        setLoading(true);
-        await Axios.get("https://maptile1.herokuapp.com/comment/" + id)
-        .then((response) => {
-            setComments(response.data.comments);
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-        setLoading(false);
-    }
-    getComments();
+    // const getComments = async () => {
+    //     setLoading(true);
+    //     await Axios.get("http://localhost:8080/comment/" + id)
+    //     .then((response) => {
+    //         console.log(response)
+    //         if(response.data.comments != null){
+    //             setComments(response.data.comments)
+    //         }
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     })
+    //     setLoading(false);
+    // }
+    // getComments();
   }, [location.state._id, location.state.owner, id, comments]);
 
   return (
