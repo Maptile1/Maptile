@@ -13,11 +13,17 @@ router.post("/comment/create", async (req, res) => {
     _id: new ObjectId(),
     owner: req.session._id, 
     comment_text: req.body.comment_text,
-    comment_date: new Date(),
+    comment_date: Date.now(),
     likes: 0,
     dislikes: 0,
+    post: req.body.post
   });
   await comment.save();
+  // var user = await User.findOneAndUpdate(
+  //   { _id: req.session._id },
+  //   { $addToSet: { tilesets: tileset._id } },
+  //   { new: true }
+  // );
   res.json({ payload: { comment: comment } });
 });
 

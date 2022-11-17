@@ -25,7 +25,11 @@ const commentSchema = new Schema(
         dislikes: {
             type: Number,
             required: true
-        }
+        },
+		post: {
+			type: ObjectId,
+			required: true
+		}
 	}
 );
 
