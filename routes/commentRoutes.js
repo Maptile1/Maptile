@@ -14,7 +14,7 @@ router.post("/comment/create", async (req, res) => {
     _id: new ObjectId(),
     owner: req.session._id, 
     comment_text: req.body.comment_text,
-    comment_date: Date.now(),
+    comment_date: new Date().toString(),
     likes: 0,
     dislikes: 0,
     post: req.body.post

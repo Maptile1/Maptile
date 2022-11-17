@@ -244,7 +244,7 @@ const TilesetDisplay = (props) => {
                   comments.map((obj, index)=>
                     <Comment
                       owner={obj.owner}
-                      date={obj.date}
+                      date={obj.comment_date}
                       comment_text={obj.comment_text}
                     /> 
                     ) 
