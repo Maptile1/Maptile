@@ -152,7 +152,7 @@ router.post('/tileset/image/:id', uploadStrategy, async (req, res) => {
 ///add to shared
 router.get("/tileset/addshared/:id", async (req, res) => {
   var user = await User.findOneAndUpdate(
-    { _id: req.session._id },
+    { _id: req.params._id },
     { $addToSet: { shared_tilesets: req.body.tilesetid } },
     { new: true }
   );
