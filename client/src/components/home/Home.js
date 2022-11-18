@@ -82,7 +82,7 @@ const Home = (props) => {
                     <Sidebar setTheUser={props.setTheUser} />
                     <div className="container px-6 py-10 mx-auto w-screen h-screen space-y-5 select-none">
                         {/* <h1 class="text-3xl font-semibold text-white capitalize lg:text-4xl dark:text-white">On Maptile</h1> */}
-                        <div className="bg-maptile-background-mid w-full h-1/3 rounded-3xl z-30 overflow-hidden relative space-y-2">
+                        <div className="bg-maptile-background-mid w-full h-2/5 rounded-3xl z-30 overflow-hidden relative space-y-2">
                             <div className="bg-gradient-to-br from-maptile-green to-maptile-green-alt w-full h-[64px] drop-shadow-lg">
                                 <div className="text-white text-4xl shadow-2xl pt-2.5 pl-4 text-shadow-lg h-full w-full flex flex-row">
                                     Top Posts
@@ -94,7 +94,7 @@ const Home = (props) => {
                                 <div className="w-[100px] h-[300px] left-[1288px] bottom-2 relative z-40 float-right bg-gradient-to-l from-maptile-background-mid"></div>
                             </div>
 
-                            <div className="flex flex-row relative bottom-[300px] w-full h-2/3 justify-start transition-transform ease-in-out duration-1000" style={{ transform: `translate3d(${-topSlideIndex * 100}%,0,0)` }}>
+                            <div className="flex flex-row relative bottom-[290px] w-full h-2/3 justify-start transition-transform ease-in-out duration-1000" style={{ transform: `translate3d(${-topSlideIndex * 100}%,0,0)` }}>
                                 {topTilesets.map((slide, i) => {
                                     if (i % 2 === 0) {
                                         return (
@@ -108,8 +108,8 @@ const Home = (props) => {
                                     }
                                 })}
                             </div>
-                            <div className="w-full h-[10px] flex flex-row relative justify-center space-x-1 bottom-[300px]">
-                                {topSlides.map((_, i) => {
+                            <div className="w-full h-[10px] flex flex-row relative justify-center space-x-1 bottom-[290px]">
+                                {topTilesets.map((_, i) => {
                                     if (i % 2 === 0) {
                                         return <div className={`w-[10px] h-[10px] inline-block rounded-full cursor-pointer ${topSlideIndex === i / 2 ? "bg-gradient-to-br from-maptile-green to-maptile-green-alt" : "bg-[#9a9a9a]"}`} onClick={() => setTopSlideIndex(i / 2)}></div>;
                                     } else {
@@ -126,7 +126,7 @@ const Home = (props) => {
                                         <FaClock className="ml-3 mt-1" />
                                     </div>
                                 </div>
-                                <div className="flex flex-col flex-shrink-0 w-full rl-scroll-card space-y-3 overflow-y-scroll no-scrollbar">
+                                <div className="flex flex-col mt-5 flex-shrink-0 ml-12 w-5/6 rl-scroll-card space-y-3 overflow-y-scroll no-scrollbar">
                                     {recent.map((item) => {
                                         return (
                                             <RecentCard description={item.description} name={item.name} />

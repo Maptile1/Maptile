@@ -36,7 +36,7 @@ const TopPostCard = (props) => {
             <div className="flex flex-row w-full h-full overflow-hidden relative left-20">
                 <div className="grid w-1/3 h-full place-items-center justify-center">
                     <img
-                        class="w-[192px] h-[192px] border border-white cursor-pointer object-cover object-center rounded-[50px] left-[50px]"
+                        class="w-[192px] h-[180px] border border-white cursor-pointer object-cover object-center rounded-[50px] left-[50px]"
                         style={{ "image-rendering": "pixelated" }}
                         src={image}
                         alt=""
@@ -51,7 +51,7 @@ const TopPostCard = (props) => {
                 </div>
                 <div className="flex flex-col w-2/3 text-white font-bold underline mt-5 left-10 relative">
                     <div className="flex flex-row ">
-                        <div className="text-2xl p-2">{props.name}</div>
+                        <div onClick={() => handleTilesetDisplay()} className="text-2xl p-2">{props.name}</div>
                     </div>
                     <div className="flex flex-row ">
                         {!loading &&
