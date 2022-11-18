@@ -122,7 +122,8 @@ const TSSCard = (props) => {
                               aria-hidden="true"
                             />
                           )}
-                          Delete
+                          {props.shared ? <div>Remove</div> : <div > Delete</div>}
+
                         </button>
                       )}
                     </Menu.Item>
