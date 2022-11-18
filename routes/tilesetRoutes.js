@@ -12,9 +12,9 @@ require('dotenv').config();
 
 // Create Tileset
 router.post("/tileset/create", async (req, res) => {
-  if (req.session._id == undefined){
-      res.status(400).json({errorMessage: 'Not logged in'})
-      return;
+  if (req.session._id == undefined) {
+    res.status(400).json({ errorMessage: 'Not logged in' })
+    return;
   }
   var tilesetId = new ObjectId();
   var tileset = new Tileset({
@@ -43,6 +43,7 @@ router.post("/tileset/create", async (req, res) => {
   res.json({ tileset: tileset, user: user });
 });
 
+
 // Delete Tileset
 router.post("/tileset/delete/:id", async (req, res) => {
   if (req.session._id == undefined) {
@@ -50,20 +51,20 @@ router.post("/tileset/delete/:id", async (req, res) => {
     return;
   }
   var tileset = await Tileset.findById(req.params.id);
-  if (tileset == null){
-    res.status(400).json({errorMessage: 'Tileset not found'});
+  if (tileset == null) {
+    res.status(400).json({ errorMessage: 'Tileset not found' });
     return;
   }
   var user_id = tileset.owner;
-  if (user_id != req.session._id){
-    res.status(400).json({errorMessage: 'Not owner of tileset'});
+  if (user_id != req.session._id) {
+    res.status(400).json({ errorMessage: 'Not owner of tileset' });
     return;
   }
   var user = await User.findById(user_id);
   await User.updateOne({ _id: user_id }, { $pullAll: { tilesets: [req.params.id] } });
   await Tileset.findOneAndRemove({ _id: req.params.id })
     .then((tileset) => res.json({ message: 'Tileset deleted' }))
-    .catch((err) => { res.status(400).json({ errorMessage: err })});
+    .catch((err) => { res.status(400).json({ errorMessage: err }) });
 });
 
 // Update tileset
@@ -79,18 +80,20 @@ router.post("/tileset/update/:id", async (req, res) => {
   updates.public = req.body.public;
   updates.tags = req.body.tags;
   var tileset = await Tileset.findOneAndUpdate(
-    {$or:[{_id: req.params.id, shared_users: {$in: [req.session._id]}}, 
-    {_id: req.params.id, owner: req.session._id}] },
+    {
+      $or: [{ _id: req.params.id, shared_users: { $in: [req.session._id] } },
+      { _id: req.params.id, owner: req.session._id }]
+    },
     { $set: updates },
     { new: true }
   );
   if (tileset != null) {
     res.json({ tileset: tileset });
-  } 
+  }
   else {
     if ((await Tileset.findById(req.params.id)) != null) {
       res.status(400).json({ errorMessage: "Not permitted to edit" });
-    } 
+    }
     else {
       res.status(400).json({ errorMessage: "Tileset does not exist" });
     }
@@ -142,9 +145,18 @@ router.post('/tileset/image/:id', uploadStrategy, async (req, res) => {
   streamLength = req.file.buffer.length
   const options = { blobHTTPHeaders: { blobContentType: req.file.mimetype } };
   blobService.uploadStream(stream, streamLength, undefined, options)
-      .then(() => { res.json({ message: 'successful upload' }) })
-      .catch((err) => { res.status(400).json({ errorMessage: err }) })
+    .then(() => { res.json({ message: 'successful upload' }) })
+    .catch((err) => { res.status(400).json({ errorMessage: err }) })
+})
+
+///add to shared
+router.get("/tileset/addshared/:id", async (req, res) => {
+  var user = await User.findOneAndUpdate(
+    { _id: req.session._id },
+    { $addToSet: { shared_tilesets: req.body.tilesetid } },
+    { new: true }
+  );
+  res.json({ sharedtilesets: user.shared_tilesets });
 })
 
 module.exports = router;
-

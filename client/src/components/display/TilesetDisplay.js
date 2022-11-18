@@ -29,14 +29,25 @@ const TilesetDisplay = (props) => {
   };
   const location = useLocation();
 
-  const addToShared = () => {};
+  const addToShared = async () => {
+    await Axios.post("https://maptile1.herokuapp.com/tileset/addshared/" + props.user._id,
+      {
+        tilesetid: id
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  };
 
   const handleCommentChange = (event) => {
-      setComment(event.target.value);
+    setComment(event.target.value);
   }
 
   const handleAddComment = async () => {
-      await Axios.post("https://maptile1.herokuapp.com/comment/create", 
+    await Axios.post("https://maptile1.herokuapp.com/comment/create",
       {
         comment_text: comment,
         post: id
@@ -47,18 +58,18 @@ const TilesetDisplay = (props) => {
       .catch((err) => {
         console.log(err);
       })
-      // REFETCH
-      commentRef.current.value = ""
-      getComments();
+    // REFETCH
+    commentRef.current.value = ""
+    getComments();
   };
 
   const getComments = async () => {
     await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
-        (response) => {
-            console.log("COMMENTS:", response.data.comments)
-            setComments(response.data.comments)
-        }
-      ); 
+      (response) => {
+        console.log("COMMENTS:", response.data.comments)
+        setComments(response.data.comments)
+      }
+    );
   }
 
   useEffect(() => {
@@ -73,7 +84,7 @@ const TilesetDisplay = (props) => {
         setOwner(response.data.user);
         setPfp(
           "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
-            response.data.user._id
+          response.data.user._id
         );
       });
       await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + id).then(
@@ -81,13 +92,13 @@ const TilesetDisplay = (props) => {
           console.log("TILESET:", response.data.tileset);
           setTileset(response.data.tileset);
         }
-      ); 
+      );
       await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
         (response) => {
-            console.log("COMMENTS:", response.data.comments)
-            setComments(response.data.comments)
+          console.log("COMMENTS:", response.data.comments)
+          setComments(response.data.comments)
         }
-      ); 
+      );
       setLoading(false);
     };
     getOwner();
@@ -143,11 +154,10 @@ const TilesetDisplay = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              className={`${
-                                active
-                                  ? "bg-violet-500 text-white"
-                                  : "text-gray-900"
-                              } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                              className={`${active
+                                ? "bg-violet-500 text-white"
+                                : "text-gray-900"
+                                } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                             >
                               {active ? (
                                 <BiEdit
@@ -168,11 +178,10 @@ const TilesetDisplay = (props) => {
                           {({ active }) => (
                             <button
                               onClick={() => addToShared()}
-                              className={`${
-                                active
-                                  ? "bg-violet-500 text-white"
-                                  : "text-gray-900"
-                              } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                              className={`${active
+                                ? "bg-violet-500 text-white"
+                                : "text-gray-900"
+                                } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                             >
                               {active ? (
                                 <MdOutlineContentCopy
@@ -193,11 +202,10 @@ const TilesetDisplay = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              className={`${
-                                active
-                                  ? "bg-violet-500 text-white"
-                                  : "text-gray-900"
-                              } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                              className={`${active
+                                ? "bg-violet-500 text-white"
+                                : "text-gray-900"
+                                } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                             >
                               {active ? (
                                 <BsSave
@@ -254,13 +262,13 @@ const TilesetDisplay = (props) => {
               <div class="row-start-4 mt-5 col-span-5 ">
                 Comments
                 {
-                  comments.map((obj, index)=>
+                  comments.map((obj, index) =>
                     <Comment
                       owner={obj.owner}
                       date={obj.comment_date}
                       comment_text={obj.comment_text}
-                    /> 
-                    ) 
+                    />
+                  )
                 }
               </div>
 
