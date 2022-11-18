@@ -50,10 +50,10 @@ const TilesetDisplay = (props) => {
         tilesetid: id
       })
       .then((response) => {
-        console.log(response.data.sharedtilesets);
+        console.log(response.data);
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response.data);
       })
   };
 
@@ -81,17 +81,17 @@ const TilesetDisplay = (props) => {
   const getComments = async () => {
     await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
       (response) => {
-        console.log("COMMENTS:", response.data.comments)
+        // console.log("COMMENTS:", response.data.comments)
         setComments(response.data.comments)
       }
     );
   }
 
   useEffect(() => {
-    console.log("TILESET ID: ", id);
+    // console.log("TILESET ID: ", id);
     const getOwner = async () => {
       setLoading(true);
-      console.log("USER ID: ", location.state.owner);
+      // console.log("USER ID: ", location.state.owner);
       await Axios.get(
         "https://maptile1.herokuapp.com/user/get/" + location.state.owner
       ).then((response) => {
@@ -104,13 +104,13 @@ const TilesetDisplay = (props) => {
       });
       await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + id).then(
         (response) => {
-          console.log("TILESET:", response.data.tileset);
+          // console.log("TILESET:", response.data.tileset);
           setTileset(response.data.tileset);
         }
       );
       await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
         (response) => {
-          console.log("COMMENTS:", response.data.comments)
+          // console.log("COMMENTS:", response.data.comments)
           setComments(response.data.comments)
         }
       );
