@@ -108,7 +108,7 @@ const TilesetDisplay = (props) => {
     <div>
       {!loading && (
         <div>
-          <Sidebar />
+          <Sidebar setTheUser={props.setTheUser} />
           <div class="container px-6 text-xl py-10 mx-auto text-white">
             <div class="text-center text-4xl font-bold">{tileset.name}</div>
             <div class="grid grid-cols-5 grid-rows-2">
