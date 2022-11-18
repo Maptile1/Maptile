@@ -152,7 +152,7 @@ router.post('/tileset/image/:id', uploadStrategy, async (req, res) => {
 ///add to shared
 router.post("/tileset/addshared/:id", async (req, res) => {
   var user = await User.findById(req.session._id);
-  if (user.tilesets.includes(red.body.tilesetid)) {
+  if (user.tilesets.includes(req.body.tilesetid)) {
     res.status(400).json({ errorMessage: "Tileset already shared" });
   }
   else if (user == req.session._id) {
