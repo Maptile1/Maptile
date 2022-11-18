@@ -8,6 +8,7 @@ import { Fragment, useEffect, useState, useRef } from "react";
 import Comment from "../comment/Comment";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Axios from "axios";
+import { saveAs } from 'file-saver'
 
 Axios.defaults.withCredentials = true;
 
@@ -29,6 +30,10 @@ const TilesetDisplay = (props) => {
   };
   const location = useLocation();
 
+
+  const handleDownload = () => {
+    saveAs("https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" + tileset._id, tileset.name + ".jpg");
+  }
   const addThenEdit = async () => {
     await Axios.post("https://maptile1.herokuapp.com/tileset/addshared/" + props.user._id,
       {
@@ -51,6 +56,7 @@ const TilesetDisplay = (props) => {
       })
       .then((response) => {
         console.log(response.data);
+        alert("Added");
       })
       .catch((err) => {
         if (err.response.data.errorMessage === "Tileset already shared") {
@@ -222,7 +228,7 @@ const TilesetDisplay = (props) => {
 
                         <Menu.Item>
                           {({ active }) => (
-                            <button
+                            <button onClick={() => handleDownload()}
                               className={`${active
                                 ? "bg-violet-500 text-white"
                                 : "text-gray-900"
