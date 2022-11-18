@@ -30,12 +30,13 @@ const TilesetDisplay = (props) => {
   const location = useLocation();
 
   const addToShared = async () => {
+    console.log(props.user_id, id);
     await Axios.post("https://maptile1.herokuapp.com/tileset/addshared/" + props.user._id,
       {
         tilesetid: id
       })
       .then((response) => {
-        console.log(response);
+        console.log(response.sharedtilesets);
       })
       .catch((err) => {
         console.log(err);

@@ -147,16 +147,17 @@ router.post('/tileset/image/:id', uploadStrategy, async (req, res) => {
   blobService.uploadStream(stream, streamLength, undefined, options)
     .then(() => { res.json({ message: 'successful upload' }) })
     .catch((err) => { res.status(400).json({ errorMessage: err }) })
-})
+});
 
 ///add to shared
 router.post("/tileset/addshared/:id", async (req, res) => {
   var user = await User.findOneAndUpdate(
-    { _id: req.params._id },
+    { _id: req.session._id },
     { $addToSet: { shared_tilesets: req.body.tilesetid } },
     { new: true }
   );
   res.json({ sharedtilesets: user.shared_tilesets });
-})
+});
+
 
 module.exports = router;
