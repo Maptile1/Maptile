@@ -17,7 +17,13 @@ const TSSCard = (props) => {
     nav("/tilesets/" + props._id, { state: { owner: props.owner, _id: props._id } });
   };
   const handleDelete = async () => {
-    props.handleDelete(props._id);
+
+    if (props.shared) {
+      props.handleDeleteShare(props._id);
+    }
+    else {
+      props.handleDelete(props._id);
+    }
   };
 
   useEffect(() => {

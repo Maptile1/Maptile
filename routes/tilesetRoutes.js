@@ -172,4 +172,14 @@ router.post("/tileset/addshared/:id", async (req, res) => {
 });
 
 
+router.post("/tileset/deleteshared/:id", async (req, res) => {
+  var user = await User.findOneAndUpdate(
+    { _id: req.params.id },
+    { $pull: { shared_tilesets: req.body.tilesetid } },
+    { new: true }
+  );
+  res.json({ sharedtilesets: user.shared_tilesetss });
+});
+
+
 module.exports = router;

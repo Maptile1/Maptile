@@ -37,7 +37,7 @@ const TilesetScreen = (props) => {
       setSharedTilesets(response.data.sharedtilesets)
     };
     getTilesets();
-    if(localStorage.getItem('imgData') !== null){
+    if (localStorage.getItem('imgData') !== null) {
       localStorage.removeItem('imgData')
     }
   }, [user]);
@@ -67,6 +67,21 @@ const TilesetScreen = (props) => {
     };
     getTilesets();
   };
+
+  const handleDeleteShare = async (id) => {
+    await Axios.post(
+      "https://maptile1.herokuapp.com/tileset/deleteshared/" + user._id
+    ).then((response) => {
+      console.log(response.data.sharedtilesets);
+    })
+    const getTilesets = async () => {
+      var response = await Axios.get(
+        "https://maptile1.herokuapp.com/tileset/getUser/" + user._id
+      );
+      setUserTilesets(response.data.usertilesets);
+    };
+    getTilesets();
+  }
 
   const handleCreate = async (e) => {
     if (inputValid) {
@@ -147,8 +162,10 @@ const TilesetScreen = (props) => {
                   sharedTilesets.map((obj, index) => (
                     <TSSCard
                       handleDelete={handleDelete}
+                      shared={true}
                       name={obj.name}
                       owner={obj.owner}
+                      handleDeleteShare={handleDeleteShare}
                       _id={obj._id}
                     />
                   )) : <div>No Shared Tilesets</div>
