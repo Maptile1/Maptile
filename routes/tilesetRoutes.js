@@ -155,7 +155,7 @@ router.post("/tileset/addshared/:id", async (req, res) => {
   if (user.tilesets.includes(req.body.tilesetid)) {
     res.status(400).json({ errorMessage: "Tileset already shared" });
   }
-  else if (user == req.session._id) {
+  else if (user === req.session._id) {
     res.status(400).json({ errorMessage: "Own Tileset" });
   }
   else {
