@@ -53,6 +53,12 @@ const TilesetDisplay = (props) => {
         console.log(response.data);
       })
       .catch((err) => {
+        if (err.response.data.errorMessage === "Tileset already shared") {
+          alert("You already added this tileset");
+        }
+        if (err.response.data.errorMessage === "Own Tileset") {
+          alert("This is your own tileset");
+        }
         console.log(err.response.data);
       })
   };
