@@ -178,7 +178,7 @@ router.post("/tileset/deleteshared/:id", async (req, res) => {
     { $pull: { shared_tilesets: req.body.tilesetid } },
     { new: true }
   );
-  res.json({ sharedtilesets: user.shared_tilesetss });
+  res.json({ sharedtilesets: user.shared_tilesets });
 });
 
 
