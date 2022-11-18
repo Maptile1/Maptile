@@ -36,7 +36,7 @@ const TilesetDisplay = (props) => {
         tilesetid: id
       })
       .then((response) => {
-        console.log(response.sharedtilesets);
+        console.log(response.data.sharedtilesets);
       })
       .catch((err) => {
         console.log(err);
