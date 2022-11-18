@@ -29,6 +29,20 @@ const TilesetDisplay = (props) => {
   };
   const location = useLocation();
 
+  const addThenEdit = async () => {
+    await Axios.post("https://maptile1.herokuapp.com/tileset/addshared/" + props.user._id,
+      {
+        tilesetid: id
+      })
+      .then((response) => {
+        console.log(response.data.sharedtilesets);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    nav("/tileset_edit", { state: { _id: id } });
+  }
+
   const addToShared = async () => {
     console.log(props.user_id, id);
     await Axios.post("https://maptile1.herokuapp.com/tileset/addshared/" + props.user._id,
@@ -154,7 +168,7 @@ const TilesetDisplay = (props) => {
                       <div className="px-1 py-1 ">
                         <Menu.Item>
                           {({ active }) => (
-                            <button
+                            <button onClick={() => addThenEdit()}
                               className={`${active
                                 ? "bg-violet-500 text-white"
                                 : "text-gray-900"
