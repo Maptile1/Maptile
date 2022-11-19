@@ -15,7 +15,7 @@ const SearchCard = (props) => {
     }, [props._id])
 
     return (
-        <div class="w-1/4 h-1/4 rounded shadow-2xl bg-maptile-background-dark overflow-hidden mx-6">
+        <div class="w-1/4 h-1/4 rounded shadow-2xl bg-maptile-background-dark overflow-hidden">
             <img
                 onClick={() => handleTilesetDisplay()}
                 class="w-3/4 h-3/4 ml-10 mt-10 border shadow-2xl border-white cursor-pointer object-cover object-center"

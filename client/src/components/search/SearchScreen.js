@@ -86,8 +86,8 @@ const SearchScreen = (props) => {
               <AiOutlineDoubleRight onClick={handleNextPageCall} size={40} />
             </div>
           </div>
-          <div className="bg-maptile-background-mid w-10/12 h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
-            <div className="flex flex-row flex-wrap py-10 left-[90px] relative  gap-y-10 ">
+          <div className="bg-maptile-background-mid w-10/12 h-[50rem] rounded-r-xl rounded-b-xl overflow-y-auto overflow-x-hidden">
+            <div className="flex flex-row flex-wrap py-20 left-[130px] relative gap-y-10 gap-x-5 ">
               {userSelected ? searchResults.length !== 0 ? getPaginatedData().map((obj, index) =>
                 <SearchCard search={true} owner={obj.owner} name={obj.name} _id={obj._id} />) : <div>No Search Results</div>
                 :
