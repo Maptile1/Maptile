@@ -14,7 +14,6 @@ const Home = (props) => {
         { name: "Test4", color: "green", "description": "124" },
         { name: "Test6", color: "blue", "description": "125215" }
     ]);
-    const [tilesets, setTilesets] = useState(null);
     const [topTilesets, setTopTilesets] = useState(null); // gonna have to be changed to maps as well in the future
     const [topSlideIndex, setTopSlideIndex] = useState(0);
     const timeoutRef = useRef(null)
@@ -26,20 +25,17 @@ const Home = (props) => {
     }
 
     useEffect(() => {
-        const tilesetRes = async () => {
+        const topRes = async () => {
             await Axios.get(
-                "https://maptile1.herokuapp.com/tileset")
+                "https://maptile1.herokuapp.com/tileset/top")
                 .then((response) => {
                     setloading(true);
-                    setTilesets(response.data)
-                    var topTilesets = response.data.sort((a, b) => (b.likes - b.dislikes) - (a.likes - a.dislikes)).slice(0, 10);
-                    setTopTilesets(topTilesets);
+                    setTopTilesets(response.data);
                     setloading(false);
                 })
 
         }
-        tilesetRes();
-        console.log(topTilesets)
+        topRes();
         resetTimeout();
         timeoutRef.current = setTimeout(
             () =>
