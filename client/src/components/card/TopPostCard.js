@@ -30,7 +30,8 @@ const TopPostCard = (props) => {
     };
 
     const [image, setImage] = useState("https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
-        props._id)
+        props._id + "?=" + Math.random().toString().substring(2));
+
     return (
         <div className={`bg-gradient-to-br from-maptile-green/60 to-maptile-green-alt/60 bg-opacity-10 w-2/5 h-full rounded-full z-30 overflow-hidden relative`}>
             <div className="flex flex-row w-full h-full overflow-hidden relative left-20">
@@ -49,7 +50,7 @@ const TopPostCard = (props) => {
                         }}
                     />
                 </div>
-                <div className="flex flex-col w-2/3 text-white font-bold underline mt-5 left-10 relative">
+                <div className="flex flex-col w-2/3 text-white font-bold underline mt-9 left-10 relative">
                     <div className="flex flex-row ">
                         <div onClick={() => handleTilesetDisplay()} className="text-2xl p-2">{props.name}</div>
                     </div>

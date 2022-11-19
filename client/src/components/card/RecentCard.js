@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const RecentCard = (props) => {
-    const [image, setImage] = useState("https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" + props._id)
+    const [image, setImage] = useState("https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" + props._id + "?=" + Math.random().toString().substring(2));
     var nav = useNavigate();
     const handleTilesetDisplay = () => {
         nav("/tilesets/" + props._id, { state: { owner: props.owner, _id: props._id } });
