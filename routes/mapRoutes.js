@@ -102,4 +102,42 @@ router.post('/map/update/:id', async (req, res) => {
     }
 });
 
+router.post("/map/like/:id", async (req, res) => {
+    if (req.session._id == undefined) {
+      res.status(400).json({ errorMessage: "Not logged in" });
+      return;
+    }
+    if (req.body.like){
+      var map = await Map.findOneAndUpdate(
+        {_id: req.params.id, usersDisliked: {$in: [req.session._id]}},
+        {$inc: {likes: 1, dislikes: -1}, $addToSet: { usersLiked: req.session._id },
+        $pull: {usersDisliked: req.session._id}},
+        {new: true})
+      if (map == null){
+        map = await Map.findOneAndUpdate(
+          {_id: req.params.id, usersLiked: {$nin: [req.session._id]}},
+          {$inc: {likes: 1}, $addToSet: { usersLiked: req.session._id }},
+          {new: true})
+        if (map == null){
+          res.status(400).json({ errorMessage: "Could not find appropriate map or have already liked" });
+          return;
+        }
+      }
+      res.json({ map: map });
+    }
+    else{
+      var map = await Map.findOneAndUpdate(
+        {_id: req.params.id, usersLiked: {$in: [req.session._id]}},
+        {$inc: {likes: -1}, $pull: { usersLiked: req.session._id }},
+        {new: true})
+      if (map == null){
+        res.status(400).json({ errorMessage: "Could not find appropriate map or have already unliked" });
+          return;
+      }
+      else{
+        res.json({ map: map });
+      }
+    }
+  })
+
 module.exports = router;
