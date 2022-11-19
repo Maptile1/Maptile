@@ -91,16 +91,17 @@ router.post('/map/update/:id', async (req, res) => {
     updates.tilesets = req.body.tilesets
     updates.public = req.body.public
     updates.layers = req.body.layers
+    updates.timeEdited = Date.now()
     var map = await Map.findOneAndUpdate({_id: req.params.id, owner: req.session._id}, {$set: updates}, {new: true})
     if (map != null){
         res.json({map: map})
     }
     else{
         if (await Map.findById(req.params.id) != null){
-            res.status(400).json({errorMessage: 'Not permitted to editle'})
+            res.status(400).json({errorMessage: 'Not permitted to edit'})
         }
         else{
-            res.status(400).json({errorMessage: 'Tileset does not exist'})
+            res.status(400).json({errorMessage: 'Map does not exist'})
         }
     }
 });
