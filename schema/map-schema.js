@@ -74,6 +74,10 @@ const mapSchema = new Schema(
         timeEdited: {
             type: Date,
             required: true
+        },
+        usersLiked: {
+            type: [ObjectId],
+            required: true
         }
     }
 )
