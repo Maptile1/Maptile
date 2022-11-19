@@ -25,7 +25,10 @@ router.post('/map/create', async (req, res) => {
         public: false,
         mapCreated: Date.now(),
         layers: [],
-        owner: req.session._id
+        owner: req.session._id,
+        timeEdited: Date.now(),
+        usersLiked: [],
+        usersDisliked: []
     })
     await map.save()
     res.json({map: map})
