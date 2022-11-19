@@ -15,10 +15,10 @@ const SearchCard = (props) => {
     }, [props._id])
 
     return (
-        <div class="w-40 rounded overflow-hidden mt-5 mx-14">
+        <div class="w-1/4 h-1/4 rounded shadow-2xl bg-maptile-background-dark overflow-hidden mx-6">
             <img
                 onClick={() => handleTilesetDisplay()}
-                class="w-full h-3/4 border border-white cursor-pointer object-cover object-center"
+                class="w-3/4 h-3/4 ml-10 mt-10 border shadow-2xl border-white cursor-pointer object-cover object-center"
                 style={{ "image-rendering": "pixelated" }}
                 src={image}
                 alt=""
@@ -33,7 +33,7 @@ const SearchCard = (props) => {
 
             <div
                 onClick={() => handleTilesetDisplay()}
-                class=" truncate hover:text-clip text-wrap text-center text-white text-xl underline mt-5 pb-10 cursor-pointer"
+                class=" truncate hover:text-clip text-wrap text-center text-white text-xl mt-5 pb-5 underline cursor-pointer"
             >
                 {props.name}
             </div>

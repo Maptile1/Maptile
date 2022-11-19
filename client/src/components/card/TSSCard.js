@@ -31,11 +31,11 @@ const TSSCard = (props) => {
   }, [props._id])
 
   return (
-    <div class="max-w-sm rounded overflow-hidden mt-5 mx-14">
+    <div className="w-1/4 h-1/4 shadow-2xl rounded mt-5 mx-14 bg-maptile-background-dark flex flex-col">
       {props.search ? (
         <img
           onClick={() => handleTilesetDisplay()}
-          class="w-full h-3/4 border border-white cursor-pointer object-cover object-center"
+          class="w-3/4 ml-12 mt-10 border border-white cursor-pointer object-cover object-center"
           style={{ "image-rendering": "pixelated" }}
           src={image}
           alt=""
@@ -49,7 +49,7 @@ const TSSCard = (props) => {
       ) : (
         <img
           onClick={() => handleTilesetView()}
-          class="w-full border border-white cursor-pointer object-cover object-center"
+          class="w-3/4 shadow-2xl ml-12 mt-10 border h-3/4 border-white cursor-pointer object-cover object-center"
           src={image}
           alt=""
           style={{ "image-rendering": "pixelated" }}
@@ -62,11 +62,11 @@ const TSSCard = (props) => {
         />
       )}
 
-      <div class="grid grid-cols-4">
+      <div className="flex flex-row w-full">
         {props.search ? (
           <div
             onClick={() => handleTilesetDisplay()}
-            class="col-start-1 col-span-3 text-center ml-20 text-white text-xl underline mt-5 cursor-pointer"
+            class="text-center text-white w-full text-xl underline mt-5 ml-12 cursor-pointer"
           >
             {" "}
             {props.name}
@@ -74,9 +74,8 @@ const TSSCard = (props) => {
         ) : (
           <div
             onClick={() => handleTilesetView()}
-            class="col-start-1 col-span-3 text-center text-white text-xl underline mt-5 cursor-pointer"
+            class=" text-white text-xl w-full text-center underline mt-5 ml-12 cursor-pointer"
           >
-            {" "}
             {props.name}
           </div>
         )}
@@ -84,7 +83,7 @@ const TSSCard = (props) => {
           {!props.search && (
             <Menu
               as="div"
-              className="col-start-3 relative inline-block text-right"
+              className="relative inline-block text-right"
             >
               <div>
                 <Menu.Button className=" inline-flex w-full justify-center rounded-md bg-opacity-20 px-4 py-2 text-5xl font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">

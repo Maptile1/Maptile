@@ -147,7 +147,7 @@ const TilesetScreen = (props) => {
             </div>
           </div>
           <div className="bg-maptile-background-mid w-full h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
-            <div className="flex flex-row flex-wrap px-5 py-5 pl-10  ">
+            <div className="flex flex-row flex-wrap px-5 py-5 pl-10 gap-y-5  ">
               {userSelected ?
                 userTilesets.length !== 0 ?
 

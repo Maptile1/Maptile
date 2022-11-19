@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import SearchCard from "../card/SearchCard";
 import Axios from "axios";
 import { Navigate, useLocation } from "react-router-dom";
-
+import { AiOutlineDoubleRight, AiOutlineDoubleLeft } from "react-icons/ai"
 Axios.defaults.withCredentials = true
 
 const SearchScreen = (props) => {
@@ -11,9 +11,10 @@ const SearchScreen = (props) => {
   var [searchResults, setSearchResults] = useState([])
   let tab_selected = 'bg-maptile-background-mid text-center rounded-t-xl cursor-pointer  mt-[10px] duration-300'
   let tab_unselected = 'bg-maptile-tab-unselected text-center rounded-t-xl cursor-pointer duration-300'
-
+  const [currentPage, setCurrentPage] = useState(1);
   const user = props.user;
   const location = useLocation();
+  var itemsPerPage = 6;
 
   useEffect(() => {
     const tilesetRes = async () => {
@@ -30,6 +31,30 @@ const SearchScreen = (props) => {
     tilesetRes();
   }, [userSelected]);
 
+  const handleNextPageCall = () => {
+    const nextEndIndex = (currentPage + 1) * itemsPerPage;
+    setCurrentPage(currentPage + 1);
+
+    if (searchResults.length < nextEndIndex - 1) {
+      setCurrentPage(1);
+    }
+  };
+
+  const handlePrevPageCall = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+    if (currentPage === 1) {
+      setCurrentPage(Math.ceil(searchResults.length / itemsPerPage))
+    }
+  };
+
+  const getPaginatedData = () => {
+    const startIndex = currentPage * itemsPerPage - itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    return searchResults.slice(startIndex, endIndex);
+  };
 
   const tags = ["Fire", "Water", "Awesome", "Big", "Small", "Great", "Earth", "City", "Lava", "Madison", "Castle", "Larger"]
   return user ? (
@@ -54,16 +79,22 @@ const SearchScreen = (props) => {
 
             <div className={`${userSelected ? tab_selected : tab_unselected}`} onClick={() => updateUserSelected(true)}>Tilesets</div>
             <div className={`${!userSelected ? tab_selected : tab_unselected}`} onClick={() => updateUserSelected(false)}>Maps</div>
+            <div className="grid-col-8 cursor-pointer relative left-[800px] flex flex-row col-span-2">
+              <AiOutlineDoubleLeft onClick={handlePrevPageCall} size={40} />
+
+              <div className="mt-2">Page {currentPage}</div>
+              <AiOutlineDoubleRight onClick={handleNextPageCall} size={40} />
+            </div>
           </div>
           <div className="bg-maptile-background-mid w-10/12 h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
-            <div className="flex flex-row flex-wrap px-5 py-5 pl-10 ml-12  ">
-
-              {userSelected ? searchResults.length !== 0 ? searchResults.map((obj, index) =>
+            <div className="flex flex-row flex-wrap py-10 left-[90px] relative  gap-y-10 ">
+              {userSelected ? searchResults.length !== 0 ? getPaginatedData().map((obj, index) =>
                 <SearchCard search={true} owner={obj.owner} name={obj.name} _id={obj._id} />) : <div>No Search Results</div>
                 :
                 <div>Maps</div>
               }
             </div>
+
           </div>
           <div className="absolute text-white top-10 mt-48 mr-10 right-4">
             <div className="text-3xl font-bold text-center">Tags</div>
