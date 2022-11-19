@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const multer = require('multer')
 const inMemoryStorage = multer.memoryStorage()
+const Tileset = require("../schema/tileset-schema");
 const uploadStrategy = multer({ storage: inMemoryStorage }).single('image')
 const { BlockBlobClient } = require('@azure/storage-blob')
 const getStream = require('into-stream')
@@ -22,10 +23,10 @@ let mailTransporter = nodeMailer.createTransport({
 })
 const sendEmail = (details) => {
     mailTransporter.sendMail(details, (err) => {
-        if(err){
+        if (err) {
             console.log("ERROR SENDING EMAIL", err);
         }
-        else{
+        else {
             console.log("email has sent.")
         }
     })
@@ -49,9 +50,9 @@ userRouter.route("/user/register").post(async (req, res) => {
             accountCreated: Date.now(),
         })
         user = await user.save()
-            .then((user) => { 
+            .then((user) => {
                 req.session._id = user._id
-                res.json({ user: user }) 
+                res.json({ user: user })
             })
             .catch((err) => { res.json({ errorMessage: err.message }) })
     })
@@ -120,17 +121,17 @@ userRouter.route("/user/email/:email").get(async (req, res) => {
         }
     )
     console.log(user)
-    if(user != null){
-        res.json({user: user})
+    if (user != null) {
+        res.json({ user: user })
     }
-    else{
+    else {
         res.status(400).json({ errorMessage: "Couldnt find user" })
     }
 })
 
 userRouter.route("/user/recover/:email").post(async (req, res) => {
     // GENERATE CODE AND SAVE TO DB
-    let code = Math.floor(Math.random()*90000) + 10000;
+    let code = Math.floor(Math.random() * 90000) + 10000;
     let updates = {
         recoveryCode: code
     }
@@ -150,7 +151,7 @@ userRouter.route("/user/recover/:email").post(async (req, res) => {
         from: process.env.EMAIL,
         to: req.params.email,
         "subject": "Maptile Password Recovery Code",
-        "text": code.toString(), 
+        "text": code.toString(),
     }
     sendEmail(details)
 })
@@ -172,15 +173,15 @@ userRouter.post("/user/update", async (req, res) => {
                 { $set: updates },
                 { new: true }
             )
-            .then((user => {
-                if (user != null) {
-                    res.json({ user: user })
-                }
-                else {
-                    res.status(400).json({ errorMessage: "User doesn't exist" })
-                }
-            }))
-            .catch((err) => {res.status(400).json({errorMessage: err})})
+                .then((user => {
+                    if (user != null) {
+                        res.json({ user: user })
+                    }
+                    else {
+                        res.status(400).json({ errorMessage: "User doesn't exist" })
+                    }
+                }))
+                .catch((err) => { res.status(400).json({ errorMessage: err }) })
         })
     }
     else {
@@ -189,22 +190,22 @@ userRouter.post("/user/update", async (req, res) => {
             { $set: updates },
             { new: true }
         )
-        .then((user => {
-            if (user != null) {
-                res.json({ user: user })
-            }
-            else {
-                res.status(400).json({ errorMessage: "User doesn't exist" })
-            }
-        }))
-        .catch((err) => {res.status(400).json({errorMessage: err})})
+            .then((user => {
+                if (user != null) {
+                    res.json({ user: user })
+                }
+                else {
+                    res.status(400).json({ errorMessage: "User doesn't exist" })
+                }
+            }))
+            .catch((err) => { res.status(400).json({ errorMessage: err }) })
     }
 })
 
 userRouter.post("/user/reset", async (req, res) => {
     var updates = {}
-    if (req.body.password == undefined){
-        res.status(400).json({errorMessage: 'No password given'})
+    if (req.body.password == undefined) {
+        res.status(400).json({ errorMessage: 'No password given' })
     }
     bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
         updates.password = hash
@@ -213,15 +214,15 @@ userRouter.post("/user/reset", async (req, res) => {
             { $set: updates },
             { new: true }
         )
-        .then((user => {
-            if (user != null) {
-                res.json({ user: user })
-            }
-            else {
-                res.status(400).json({ errorMessage: "Wrong code" })
-            }
-        }))
-        .catch((err) => {res.status(400).json({errorMessage: err})})
+            .then((user => {
+                if (user != null) {
+                    res.json({ user: user })
+                }
+                else {
+                    res.status(400).json({ errorMessage: "Wrong code" })
+                }
+            }))
+            .catch((err) => { res.status(400).json({ errorMessage: err }) })
     })
 })
 
@@ -238,6 +239,25 @@ userRouter.post('/user/image', uploadStrategy, async (req, res) => {
     blobService.uploadStream(stream, streamLength, undefined, options)
         .then(() => { res.json({ message: 'successful upload' }) })
         .catch((err) => { res.status(400).json({ errorMessage: err }) })
+})
+
+userRouter.get('/user/getRecent/:id', async (req, res) => {
+    var user = await User.findById(req.params.id);
+    var tilesets = [];
+    await Promise.all(
+        user.tilesets.map(async (obj, index) => {
+            tileset = await Tileset.findById(obj);
+            tilesets.push(tileset);
+        })
+    );
+    await Promise.all(
+        user.shared_tilesets.map(async (obj, index) => {
+            tileset = await Tileset.findById(obj);
+            tilesets.push(tileset);
+        })
+    );
+    var recent = tilesets.sort((a, b) => new Date(b.timeAccessed) - new Date(a.timeAccessed));
+    res.json({ recent });
 })
 
 module.exports = userRouter;

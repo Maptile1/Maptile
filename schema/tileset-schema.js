@@ -61,6 +61,9 @@ const tilesetSchema = new Schema(
         owner: {
             type: String,
             required: true
+        },
+        timeAccessed: {
+            type: Date
         }
     }
 )

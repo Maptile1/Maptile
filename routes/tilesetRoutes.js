@@ -33,6 +33,7 @@ router.post("/tileset/create", async (req, res) => {
     public: false,
     tilesetCreated: Date.now(),
     owner: req.session._id,
+    timeAccessed: Date.now()
   });
   tileset = await tileset.save();
   var user = await User.findOneAndUpdate(
@@ -79,6 +80,7 @@ router.post("/tileset/update/:id", async (req, res) => {
   updates.description = req.body.description;
   updates.public = req.body.public;
   updates.tags = req.body.tags;
+  updates.timeAccessed = Date.now()
   var tileset = await Tileset.findOneAndUpdate(
     {
       $or: [{ _id: req.params.id, shared_users: { $in: [req.session._id] } },
