@@ -7,17 +7,12 @@ import Axios from "axios";
 
 const Home = (props) => {
     //const nav = useNavigate();
-    const [recent, setRecent] = useState([
-        { name: "Bone Zone", color: "maptile-green", "description": "HI" },
-        { name: "Test2", color: "orange", "description": "123" },
-        { name: "Test3", color: "yellow", "description": "124" },
-        { name: "Test4", color: "green", "description": "124" },
-        { name: "Test6", color: "blue", "description": "125215" }
-    ]);
+    const [recent, setRecent] = useState(null);
     const [topTilesets, setTopTilesets] = useState(null); // gonna have to be changed to maps as well in the future
     const [topSlideIndex, setTopSlideIndex] = useState(0);
     const timeoutRef = useRef(null)
     const [loading, setloading] = useState(true);
+
     const resetTimeout = () => {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
@@ -26,14 +21,17 @@ const Home = (props) => {
 
     useEffect(() => {
         const topRes = async () => {
+            setloading(true);
             await Axios.get(
                 "https://maptile1.herokuapp.com/tileset/top")
                 .then((response) => {
-                    setloading(true);
                     setTopTilesets(response.data);
-                    setloading(false);
                 })
-
+            await Axios.get("https://maptile1.herokuapp.com/user/getRecent/" + props.user._id)
+                .then((response) => {
+                    setRecent(response.data.recent);
+                })
+            setloading(false);
         }
         topRes();
         resetTimeout();
@@ -48,7 +46,7 @@ const Home = (props) => {
             resetTimeout();
         };
     }, [])
-
+    console.log(recent);
     return (
         <div>
             {!loading && (
@@ -113,7 +111,7 @@ const Home = (props) => {
                                 <div className="flex flex-col mt-5 flex-shrink-0 ml-12 w-5/6 rl-scroll-card space-y-3 overflow-y-scroll no-scrollbar">
                                     {recent.map((item) => {
                                         return (
-                                            <RecentCard description={item.description} name={item.name} />
+                                            <RecentCard _id={item._id} owner={item.owner} description={item.description} name={item.name} />
                                         )
                                     })}
                                 </div>
