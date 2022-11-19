@@ -198,8 +198,8 @@ router.post("/tileset/like/:id", async (req, res) => {
   if (req.body.like){
     var tileset = await Tileset.findOneAndUpdate(
       {_id: req.params.id, usersDisliked: {$in: [req.session._id]}},
-      {$inc: {likes: 1}, $addToSet: { usersLiked: req.session._id },
-      $inc: {dislikes: -1}, $pull: {usersDisliked: req.session._id}},
+      {$inc: {likes: 1, dislikes: -1}, $addToSet: { usersLiked: req.session._id },
+      $pull: {usersDisliked: req.session._id}},
       {new: true})
     if (tileset == null){
       tileset = await Tileset.findOneAndUpdate(
@@ -220,6 +220,44 @@ router.post("/tileset/like/:id", async (req, res) => {
       {new: true})
     if (tileset == null){
       res.status(400).json({ errorMessage: "Could not find appropriate tileset or have already unliked" });
+        return;
+    }
+    else{
+      res.json({ tileset: tileset });
+    }
+  }
+})
+
+router.post("/tileset/dislike/:id", async (req, res) => {
+  if (req.session._id == undefined) {
+    res.status(400).json({ errorMessage: "Not logged in" });
+    return;
+  }
+  if (req.body.dislike){
+    var tileset = await Tileset.findOneAndUpdate(
+      {_id: req.params.id, usersLiked: {$in: [req.session._id]}},
+      {$inc: {likes: -1, dislikes: 1}, $addToSet: { usersDisliked: req.session._id },
+      $pull: {usersLiked: req.session._id}},
+      {new: true})
+    if (tileset == null){
+      tileset = await Tileset.findOneAndUpdate(
+        {_id: req.params.id, usersDisliked: {$nin: [req.session._id]}},
+        {$inc: {dislikes: 1}, $addToSet: { usersDisliked: req.session._id }},
+        {new: true})
+      if (tileset == null){
+        res.status(400).json({ errorMessage: "Could not find appropriate tileset or have already disliked" });
+        return;
+      }
+    }
+    res.json({ tileset: tileset });
+  }
+  else{
+    var tileset = await Tileset.findOneAndUpdate(
+      {_id: req.params.id, usersDisliked: {$in: [req.session._id]}},
+      {$inc: {dislikes: -1}, $pull: { usersDisliked: req.session._id }},
+      {new: true})
+    if (tileset == null){
+      res.status(400).json({ errorMessage: "Could not find appropriate tileset or have already undisliked" });
         return;
     }
     else{
