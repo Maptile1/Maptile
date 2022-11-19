@@ -7,18 +7,6 @@ import Axios from "axios";
 
 const Home = (props) => {
     //const nav = useNavigate();
-    const [topSlides, setTopSlides] = useState([
-        { name: "slide1", color: "maptile-green" },
-        { name: "slide2", color: "orange" },
-        { name: "slide3", color: "yellow" },
-        { name: "slide4", color: "green" },
-        { name: "slide5", color: "blue" },
-        { name: "slide6", color: "purple" },
-        { name: "slide7", color: "purple" },
-        { name: "slide8", color: "purple" },
-        { name: "slide9", color: "purple" },
-        { name: "slide10", color: "purple" }
-    ]);
     const [recent, setRecent] = useState([
         { name: "Bone Zone", color: "maptile-green", "description": "HI" },
         { name: "Test2", color: "orange", "description": "123" },

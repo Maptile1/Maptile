@@ -181,5 +181,12 @@ router.post("/tileset/deleteshared/:id", async (req, res) => {
   res.json({ sharedtilesets: user.shared_tilesets });
 });
 
+router.get("/tileset/top", async (req, res) => {
+  Tileset.find()
+    .then((tilesets) =>
+      res.json(tilesets.sort((a, b) => (b.likes - b.dislikes) - (a.likes - a.dislikes)).slice(0, 10)))
+    .catch((err) => res.status(400).json("Error: " + err));
+});
+
 
 module.exports = router;
