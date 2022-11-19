@@ -17,7 +17,9 @@ router.post("/comment/create", async (req, res) => {
     comment_date: new Date().toString(),
     likes: 0,
     dislikes: 0,
-    post: req.body.post
+    post: req.body.post,
+    usersLiked: [],
+    usersDisliked: []
   });
   await comment.save();
   var tileset = await Tileset.findOneAndUpdate(
