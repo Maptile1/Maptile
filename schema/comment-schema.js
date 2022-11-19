@@ -29,7 +29,15 @@ const commentSchema = new Schema(
 		post: {
 			type: ObjectId,
 			required: true
-		}
+		},
+		usersLiked: {
+            type: [ObjectId],
+            required: true
+        },
+        usersDisliked: {
+            type: [ObjectId],
+            required: true
+        }
 	}
 );
 
