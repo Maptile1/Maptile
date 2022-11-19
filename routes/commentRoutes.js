@@ -120,5 +120,43 @@ router.post("/comment/like/:id", async (req, res) => {
   }
 })
 
+router.post("/comment/dislike/:id", async (req, res) => {
+  if (req.session._id == undefined) {
+    res.status(400).json({ errorMessage: "Not logged in" });
+    return;
+  }
+  if (req.body.dislike){
+    var comment = await Comment.findOneAndUpdate(
+      {_id: req.params.id, usersLiked: {$in: [req.session._id]}},
+      {$inc: {likes: -1, dislikes: 1}, $addToSet: { usersDisliked: req.session._id },
+      $pull: {usersLiked: req.session._id}},
+      {new: true})
+    if (comment == null){
+      comment = await Comment.findOneAndUpdate(
+        {_id: req.params.id, usersDisliked: {$nin: [req.session._id]}},
+        {$inc: {dislikes: 1}, $addToSet: { usersDisliked: req.session._id }},
+        {new: true})
+      if (comment == null){
+        res.status(400).json({ errorMessage: "Could not find appropriate comment or have already disliked" });
+        return;
+      }
+    }
+    res.json({ comment: comment });
+  }
+  else{
+    var comment = await Comment.findOneAndUpdate(
+      {_id: req.params.id, usersDisliked: {$in: [req.session._id]}},
+      {$inc: {dislikes: -1}, $pull: { usersDisliked: req.session._id }},
+      {new: true})
+    if (comment == null){
+      res.status(400).json({ errorMessage: "Could not find appropriate comment or have already undisliked" });
+        return;
+    }
+    else{
+      res.json({ comment: comment });
+    }
+  }
+})
+
 
 module.exports = router;
