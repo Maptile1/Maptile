@@ -62,8 +62,9 @@ const tilesetSchema = new Schema(
             type: String,
             required: true
         },
-        timeAccessed: {
-            type: Date
+        timeEdited: {
+            type: Date,
+            required: true
         }
     }
 )

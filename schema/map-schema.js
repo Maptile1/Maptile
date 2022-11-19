@@ -70,6 +70,10 @@ const mapSchema = new Schema(
         owner: {
             type: String,
             required: true
+        },
+        timeEdited: {
+            type: Date,
+            required: true
         }
     }
 )
