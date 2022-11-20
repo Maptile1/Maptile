@@ -9,6 +9,7 @@ import Comment from "../comment/Comment";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Axios from "axios";
 import { saveAs } from 'file-saver'
+import { FaUserAlt, FaHeart } from "react-icons/fa";
 
 Axios.defaults.withCredentials = true;
 
@@ -138,12 +139,12 @@ const TilesetDisplay = (props) => {
           <Sidebar setTheUser={props.setTheUser} />
           <div class="container px-6 text-xl py-10 mx-auto text-white">
             <div class="text-center text-4xl font-bold">{tileset.name}</div>
-            <div class="grid grid-cols-5 grid-rows-2">
-              <div class="row-start-1 col-start-1 col-span-3 mt-10">
+            <div class="grid grid-cols-5 grid-rows-2 ">
+              <div class="row-start-1 col-start-1 col-span-1 mt-10 bg-gradient-to-br from-maptile-green/60 to-maptile-green-alt/60 rounded-3xl p-2">
                 <div class="flex">
                   <img
                     style={{ width: 100, height: 120, borderRadius: 400 / 2 }}
-                    class="w-full h-3/4 object-cover object-center border-2 border-maptile-green"
+                    class="w-full h-3/4 object-cover object-center border-2 border-maptile-green ml-3"
                     src={userPfp}
                     alt="blog"
                     onError={({ currentTarget }) => {
@@ -155,8 +156,11 @@ const TilesetDisplay = (props) => {
                   />
 
                   <div class="flex flex-col justify-between ml-5">
-                    <div>{owner.userName}</div>
-                    <div>{tileset.description}</div>
+                    <div className="text-white text-lg flex flex-row">
+                      <div className="mt-2">{owner.userName}</div>
+                      <FaUserAlt className="mt-3 ml-2"/>
+                    </div>
+                    <div className="mb-2 text-lg">{tileset.description}</div>
                   </div>
                 </div>
               </div>
@@ -254,10 +258,11 @@ const TilesetDisplay = (props) => {
                   </Transition>
                 </Menu>
               </div>
-              <div class="mt-10 row-start-2 col-span-3">
-                Tags: {tileset.tags.join(", ")}
+              <div class="mt-10 row-start-2 col-span-1">
+                <div className={`w-full bg-maptile-background-mid rounded-xl p-2`}>Tags: {tileset.tags.join(", ")}</div>
+                
               </div>
-              <div class="row-start-3 row-end-4 col-start-1 col-end-4 mb-10">
+              <div class="row-start-3 row-end-4 col-start-1 col-end-4 mb-10 bg-gradient-to-br from-maptile-green/60 to-maptile-green-alt/60 rounded-[50px]">
                 <img
                   class="object-cover w-full h-full mx-auto rounded-md lg:max-w-2xl"
                   src={
@@ -273,14 +278,14 @@ const TilesetDisplay = (props) => {
                   }}
                 />
               </div>
-              <div class="flex flex-row gap-20 row-start-3 col-start-5">
-                <div class="flex flex-col text-6xl font-bold">
+              <div class="flex flex-row row-start-3 col-start-5 gap-20 h-2/5 bg-maptile-background-mid rounded-l-3xl">
+                <div class="flex flex-col text-6xl font-bold p-2">
                   {" "}
                   <FaThumbsUp color={"green"} size={100} stroke={1} />
                   <div class="mt-10">{tileset.likes} Likes</div>
                 </div>
 
-                <div class="flex flex-col text-6xl font-bold">
+                <div class="flex flex-col text-6xl font-bold bg-maptile-background-mid rounded-r-3xl p-2">
                   <FaThumbsDown color={"red"} size={100} />
                   <div class="mt-10 ">{tileset.dislikes} Dislikes</div>
                 </div>
