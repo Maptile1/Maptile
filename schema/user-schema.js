@@ -60,6 +60,14 @@ const userSchema = new Schema(
         recoveryCode: {
             type: Number,
             required: false
+        },
+        shared_tilesets: {
+            type: [ObjectId],
+            required: true
+        },
+        shared_maps: {
+            type: [ObjectId],
+            required: true
         }
     }
 )
