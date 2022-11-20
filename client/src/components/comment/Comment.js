@@ -5,6 +5,7 @@ const Comment = (props) => {
 
     const [owner, setOwner] = useState(null);
     const [userPfp, setPfp] = useState("");
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const getOwner = async () => {
@@ -18,11 +19,12 @@ const Comment = (props) => {
                   response.data.user._id
                 );
               });
+              setLoading(false);
         }
         getOwner();
     }, []);
 
-    return (<div class="relative gap-4 p-4 mt-10 mb-8 border rounded-lg bg-gray-600 text-white shadow-lg">
+    return !loading && (<div class="relative gap-4 p-4 mt-10 mb-8 border rounded-lg bg-gray-600 text-white shadow-lg">
         <div class="relative flex gap-4">
             <img src={userPfp} class="relative rounded-lg -top-8 -mb-4 bg-white border h-20 w-20" alt="" loading="lazy" />
             <div class="flex flex-col w-full">
