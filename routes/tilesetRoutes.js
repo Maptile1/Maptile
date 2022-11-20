@@ -212,7 +212,23 @@ router.post("/tileset/like/:id", async (req, res) => {
         res.status(400).json({ errorMessage: "Could not find appropriate tileset or have already liked" });
         return;
       }
+      else{
+        await User.findOneAndUpdate(
+          {_id: tileset.owner},
+          {$inc: {likes: 1}}
+        )
+      }
     }
+    else{
+      await User.findOneAndUpdate(
+        {_id: tileset.owner},
+        {$inc: {likes: 1, dislikes: -1}}
+      )
+    }
+    await User.findOneAndUpdate(
+      {_id: req.session._id},
+      {$addToSet: {liked_tilesets: tileset._id}},
+    )
     res.json({ tileset: tileset });
   }
   else{
@@ -225,6 +241,14 @@ router.post("/tileset/like/:id", async (req, res) => {
         return;
     }
     else{
+      await User.findOneAndUpdate(
+        {_id: tileset.owner},
+        {$inc: {likes: -1}}
+      )
+      await User.findOneAndUpdate(
+        {_id: req.session._id},
+        {$pull:{liked_tilesets: tileset._id}}
+      )
       res.json({ tileset: tileset });
     }
   }
@@ -250,6 +274,22 @@ router.post("/tileset/dislike/:id", async (req, res) => {
         res.status(400).json({ errorMessage: "Could not find appropriate tileset or have already disliked" });
         return;
       }
+      else{
+        await User.findOneAndUpdate(
+          {_id: tileset.owner},
+          {$inc: {dislikes: 1}}
+        )
+      }
+    }
+    else{
+      await User.findOneAndUpdate(
+        {_id: tileset.owner},
+        {$inc: {likes: -1, dislikes: 1}}
+      )
+      await User.findOneAndUpdate(
+        {_id: req.session._id},
+        {$pull:{liked_tilesets: tileset._id}}
+      )
     }
     res.json({ tileset: tileset });
   }
@@ -263,6 +303,10 @@ router.post("/tileset/dislike/:id", async (req, res) => {
         return;
     }
     else{
+      await User.findOneAndUpdate(
+        {_id: tileset.owner},
+        {$inc: {dislikes: -1}}
+      )
       res.json({ tileset: tileset });
     }
   }
