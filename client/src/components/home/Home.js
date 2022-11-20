@@ -34,6 +34,9 @@ const Home = (props) => {
             setloading(false);
         }
         topRes();
+    }, [])
+
+    useEffect(() => {
         resetTimeout();
         timeoutRef.current = setTimeout(
             () =>
@@ -45,7 +48,8 @@ const Home = (props) => {
         return () => {
             resetTimeout();
         };
-    }, [])
+    }, [topSlideIndex])
+
     console.log(recent);
     return (
         <div>
@@ -80,7 +84,7 @@ const Home = (props) => {
                                 {topTilesets.map((slide, i) => {
                                     if (i % 2 === 0) {
                                         return (
-                                            <div className="flex flex-row w-full h-full space-x-5 justify-center flex-shrink-0">
+                                            <div className="flex flex-row w-full h-full space-x-16 justify-center flex-shrink-0">
                                                 <TopPostCard _id={slide._id} name={slide.name} owner={slide.owner} likes={slide.likes} />
                                                 <TopPostCard _id={topTilesets[i + 1]._id} name={topTilesets[i + 1].name} owner={topTilesets[i + 1].owner} likes={topTilesets[i + 1].likes} />
                                             </div>
@@ -100,8 +104,8 @@ const Home = (props) => {
                                 })}
                             </div>
                         </div>
-                        <div className="flex flex-row z-30 w-full h-2/3 space-x-[50px]">
-                            <div className="bg-maptile-background-mid w-1/2 rounded-3xl z-30 overflow-hidden">
+                        <div className="flex flex-row z-30 w-full h-3/5 space-x-[50px]">
+                            <div className="bg-maptile-background-mid w-1/2 h-full rounded-3xl z-30 overflow-hidden">
                                 <div className="bg-gradient-to-br from-maptile-green to-maptile-green-alt w-full drop-shadow-lg bg-fixed rounded-t-3xl header-card">
                                     <div className="text-white text-4xl shadow-2xl pt-2.5 pl-4 text-shadow-lg h-full w-full flex flex-row">
                                         Recent
