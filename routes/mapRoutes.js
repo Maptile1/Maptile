@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Map = require('../schema/map-schema.js')
 const ObjectId = require('mongodb').ObjectId;
+const User = require("../schema/user-schema");
 
 router.post('/map/create', async (req, res) => {
     if (req.session._id == undefined){
@@ -126,7 +127,23 @@ router.post("/map/like/:id", async (req, res) => {
           res.status(400).json({ errorMessage: "Could not find appropriate map or have already liked" });
           return;
         }
+        else{
+          await User.findOneAndUpdate(
+            {_id: map.owner},
+            {$inc: {likes: 1}}
+          )
+        }
       }
+      else{
+        await User.findOneAndUpdate(
+          {_id: map.owner},
+          {$inc: {likes: 1, dislikes: -1}}
+        )
+      }
+      await User.findOneAndUpdate(
+        {_id: req.session._id},
+        {$addToSet: {liked_maps: map._id}},
+      )
       res.json({ map: map });
     }
     else{
@@ -139,6 +156,14 @@ router.post("/map/like/:id", async (req, res) => {
           return;
       }
       else{
+        await User.findOneAndUpdate(
+          {_id: map.owner},
+          {$inc: {likes: -1}}
+        )
+        await User.findOneAndUpdate(
+          {_id: req.session._id},
+          {$pull:{liked_maps: map._id}}
+        )
         res.json({ map: map });
       }
     }
@@ -164,6 +189,22 @@ router.post("/map/dislike/:id", async (req, res) => {
           res.status(400).json({ errorMessage: "Could not find appropriate map or have already disliked" });
           return;
         }
+        else{
+          await User.findOneAndUpdate(
+            {_id: map.owner},
+            {$inc: {dislikes: 1}}
+          )
+        }
+      }
+      else{
+        await User.findOneAndUpdate(
+          {_id: map.owner},
+          {$inc: {likes: -1, dislikes: 1}}
+        )
+        await User.findOneAndUpdate(
+          {_id: req.session._id},
+          {$pull:{liked_maps: map._id}}
+        )
       }
       res.json({ map: map });
     }
@@ -177,6 +218,10 @@ router.post("/map/dislike/:id", async (req, res) => {
           return;
       }
       else{
+        await User.findOneAndUpdate(
+          {_id: map.owner},
+          {$inc: {dislikes: -1}}
+        )
         res.json({ map: map });
       }
     }
