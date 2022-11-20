@@ -316,7 +316,7 @@ router.post("/tileset/getBatch", async (req, res) => {
   var limit = req.body.limit ? req.body.limit : 0
   var page = req.body.page ? req.body.page * limit : 0
   var ids = req.body.ids.map((id) => { return {_id: id}})
-  var tilesets = await Tileset.find({$or: ids}).sort({timeEdited : -1, _id: 1}).skip(page).limit(limit)
+  var tilesets = await Tileset.find({$or: ids}, req.body.fields).sort({timeEdited : -1, _id: 1}).skip(page).limit(limit)
   res.json({tilesets: tilesets})
 })
 
