@@ -48,6 +48,8 @@ userRouter.route("/user/register").post(async (req, res) => {
             bio: "Empty Bio",
             featured: [],
             accountCreated: Date.now(),
+            liked_tilesets: [],
+            liked_maps: []
         })
         user = await user.save()
             .then((user) => {
