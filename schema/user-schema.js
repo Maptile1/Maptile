@@ -61,11 +61,11 @@ const userSchema = new Schema(
             type: Number,
             required: false
         },
-        shared_tilesets: {
+        liked_tilesets: {
             type: [ObjectId],
             required: true
         },
-        shared_maps: {
+        liked_maps: {
             type: [ObjectId],
             required: true
         }
