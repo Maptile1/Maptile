@@ -22,6 +22,8 @@ const TilesetDisplay = (props) => {
   const [userPfp, setPfp] = useState("");
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
+  const [likes, setLikes] = useState();
+  const [dislikes, setDislikes] = useState();
   const commentRef = useRef(null);
 
   const handleOtherUserProfile = () => {
@@ -94,10 +96,46 @@ const TilesetDisplay = (props) => {
   const getComments = async () => {
     await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
       (response) => {
-        // console.log("COMMENTS:", response.data.comments)
         setComments(response.data.comments)
       }
     );
+  }
+
+  const getLikesAndDislikes = async () => {
+    await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + id).then(
+      (response) => {
+        setTileset(response.data.tileset)
+        setLikes(response.data.tileset.likes)
+        setDislikes(response.data.tileset.dislikes)
+      });
+  }
+
+  const likeTileset = async () => {
+      let like_status = tileset.usersLiked.includes(props.user._id);
+      await Axios.post("https://maptile1.herokuapp.com/tileset/like/" + tileset._id, {like: !like_status})
+      .then((response) => {
+        console.log(response);
+        setLikes(response.data.tileset.likes)
+        setDislikes(response.data.tileset.dislikes)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      getLikesAndDislikes();
+  }
+
+  const dislikeTileset = async () => {
+      let dislike_status = tileset.usersDisliked.includes(props.user._id);
+      await Axios.post("https://maptile1.herokuapp.com/tileset/dislike/" + tileset._id, {dislike: !dislike_status})
+      .then((response) => {
+        console.log(response);
+        setLikes(response.data.tileset.likes)
+        setDislikes(response.data.tileset.dislikes)
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      getLikesAndDislikes();
   }
 
   useEffect(() => {
@@ -119,6 +157,8 @@ const TilesetDisplay = (props) => {
         (response) => {
           // console.log("TILESET:", response.data.tileset);
           setTileset(response.data.tileset);
+          setLikes(response.data.tileset.likes)
+          setDislikes(response.data.tileset.dislikes)
         }
       );
       await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
@@ -132,6 +172,12 @@ const TilesetDisplay = (props) => {
     getOwner();
   }, [location.state._id, location.state.owner, id]);
 
+  let like_color = "gray";
+  let dislike_color = "gray";
+  if(tileset !== null){
+    like_color = tileset.usersLiked.includes(props.user._id) ? "green" : "gray";
+    dislike_color = tileset.usersDisliked.includes(props.user._id) ? "red" : "gray";
+  }
   return (
     <div>
       {!loading && (
@@ -281,13 +327,13 @@ const TilesetDisplay = (props) => {
               <div class="flex flex-row row-start-3 col-start-5 gap-20 h-2/5 bg-maptile-background-mid rounded-l-3xl">
                 <div class="flex flex-col text-6xl font-bold p-2">
                   {" "}
-                  <FaThumbsUp color={"green"} size={100} stroke={1} />
-                  <div class="mt-10">{tileset.likes} Likes</div>
+                  <FaThumbsUp color={like_color} onClick={likeTileset} size={100} stroke={1} />
+                  <div class="mt-10">{likes} Likes</div>
                 </div>
 
                 <div class="flex flex-col text-6xl font-bold bg-maptile-background-mid rounded-r-3xl p-2">
-                  <FaThumbsDown color={"red"} size={100} />
-                  <div class="mt-10 ">{tileset.dislikes} Dislikes</div>
+                  <FaThumbsDown onClick={dislikeTileset} color={dislike_color} size={100} />
+                  <div class="mt-10 ">{dislikes} Dislikes</div>
                 </div>
               </div>
 
