@@ -348,14 +348,23 @@ router.post("/tileset/search", async (req, res) => {
   if (tags && tags.length != 0){
     query.$or = tags
   }
-  var tilesets = await Tileset.aggregate([
+  var documents = await Tileset.aggregate([
     { $match: query},
-    { $project: {name: 1, description: 1, _id: 1, likes: 1, dislikes: 1, usersLiked: 1, tags: 1, owner: 1,score: { $subtract: ["$likes", "$dislikes"]}}},
-    { $sort: { score: -1, _id: 1} },
-    { $skip: page },
-    { $limit: limit }
+    {$facet: {
+      tilesets: [
+        { $project: {name: 1, description: 1, _id: 1, likes: 1, dislikes: 1, usersLiked: 1, tags: 1, owner: 1,score: { $subtract: ["$likes", "$dislikes"]}}},
+        { $sort: { score: -1, _id: 1} },
+        { $skip: page },
+        { $limit: limit }
+      ],
+      count: [
+        {$count: "count"}
+      ]
+    },
+    }
   ])
-  res.json({tilesets: tilesets})
+  var count = documents[0].count.length != 0 ? documents[0].count[0].count : 0
+  res.json({tilesets: documents[0].tilesets, count: count})
 })
 
 module.exports = router;
