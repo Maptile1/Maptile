@@ -12,6 +12,7 @@ const Home = (props) => {
     const [topSlideIndex, setTopSlideIndex] = useState(0);
     const timeoutRef = useRef(null)
     const [loading, setloading] = useState(true);
+    const [likedTilesets, setLikedTilesets] = useState(null);
 
     const resetTimeout = () => {
         if (timeoutRef.current) {
@@ -22,6 +23,7 @@ const Home = (props) => {
     useEffect(() => {
         const topRes = async () => {
             setloading(true);
+            var user
             await Axios.get(
                 "https://maptile1.herokuapp.com/tileset/top")
                 .then((response) => {
@@ -31,6 +33,22 @@ const Home = (props) => {
             await Axios.get("https://maptile1.herokuapp.com/user/getRecent/" + props.user._id)
                 .then((response) => {
                     setRecent(response.data.recent);
+                })
+            await Axios.get("https://maptile1.herokuapp.com/user/get/" + props.user._id)
+                .then((response) => {
+                    user = response.data.user
+                    props.setTheUser(response.data.user);
+                })
+            await Axios.post("https://maptile1.herokuapp.com/tileset/getBatch",
+                {
+                    ids: user.liked_tilesets,
+                    limit: 10,
+                    page: 0,
+                    fields: "_id name owner description"
+                })
+                .then((response) => {
+                    console.log(response.data.tilesets)
+                    setLikedTilesets(response.data.tilesets);
                 })
             setloading(false);
         }
@@ -126,6 +144,13 @@ const Home = (props) => {
                                         Liked
                                         <FaHeart className="ml-3 mt-1" />
                                     </div>
+                                </div>
+                                <div className="flex flex-col mt-5 flex-shrink-0 ml-12 w-5/6 rl-scroll-card space-y-3 overflow-y-scroll no-scrollbar">
+                                    {likedTilesets.map((item) => {
+                                        return (
+                                            <RecentCard _id={item._id} owner={item.owner} description={item.description} name={item.name} />
+                                        )
+                                    })}
                                 </div>
                             </div>
                         </div>
