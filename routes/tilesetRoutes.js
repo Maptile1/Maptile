@@ -186,10 +186,13 @@ router.post("/tileset/deleteshared/:id", async (req, res) => {
 });
 
 router.get("/tileset/top", async (req, res) => {
-  Tileset.find()
-    .then((tilesets) =>
-      res.json(tilesets.sort((a, b) => (b.likes - b.dislikes) - (a.likes - a.dislikes)).slice(0, 10)))
-    .catch((err) => res.status(400).json("Error: " + err));
+  var tilesets = await Tileset.aggregate([
+    { $match: {}},
+    { $project: {name: 1, description: 1, _id: 1, likes: 1, dislikes: 1, usersLiked: 1, tags: 1, score: { $subtract: ["$likes", "$dislikes"]}}},
+    { $sort: { score: -1, _id: 1} },
+    { $limit: 10 }
+  ])
+  res.json({tilesets: tilesets})
 });
 
 router.post("/tileset/like/:id", async (req, res) => {
@@ -330,7 +333,7 @@ router.get("/tileset/search", async (req, res) => {
   }
   var tilesets = await Tileset.aggregate([
     { $match: query},
-    { $project: {name: 1, description: 1, _id: 1, likes: 1, dislikes: 1, usersLiked: 1, score: { $subtract: ["$likes", "$dislikes"]}}},
+    { $project: {name: 1, description: 1, _id: 1, likes: 1, dislikes: 1, usersLiked: 1, tags: 1, score: { $subtract: ["$likes", "$dislikes"]}}},
     { $sort: { score: -1, _id: 1} },
     { $skip: page },
     { $limit: limit }
