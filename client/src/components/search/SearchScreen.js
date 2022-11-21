@@ -81,10 +81,10 @@ const SearchScreen = (props) => {
     }
     if (currentPage === 0) {
       if (resultCount % itemsPerPage == 0){
-        setCurrentPage(resultCount / itemsPerPage - 1)
+        setCurrentPage(Math.floor(resultCount / itemsPerPage - 1))
       }
       else{
-        setCurrentPage(resultCount / itemsPerPage)
+        setCurrentPage(Math.floor(resultCount / itemsPerPage))
       }
     }
   };
