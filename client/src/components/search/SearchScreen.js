@@ -11,13 +11,15 @@ const SearchScreen = (props) => {
   var [searchResults, setSearchResults] = useState([])
   let tab_selected = 'bg-maptile-background-mid text-center rounded-t-xl cursor-pointer  mt-[10px] duration-300'
   let tab_unselected = 'bg-maptile-tab-unselected text-center rounded-t-xl cursor-pointer duration-300'
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const user = props.user;
   const location = useLocation();
   var itemsPerPage = 6;
   const searchRef = useRef(null);
   const tagRef = useRef(null);
   const [tags,setTags] = useState([])
+  const [resultCount, setResultCount] = useState(0)
+  const didMount = useRef(false);
 
   useEffect(() => {
     const tilesetRes = async () => {
@@ -34,29 +36,61 @@ const SearchScreen = (props) => {
     tilesetRes();
   }, [userSelected]);
 
-  const handleNextPageCall = () => {
-    const nextEndIndex = (currentPage + 1) * itemsPerPage;
-    setCurrentPage(currentPage + 1);
+  useEffect(() => {
+    if (didMount.current){
+      let selectedTags = []
+      let tagChoices = document.getElementsByName("tagBox")
+      for(let i = 0; tagChoices[i]; i++){
+        if(tagChoices[i].checked){
+          selectedTags.push(tagChoices[i].value)
+        }
+      }
+      var response = Axios.post(
+        "https://maptile1.herokuapp.com/tileset/search",
+        {
+          search: searchRef.current.value,
+          limit: itemsPerPage,
+          page: currentPage,
+          tags: selectedTags
+        })
+        .then(response => {
+          console.log(response.data)
+          setResultCount(response.data.count)
+          setSearchResults(response.data.tilesets)
+        })
+    }
+    else{
+      didMount.current = true
+    }
+  }, [currentPage]);
 
-    if (searchResults.length < nextEndIndex - 1) {
-      setCurrentPage(1);
+  const handleNextPageCall = () => {
+    console.log((currentPage + 2) * itemsPerPage)
+    console.log((currentPage + 2) * itemsPerPage - resultCount)
+    if ((currentPage + 2) * itemsPerPage - resultCount >= itemsPerPage){
+      setCurrentPage(0);
+    }
+    else{
+      setCurrentPage(currentPage + 1);
     }
   };
 
   const handlePrevPageCall = () => {
-    if (currentPage > 1) {
+    if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
     }
-    if (currentPage === 1) {
-      setCurrentPage(Math.ceil(searchResults.length / itemsPerPage))
+    if (currentPage === 0) {
+      if (resultCount % itemsPerPage == 0){
+        setCurrentPage(resultCount / itemsPerPage - 1)
+      }
+      else{
+        setCurrentPage(resultCount / itemsPerPage)
+      }
     }
   };
 
   const getPaginatedData = () => {
-    const startIndex = currentPage * itemsPerPage - itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-
-    return searchResults.slice(startIndex, endIndex);
+    return searchResults
   };
 
   
@@ -69,15 +103,17 @@ const SearchScreen = (props) => {
         selectedTags.push(tagChoices[i].value)
       }
     }
+    setCurrentPage(0)
     var response = await Axios.post(
       "https://maptile1.herokuapp.com/tileset/search",
       {
         search: searchRef.current.value,
         limit: itemsPerPage,
-        page: currentPage,
+        page: 0,
         tags: selectedTags
       })
       console.log(response.data)
+    setResultCount(response.data.count)
     setSearchResults(response.data.tilesets)
   }
 
@@ -112,7 +148,7 @@ const SearchScreen = (props) => {
             <div className="grid-col-8 cursor-pointer relative left-[800px] flex flex-row col-span-2">
               <AiOutlineDoubleLeft onClick={handlePrevPageCall} size={40} />
 
-              <div className="mt-2">Page {currentPage}</div>
+              <div className="mt-2">Page {currentPage + 1}</div>
               <AiOutlineDoubleRight onClick={handleNextPageCall} size={40} />
             </div>
           </div>
