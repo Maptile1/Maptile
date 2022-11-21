@@ -188,7 +188,7 @@ router.post("/tileset/deleteshared/:id", async (req, res) => {
 router.get("/tileset/top", async (req, res) => {
   var tilesets = await Tileset.aggregate([
     { $match: {}},
-    { $project: {name: 1, description: 1, _id: 1, likes: 1, dislikes: 1, usersLiked: 1, tags: 1, score: { $subtract: ["$likes", "$dislikes"]}}},
+    { $project: {name: 1, description: 1, _id: 1, likes: 1, dislikes: 1, usersLiked: 1, tags: 1, owner: 1, score: { $subtract: ["$likes", "$dislikes"]}}},
     { $sort: { score: -1, _id: 1} },
     { $limit: 10 }
   ])
@@ -333,7 +333,7 @@ router.get("/tileset/search", async (req, res) => {
   }
   var tilesets = await Tileset.aggregate([
     { $match: query},
-    { $project: {name: 1, description: 1, _id: 1, likes: 1, dislikes: 1, usersLiked: 1, tags: 1, score: { $subtract: ["$likes", "$dislikes"]}}},
+    { $project: {name: 1, description: 1, _id: 1, likes: 1, dislikes: 1, usersLiked: 1, tags: 1, owner: 1,score: { $subtract: ["$likes", "$dislikes"]}}},
     { $sort: { score: -1, _id: 1} },
     { $skip: page },
     { $limit: limit }
