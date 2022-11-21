@@ -25,7 +25,8 @@ const Home = (props) => {
             await Axios.get(
                 "https://maptile1.herokuapp.com/tileset/top")
                 .then((response) => {
-                    setTopTilesets(response.data);
+                    console.log(response.data.tilesets)
+                    setTopTilesets(response.data.tilesets);
                 })
             await Axios.get("https://maptile1.herokuapp.com/user/getRecent/" + props.user._id)
                 .then((response) => {
@@ -50,7 +51,6 @@ const Home = (props) => {
         };
     }, [topSlideIndex])
 
-    console.log(recent);
     return (
         <div>
             {!loading && (
