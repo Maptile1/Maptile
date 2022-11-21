@@ -327,7 +327,7 @@ router.get("/tileset/search", async (req, res) => {
   var tags = req.body.tags ? req.body.tags.map((tag) => {return {tags: tag}}) : undefined
   var limit = req.body.limit ? req.body.limit : 0
   var page = req.body.page ? req.body.page * limit : 0
-  var query = {$text:{$search: req.body.search}}
+  var query = {$text:{$search: req.body.search ? req.body.search : ""}}
   if (tags && tags.length != 0){
     query.$or = tags
   }
