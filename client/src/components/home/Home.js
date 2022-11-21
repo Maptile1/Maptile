@@ -148,7 +148,7 @@ const Home = (props) => {
                                 <div className="flex flex-col mt-5 flex-shrink-0 ml-12 w-5/6 rl-scroll-card space-y-3 overflow-y-scroll no-scrollbar">
                                     {likedTilesets.map((item) => {
                                         return (
-                                            <RecentCard _id={item._id} owner={item.owner} description={item.description} name={item.name} />
+                                            <RecentCard _id={item._id} owner={item.owner} description={item.description} like={true} name={item.name} />
                                         )
                                     })}
                                 </div>
