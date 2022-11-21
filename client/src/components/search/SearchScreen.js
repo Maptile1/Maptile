@@ -69,7 +69,7 @@ const SearchScreen = (props) => {
         selectedTags.push(tagChoices[i].value)
       }
     }
-    var response = await Axios.get(
+    var response = await Axios.post(
       "https://maptile1.herokuapp.com/tileset/search",
       {
         search: searchRef.current.value,
@@ -78,7 +78,7 @@ const SearchScreen = (props) => {
         tags: selectedTags
       })
       console.log(response.data)
-    //setSearchResults(response.data)
+    setSearchResults(response.data)
   }
 
   const handleAddTag = (e) => {
