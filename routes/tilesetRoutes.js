@@ -343,12 +343,14 @@ router.post("/tileset/search", async (req, res) => {
   if (limit <= 0){
     limit = 1;
   }
-  console.log(limit)
   var page = req.body.page ? req.body.page * limit : 0
   if (page < 0){
     page = 0;
   }
-  var query = {$text:{$search: req.body.search ? req.body.search : ""}}
+  var query = {}
+  if (req.body.search != undefined && req.body.search != ""){
+    query.$text = {$search: req.body.search}
+  }
   if (tags && tags.length != 0){
     query.$or = tags
   }
