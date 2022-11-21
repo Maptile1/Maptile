@@ -245,21 +245,18 @@ userRouter.post('/user/image', uploadStrategy, async (req, res) => {
 
 userRouter.get('/user/getRecent/:id', async (req, res) => {
     var user = await User.findById(req.params.id);
-    var tilesets = [];
-    await Promise.all(
-        user.tilesets.map(async (obj, index) => {
-            tileset = await Tileset.findById(obj);
-            tilesets.push(tileset);
-        })
-    );
-    await Promise.all(
-        user.shared_tilesets.map(async (obj, index) => {
-            tileset = await Tileset.findById(obj);
-            tilesets.push(tileset);
-        })
-    );
-    var recent = tilesets.sort((a, b) => new Date(b.timeAccessed) - new Date(a.timeAccessed));
-    res.json({ recent });
+    if (user == null){
+        res.status(400).json({errorMessage: "User not found"})
+        return
+    }
+    var ids = user.tilesets.concat(user.shared_tilesets)
+    if (ids.length == 0){
+        res.json({tilesets: []})
+        return;
+    }
+    ids = ids.map((id) => {return {_id: id}})
+    var tilesets = await Tileset.find({$or: ids}, "_id name owner description").sort({timeEdited: -1, _id: 1}).limit(10)
+    res.json({ recent: tilesets });
 })
 
 module.exports = userRouter;
