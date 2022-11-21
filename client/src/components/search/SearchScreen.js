@@ -78,7 +78,7 @@ const SearchScreen = (props) => {
         tags: selectedTags
       })
       console.log(response.data)
-    setSearchResults(response.data)
+    setSearchResults(response.data.tilesets)
   }
 
   const handleAddTag = (e) => {
