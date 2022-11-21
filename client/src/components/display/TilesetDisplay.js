@@ -267,7 +267,7 @@ const TilesetDisplay = (props) => {
                   class="object-cover w-full h-full mx-auto rounded-md lg:max-w-2xl"
                   src={
                     "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
-                    tileset._id
+                    tileset._id + "?=" + Math.random().toString().substring(2)
                   }
                   alt=""
                   style={{ "image-rendering": "pixelated" }}
