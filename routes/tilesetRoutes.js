@@ -320,4 +320,22 @@ router.post("/tileset/getBatch", async (req, res) => {
   res.json({tilesets: tilesets})
 })
 
+router.get("/tileset/search", async (req, res) => {
+  var tags = req.body.tags ? req.body.tags.map((tag) => {return {tags: tag}}) : undefined
+  var limit = req.body.limit ? req.body.limit : 0
+  var page = req.body.page ? req.body.page * limit : 0
+  var query = {$text:{$search: req.body.search}}
+  if (tags){
+    query.$or = tags
+  }
+  var tilesets = await Tileset.aggregate([
+    {$match: query},
+    {$project: {name: 1, description: 1, _id: 1, likes: 1, dislikes: 1, usersLiked: 1, score: { $subtract: ["$likes", "$dislikes"]}}},
+    { $sort: { score: -1, _id: 1}},
+    { $skip: page},
+    { $limit: limit}
+  ])
+  res.json({tilesets: tilesets})
+})
+
 module.exports = router;
