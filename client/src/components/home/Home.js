@@ -103,8 +103,8 @@ const Home = (props) => {
                                     if (i % 2 === 0) {
                                         return (
                                             <div className="flex flex-row w-full h-full space-x-16 justify-center flex-shrink-0">
-                                                <TopPostCard _id={slide._id} name={slide.name} owner={slide.owner} likes={slide.likes} />
-                                                <TopPostCard _id={topTilesets[i + 1]._id} name={topTilesets[i + 1].name} owner={topTilesets[i + 1].owner} likes={topTilesets[i + 1].likes} />
+                                                <TopPostCard _id={slide._id} name={slide.name} owner={slide.owner} dislikes={slide.dislikes} likes={slide.likes} />
+                                                <TopPostCard _id={topTilesets[i + 1]._id} dislikes={topTilesets[i + 1].dislikes} name={topTilesets[i + 1].name} owner={topTilesets[i + 1].owner} likes={topTilesets[i + 1].likes} />
                                             </div>
                                         );
                                     } else {
