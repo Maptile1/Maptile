@@ -118,9 +118,10 @@ const SearchScreen = (props) => {
   }
 
   const handleAddTag = (e) => {
-    if(!tags.find((tag) => tag === tagRef.current.value)){
-      setTags([tagRef.current.value, ...tags])
+    if(tagRef.current.value != "" && !tags.find((tag) => tag === tagRef.current.value)){
+      setTags([...tags, tagRef.current.value])
     }
+    tagRef.current.value = "";
   }
 
   return user ? (
