@@ -10,15 +10,14 @@ router.post("/comment/create", async (req, res) => {
     res.status(400).json({errorMessage: 'Not logged in'})
     return;
   }
-
-  let date = new Date()
-  let dateString = date.toLocaleDateString()
-  dateString += " " + date.toLocaleTimeString()
+  // let date = new Date()
+  // let dateString = date.toLocaleDateString()
+  // dateString += " " + date.toLocaleTimeString()
   var comment = new Comment({
     _id: new ObjectId(),
     owner: req.session._id, 
     comment_text: req.body.comment_text,
-    comment_date: dateString,
+    comment_date: new Date(),
     likes: 0,
     dislikes: 0,
     post: req.body.post,
