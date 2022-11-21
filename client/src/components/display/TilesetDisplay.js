@@ -294,12 +294,22 @@ const TilesetDisplay = (props) => {
               <div class="row-start-4 mt-5 col-span-5 ">
                 Comments
                 {
-                  comments.map((obj, index) =>
-                    <Comment
+                  comments.sort(function (a,b) {
+                      if(a || b == null){
+                        return 0
+                      }
+                      return a.comment_date - b.comment_date;
+                  }).map((obj, index) => {
+                      if(obj == null){
+                        return null
+                      }
+                      console.log(obj)
+                      return (<Comment
                       owner={obj.owner}
                       date={obj.comment_date}
                       comment_text={obj.comment_text}
-                    />
+                    />)
+                  }
                   )
                 }
               </div>
