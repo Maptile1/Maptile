@@ -301,10 +301,17 @@ const TilesetDisplay = (props) => {
                         return null
                       }
                       console.log(obj)
-                      return (<Comment
+                      return (
+                      <Comment
                       owner={obj.owner}
                       date={obj.comment_date}
                       comment_text={obj.comment_text}
+                      likes={obj.likes}
+                      dislikes={obj.dislikes}
+                      comment_id={obj._id}
+                      curr_user={props.user}
+                      liked_by={obj.usersLiked}
+                      disliked_by={obj.usersDisliked}
                     />)
                   }
                   )
