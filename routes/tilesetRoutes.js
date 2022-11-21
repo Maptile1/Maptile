@@ -324,6 +324,10 @@ router.post("/tileset/getBatch", async (req, res) => {
   if (page < 0){
     page = 0;
   }
+  if (req.body.ids == undefined){
+    res.json({tilesets: []})
+    return;
+  }
   var ids = req.body.ids.map((id) => { return {_id: id}})
   if (ids == undefined || ids.length == 0){
     res.json({tilesets: []})
