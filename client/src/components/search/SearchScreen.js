@@ -1,5 +1,5 @@
 import Sidebar from "../sidebar/Sidebar";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SearchCard from "../card/SearchCard";
 import Axios from "axios";
 import { Navigate, useLocation } from "react-router-dom";
@@ -15,6 +15,9 @@ const SearchScreen = (props) => {
   const user = props.user;
   const location = useLocation();
   var itemsPerPage = 6;
+  const searchRef = useRef(null);
+  const tagRef = useRef(null);
+  const [tags,setTags] = useState([])
 
   useEffect(() => {
     const tilesetRes = async () => {
@@ -56,7 +59,34 @@ const SearchScreen = (props) => {
     return searchResults.slice(startIndex, endIndex);
   };
 
-  const tags = ["Fire", "Water", "Awesome", "Big", "Small", "Great", "Earth", "City", "Lava", "Madison", "Castle", "Larger"]
+  
+
+  const handleSearch = async (e) => {
+    let selectedTags = []
+    let tagChoices = document.getElementsByName("tagBox")
+    for(let i = 0; tagChoices[i]; i++){
+      if(tagChoices[i].checked){
+        selectedTags.push(tagChoices[i].value)
+      }
+    }
+    var response = await Axios.get(
+      "https://maptile1.herokuapp.com/tileset/search",
+      {
+        search: searchRef.current.value,
+        limit: itemsPerPage,
+        page: currentPage,
+        tags: selectedTags
+      })
+      console.log(response.data)
+    //setSearchResults(response.data)
+  }
+
+  const handleAddTag = (e) => {
+    if(!tags.find((tag) => tag === tagRef.current.value)){
+      setTags([tagRef.current.value, ...tags])
+    }
+  }
+
   return user ? (
     <div>
       <Sidebar setTheUser={props.setTheUser} />
@@ -64,16 +94,16 @@ const SearchScreen = (props) => {
         <div className="pt-5 text-center text-4xl font-bold text-white">Search</div>
         <div className="flex flex-col h-[53rem] w-5/6 items-left justify-top ml-20 mt-10">
           <div class="grid grid-cols-4">
-            <form className="mb-10 col-start-4 col-span-3">
+            <div className="mb-10 col-start-4 col-span-3">
               <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300">Search</label>
               <div className="relative w-100">
                 <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                   <svg aria-hidden="true" className="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </div>
-                <input type="search" id="default-search" class="block p-4 pl-10 w-full text-sm text-gray-900 bg-maptile-background-mid rounded-lg border border-gray-300 focus:ring-white-500 focus:border-black-500 dark:bg-maptile-background-mid dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Tilesets and Maps" required />
-                <button type="submit" className="text-white absolute right-2.5 bottom-2.5 bg-maptile-background-mid hover:bg-black focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-maptile-green dark:hover:bg-maptile-green-highlight dark:focus:ring-blue-800">Search</button>
+                <input ref={searchRef} type="search" id="default-search" class="block p-4 pl-10 w-full text-sm text-gray-900 bg-maptile-background-mid rounded-lg border border-gray-300 focus:ring-white-500 focus:border-black-500 dark:bg-maptile-background-mid dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Tilesets and Maps" required />
+                <button onClick={()=>handleSearch()}className="text-white absolute right-2.5 bottom-2.5 bg-maptile-background-mid hover:bg-black focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-maptile-green dark:hover:bg-maptile-green-highlight dark:focus:ring-blue-800">Search</button>
               </div>
-            </form>
+            </div>
           </div>
           <div className="grid grid-cols-8 grid-rows-1 place-items-left w-full">
 
@@ -99,11 +129,11 @@ const SearchScreen = (props) => {
           <div className="absolute text-white top-10 mt-48 mr-10 right-4">
             <div className="text-3xl font-bold text-center">Tags</div>
             <div className="bg-maptile-background-mid w-full mt-5 h-[30rem] overflow-auto rounded-xl ">
-              <input className=" bg-maptile-background-light mt-5 w-3/4 flex ml-7 rounded-xl p-2"></input>
+              <input onBlur={() => handleAddTag()} ref={tagRef} className=" bg-maptile-background-light mt-5 w-3/4 flex ml-7 rounded-xl p-2"></input>
               <div className="flex flex-col ml-7 mt-5 space-y-4">
                 {tags.map((obj, index) =>
                   <div>
-                    <input id="default-checkbox" type="checkbox" value="" className="w-4 h-4 text-green-100 bg-black rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                    <input name="tagBox" id="default-checkbox" type="checkbox" value={obj} className="w-4 h-4 text-green-100 bg-black rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                     <label for="default-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{obj}</label>
                   </div>
                 )}
