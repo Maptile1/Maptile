@@ -15,7 +15,7 @@ const commentSchema = new Schema(
 			required: true
 		},
 		comment_date: {
-			type: String,
+			type: Date,
 			required: true
 		},
 		likes: {
