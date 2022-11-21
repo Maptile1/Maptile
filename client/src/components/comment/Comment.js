@@ -32,7 +32,7 @@ const Comment = (props) => {
                     <p class="relative text-xl whitespace-nowrap truncate overflow-hidden">{owner.userName}</p>
 
                 </div>
-                <p class="text-sm">{props.date.toLocaleDateString() + " " + props.date.toLocaleTimeString()}</p>
+                <p class="text-sm">{new Date(props.date).toLocaleDateString() + " " + new Date(props.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
             </div>
         </div>
         <p class="-mt-4">{props.comment_text}</p>
