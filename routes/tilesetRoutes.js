@@ -317,7 +317,7 @@ router.post("/tileset/dislike/:id", async (req, res) => {
 
 router.get("/tileset/getBatch", async (req, res) => {
   var limit = req.body.limit ? req.body.limit : 0
-  if (limit < 0){
+  if (limit <= 0){
     limit = 1;
   }
   var page = req.body.page ? req.body.page * limit : 0
@@ -336,7 +336,7 @@ router.get("/tileset/getBatch", async (req, res) => {
 router.get("/tileset/search", async (req, res) => {
   var tags = req.body.tags ? req.body.tags.map((tag) => {return {tags: tag}}) : undefined
   var limit = req.body.limit ? req.body.limit : 0
-  if (limit < 0){
+  if (limit <= 0){
     limit = 1;
   }
   console.log(limit)
