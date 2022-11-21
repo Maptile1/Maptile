@@ -106,7 +106,7 @@ router.post("/tileset/update/:id", async (req, res) => {
 
 // Get Tileset
 router.get("/tileset/get/:id", async (req, res) => {
-  var tileset = await Tileset.findById(req.params.id);
+  var tileset = await Tileset.findById(req.params.id).catch((err) => {});
   if (tileset != null) {
     res.json({ tileset: tileset });
   } else {
