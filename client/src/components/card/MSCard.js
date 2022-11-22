@@ -39,7 +39,7 @@ const MSCard = (props) => {
         />
       ) : (
         <img
-          //   onClick={() => handleTilesetView()}
+          onClick={() => handleMapView()}
           class="w-3/4 shadow-2xl ml-12 mt-10 border h-3/4 border-white cursor-pointer object-cover object-center"
           src={image}
           alt=""

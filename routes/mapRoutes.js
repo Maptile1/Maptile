@@ -98,6 +98,7 @@ router.post("/map/update/:id", async (req, res) => {
   updates.tilesets = req.body.tilesets;
   updates.public = req.body.public;
   updates.layers = req.body.layers;
+  updates.tags = req.body.tags;
   updates.timeEdited = Date.now();
   var map = await Map.findOneAndUpdate(
     { _id: req.params.id, owner: req.session._id },
