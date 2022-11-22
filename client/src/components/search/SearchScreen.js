@@ -25,29 +25,24 @@ const SearchScreen = (props) => {
   const [loading, setLoading] = useState(true);
   console.log(searchResults);
   useEffect(() => {
-
-      let selectedTags = [];
-      let tagChoices = document.getElementsByName("tagBox");
-      for (let i = 0; tagChoices[i]; i++) {
-        if (tagChoices[i].checked) {
-          selectedTags.push(tagChoices[i].value);
-        }
+    let selectedTags = [];
+    let tagChoices = document.getElementsByName("tagBox");
+    for (let i = 0; tagChoices[i]; i++) {
+      if (tagChoices[i].checked) {
+        selectedTags.push(tagChoices[i].value);
       }
-      var response = Axios.post(
-        "https://maptile1.herokuapp.com/tileset/search",
-        {
-          search: searchRef.current.value,
-          limit: itemsPerPage,
-          page: currentPage,
-          tags: selectedTags,
-        }
-      ).then((response) => {
-        console.log(response.data);
-        setLoading(false);
-        setResultCount(response.data.count);
-        setSearchResults(response.data.tilesets);
-      });
     }
+    var response = Axios.post("https://maptile1.herokuapp.com/tileset/search", {
+      search: searchRef.current.value,
+      limit: itemsPerPage,
+      page: currentPage,
+      tags: selectedTags,
+    }).then((response) => {
+      console.log(response.data);
+      setLoading(false);
+      setResultCount(response.data.count);
+      setSearchResults(response.data.tilesets);
+    });
   }, [currentPage]);
 
   const handleNextPageCall = () => {
