@@ -25,7 +25,7 @@ const SearchScreen = (props) => {
   const [loading, setLoading] = useState(true);
   console.log(searchResults);
   useEffect(() => {
-    if (didMount.current) {
+
       let selectedTags = [];
       let tagChoices = document.getElementsByName("tagBox");
       for (let i = 0; tagChoices[i]; i++) {
@@ -47,8 +47,6 @@ const SearchScreen = (props) => {
         setResultCount(response.data.count);
         setSearchResults(response.data.tilesets);
       });
-    } else {
-      didMount.current = true;
     }
   }, [currentPage]);
 
