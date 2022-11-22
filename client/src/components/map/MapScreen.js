@@ -1,5 +1,5 @@
 import Sidebar from "../sidebar/Sidebar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CreateMapModal from "./CreateMapModal";
 import MSCard from "../card/MSCard";
 import ShareModal from "./ShareModal";
@@ -19,6 +19,57 @@ const MapScreen = (props) => {
     tileset: "",
   });
   const [inputValid, setInputValid] = useState(false);
+
+  const getMaps = async () => {
+    var userresponse = await Axios.get(
+      "https://maptile1.herokuapp.com/user/get/" + props.user._id
+    );
+    console.log(userresponse);
+    var maps = userresponse.data.user.maps;
+    var shared_maps = userresponse.data.user.shared_maps;
+    await Axios.post("https://maptile1.herokuapp.com/map/getBatch", {
+      ids: maps,
+      page: 0,
+      limit: 9999,
+      fields: "name",
+    }).then((response) => {
+      setUserMaps(response.data.maps);
+    });
+    await Axios.post("https://maptile1.herokuapp.com/map/getBatch", {
+      ids: shared_maps,
+      page: 0,
+      limit: 9999,
+      fields: "name",
+    }).then((response) => {
+      setUserSharedMaps(response.data.maps);
+    });
+  };
+
+  useEffect(() => {
+    const getMaps = async () => {
+      await Axios.post("https://maptile1.herokuapp.com/map/getBatch", {
+        ids: props.user.maps,
+        page: 0,
+        limit: 9999,
+        fields: "name",
+      }).then((response) => {
+        setUserMaps(response.data.maps);
+      });
+      await Axios.post("https://maptile1.herokuapp.com/map/getBatch", {
+        ids: props.user.shared_maps,
+        page: 0,
+        limit: 9999,
+        fields: "name",
+      }).then((response) => {
+        setUserSharedMaps(response.data.maps);
+      });
+    };
+    getMaps();
+  }, []);
+  console.log(props.user.maps);
+  console.log(userSharedMaps);
+  console.log(userMaps);
+
   let tab_selected =
     "bg-maptile-background-mid text-center rounded-t-xl cursor-pointer  mt-[10px] duration-300";
   let tab_unselected =
@@ -47,6 +98,8 @@ const MapScreen = (props) => {
         width: input.mapwidth,
         height: input.mapheight,
         name: input.name,
+      }).then(() => {
+        getMaps();
       });
     }
   };
@@ -70,6 +123,7 @@ const MapScreen = (props) => {
     setInputValid(false);
     setModal(false);
   };
+
   return (
     <div>
       <Sidebar setTheUser={props.setTheUser} />
@@ -103,7 +157,7 @@ const MapScreen = (props) => {
             <div className="flex flex-row flex-wrap px-5 py-5 pl-10  ">
               {userSelected ? (
                 userMaps.length !== 0 ? (
-                  userMaps.map((obj, index) => <div>abc</div>)
+                  userMaps.map((obj, index) => <MSCard name={obj.name} />)
                 ) : (
                   <div>No Maps</div>
                 )

@@ -20,7 +20,6 @@ const TilesetScreen = (props) => {
     tilesetheight: "",
   });
   const [inputValid, setInputValid] = useState(false);
-  const [shareModalOpen, setShareModal] = useState(false);
   let tab_selected =
     "bg-maptile-background-mid text-center rounded-t-xl cursor-pointer  mt-[10px] duration-300";
   let tab_unselected =

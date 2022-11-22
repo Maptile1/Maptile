@@ -1,36 +1,43 @@
 // import modules
-const express = require('express');
-const mongoose = require('mongoose');
-const morgan = require('morgan');
-const cors = require('cors');
-require('dotenv').config();
+const express = require("express");
+const mongoose = require("mongoose");
+const morgan = require("morgan");
+const cors = require("cors");
+require("dotenv").config();
 // app
 const app = express();
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: "10mb" }));
 
-const session = require('express-session')
-const MongoStore = require('connect-mongo');
-app.set('trust proxy', 1)
-app.use(session({
-  secret: 'dfgdfgdfgdfgsdf',
-  resave: false, saveUninitialized: true,
-  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI + '/sessions' }),
-  cookie: { sameSite: 'none', secure: true }
-}));
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+app.set("trust proxy", 1);
+app.use(
+  session({
+    secret: "dfgdfgdfgdfgsdf",
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI + "/sessions" }),
+    cookie: { sameSite: "none", secure: false },
+  })
+);
 
 // db
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("DB CONNECTED"))
-  .catch(err => console.log("DB CONNECTION ERROR", err));
-
+  .catch((err) => console.log("DB CONNECTION ERROR", err));
 
 // middleware
-app.use(morgan('dev'));
-app.use(cors({ origin: ['http://localhost:3000', 'https://maptile.netlify.app'], credentials: true }));
-
+app.use(morgan("dev"));
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "https://maptile.netlify.app"],
+    credentials: true,
+  })
+);
 
 // user routes
 const userRoutes = require("./routes/userRoutes");
@@ -40,7 +47,7 @@ app.use("/", userRoutes);
 const tilesetRoutes = require("./routes/tilesetRoutes");
 app.use("/", tilesetRoutes);
 
-// map routes 
+// map routes
 const mapRoutes = require("./routes/mapRoutes");
 app.use("/", mapRoutes);
 
@@ -56,4 +63,4 @@ const server = app.listen(port, () =>
   console.log(`Server is running on port ${port}`)
 );
 
-module.exports = app
+module.exports = app;

@@ -63,8 +63,12 @@ router.post("/map/delete/:id", async (req, res) => {
     res.status(400).json({ errorMessage: "Not logged in" });
     return;
   }
+  var user = await User.updateOne(
+    { _id: req.session._id },
+    { $pullAll: { maps: [req.params.id] } }
+  );
   Map.findOneAndRemove({ _id: req.params.id, owner: req.session._id })
-    .then(() => res.json({ message: "Map deleted" }))
+    .then(() => res.json({ message: "Map deleted", user: user }))
     .catch((err) => {
       Map.findOne({ _id: req.params.id })
         .then((map) => {
