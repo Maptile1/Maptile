@@ -165,7 +165,7 @@ const SearchScreen = (props) => {
                     ref={searchRef}
                     type="search"
                     id="default-search"
-                    class="block p-4 pl-10 w-full text-sm text-gray-900 bg-maptile-background-mid rounded-lg border border-gray-300 focus:ring-white-500 focus:border-black-500 dark:bg-maptile-background-mid dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="block p-4 pl-10 w-full text-sm text-white bg-maptile-background-mid rounded-lg border border-gray-300 focus:ring-white-500 focus:border-black-500 dark:bg-maptile-background-mid dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Search Tilesets and Maps"
                     required
                   />
