@@ -273,4 +273,55 @@ router.post("/map/dislike/:id", async (req, res) => {
   }
 });
 
+router.post("/map/search", async (req, res) => {
+  var tags = req.body.tags
+    ? req.body.tags.map((tag) => {
+        return { tags: tag };
+      })
+    : undefined;
+  var limit = req.body.limit ? req.body.limit : 0;
+  if (limit <= 0) {
+    limit = 1;
+  }
+  var page = req.body.page ? req.body.page * limit : 0;
+  if (page < 0) {
+    page = 0;
+  }
+  var query = {};
+  if (req.body.search != undefined && req.body.search != "") {
+    query.$text = { $search: req.body.search };
+  }
+  if (tags && tags.length != 0) {
+    query.$or = tags;
+  }
+  var documents = await Tileset.aggregate([
+    { $match: query },
+    {
+      $facet: {
+        maps: [
+          {
+            $project: {
+              name: 1,
+              description: 1,
+              _id: 1,
+              likes: 1,
+              dislikes: 1,
+              usersLiked: 1,
+              tags: 1,
+              owner: 1,
+              score: { $subtract: ["$likes", "$dislikes"] },
+            },
+          },
+          { $sort: { score: -1, _id: 1 } },
+          { $skip: page },
+          { $limit: limit },
+        ],
+        count: [{ $count: "count" }],
+      },
+    },
+  ]);
+  var count = documents[0].count.length != 0 ? documents[0].count[0].count : 0;
+  res.json({ maps: documents[0].maps, count: count });
+});
+
 module.exports = router;

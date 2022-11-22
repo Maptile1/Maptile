@@ -178,7 +178,13 @@ const MapScreen = (props) => {
                   <div>No Maps</div>
                 )
               ) : userSharedMaps.length !== 0 ? (
-                userSharedMaps.map((obj, index) => <div>1</div>)
+                userSharedMaps.map((obj, index) => (
+                  <MSCard
+                    // handleDelete={handleDelete}
+                    name={obj.name}
+                    _id={obj._id}
+                  />
+                ))
               ) : (
                 <div>No Shared Maps</div>
               )}
