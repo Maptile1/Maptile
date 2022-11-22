@@ -78,6 +78,7 @@ const SearchScreen = (props) => {
   };
 
   const handleSearch = async (boolean) => {
+    console.log(boolean);
     let selectedTags = [];
     let tagChoices = document.getElementsByName("tagBox");
     for (let i = 0; tagChoices[i]; i++) {
@@ -169,7 +170,7 @@ const SearchScreen = (props) => {
                     required
                   />
                   <button
-                    onClick={() => handleSearch()}
+                    onClick={() => handleSearch(userSelected)}
                     className="text-white absolute right-2.5 bottom-2.5 bg-maptile-background-mid hover:bg-black focus:ring-4 focus:outline-none focus:ring-white-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-maptile-green dark:hover:bg-maptile-green-highlight dark:focus:ring-blue-800"
                   >
                     Search

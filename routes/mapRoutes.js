@@ -288,6 +288,7 @@ router.post("/map/search", async (req, res) => {
   if (page < 0) {
     page = 0;
   }
+  console.log(req.body.search);
   var query = {};
   if (req.body.search != undefined && req.body.search != "") {
     query.$text = { $search: req.body.search };
