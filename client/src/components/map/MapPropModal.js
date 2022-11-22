@@ -24,7 +24,7 @@ const MapPropModal = (props) => {
       setTags([...tags, tag]);
     }
   };
-  console.log("load");
+
   const removeTag = (e) => {
     const tag = e.target.getAttribute("name");
     setTags(tags.filter((t) => t !== tag));

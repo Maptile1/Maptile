@@ -60,16 +60,32 @@ const EditMap = (props) => {
     };
     getMap();
   }, [gridSize]);
-  console.log(map);
   const zoom = (factor) => {
     if (gridSize.x + factor * 10 <= 60 && gridSize.x + factor * 10 >= 20) {
       setGridSize({ x: gridSize.x + factor * 10, y: gridSize.y + factor * 10 });
     }
   };
-  console.log(mapPropModal);
+  const updateMap = (map) => {
+    setMap(map);
+  };
+
+  const handleShare = async (email) => {
+    await Axios.post("https://maptile1.herokuapp.com/user/share", {
+      type: "map",
+      email: email,
+      id: map._id,
+    })
+      .then((response) => {
+        alert("Shared Map");
+      })
+      .catch((error) => {
+        alert("No user with that email");
+      });
+  };
+
   return (
     <div>
-      <Sidebar />
+      <Sidebar setTheUser={props.setTheUser} />
       {!loading && (
         <main className="mx-auto flex flex-col min-h-screen w-full items-center justify-top bg-maptile-background-dark text-white">
           <div className="pt-5 text-center text-4xl font-bold text-white underline">
@@ -140,10 +156,13 @@ const EditMap = (props) => {
           <ShareModal
             modalOpen={shareModalOpen}
             setShareModal={setShareModal}
+            handleShare={handleShare}
           />
+
           <MapPropModal
             mapPropModal={mapPropModal}
             setMapPropModal={setMapPropModal}
+            updateMap={updateMap}
             map={map}
           />
         </main>

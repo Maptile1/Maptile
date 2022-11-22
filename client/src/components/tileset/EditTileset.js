@@ -125,7 +125,6 @@ const EditTileset = (props) => {
       id: tileset._id,
     })
       .then((response) => {
-        console.log(response.data.user);
         alert("Shared Tileset");
       })
       .catch((error) => {
