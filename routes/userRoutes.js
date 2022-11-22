@@ -309,7 +309,6 @@ userRouter.post("/user/share", async (req, res) => {
 
 userRouter.post("/user/deleteshared", async (req, res) => {
   var userID = req.body._id;
-  console.log(userID);
   var assetID = req.body.asset_id;
   var type = req.body.type;
   if (type == "tileset") {
