@@ -77,6 +77,11 @@ const SearchScreen = (props) => {
     return searchResults;
   };
 
+  const updateSelect = (boolean) => {
+    updateUserSelected(boolean);
+    handleSearch();
+  };
+
   const handleSearch = async (e) => {
     let selectedTags = [];
     let tagChoices = document.getElementsByName("tagBox");
@@ -86,7 +91,7 @@ const SearchScreen = (props) => {
       }
     }
     setCurrentPage(0);
-    if (userSelected) {
+    if (!userSelected) {
       var response = await Axios.post(
         "https://maptile1.herokuapp.com/tileset/search",
         {
@@ -176,13 +181,13 @@ const SearchScreen = (props) => {
           <div className="grid grid-cols-8 grid-rows-1 place-items-left w-full">
             <div
               className={`${userSelected ? tab_selected : tab_unselected}`}
-              onClick={() => updateUserSelected(true)}
+              onClick={() => updateSelect(true)}
             >
               Tilesets
             </div>
             <div
               className={`${!userSelected ? tab_selected : tab_unselected}`}
-              onClick={() => updateUserSelected(false)}
+              onClick={() => updateSelect(false)}
             >
               Maps
             </div>
