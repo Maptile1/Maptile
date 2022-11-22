@@ -208,6 +208,7 @@ const SearchScreen = (props) => {
                       owner={obj.owner}
                       name={obj.name}
                       _id={obj._id}
+                      type={"tileset"}
                     />
                   ))
                 ) : (
@@ -216,6 +217,7 @@ const SearchScreen = (props) => {
               ) : searchResults.length !== 0 ? (
                 getPaginatedData().map((obj, index) => (
                   <SearchCard
+                    type={"map"}
                     search={true}
                     owner={obj.owner}
                     name={obj.name}
