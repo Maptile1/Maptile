@@ -294,7 +294,7 @@ router.post("/map/search", async (req, res) => {
   if (tags && tags.length != 0) {
     query.$or = tags;
   }
-  var documents = await Tileset.aggregate([
+  var documents = await Map.aggregate([
     { $match: query },
     {
       $facet: {

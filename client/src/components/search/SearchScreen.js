@@ -96,7 +96,6 @@ const SearchScreen = (props) => {
           tags: selectedTags,
         }
       );
-      console.log(response.data);
       setResultCount(response.data.count);
       setSearchResults(response.data.tilesets);
     } else {
@@ -109,9 +108,8 @@ const SearchScreen = (props) => {
           tags: selectedTags,
         }
       );
-      console.log(response.data);
       setResultCount(response.data.count);
-      setSearchResults(response.data.tilesets);
+      setSearchResults(response.data.maps);
     }
   };
 
@@ -208,10 +206,19 @@ const SearchScreen = (props) => {
                     />
                   ))
                 ) : (
-                  <div>No Search Results</div>
+                  <div>No Tileset Search Results</div>
                 )
+              ) : searchResults.length !== 0 ? (
+                getPaginatedData().map((obj, index) => (
+                  <SearchCard
+                    search={true}
+                    owner={obj.owner}
+                    name={obj.name}
+                    _id={obj._id}
+                  />
+                ))
               ) : (
-                <div>Maps</div>
+                <div>No Map Search Results</div>
               )}
             </div>
           </div>
