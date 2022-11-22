@@ -104,6 +104,16 @@ const MapScreen = (props) => {
     }
   };
 
+  const handleDelete = async (_id) => {
+    await Axios.post("https://maptile1.herokuapp.com/map/delete/" + _id).then(
+      (response) => {
+        console.log(response);
+        getMaps();
+        alert("Deleted");
+      }
+    );
+  };
+
   const handleShare = (e) => {
     setShareModal(false);
   };
@@ -157,7 +167,13 @@ const MapScreen = (props) => {
             <div className="flex flex-row flex-wrap px-5 py-5 pl-10  ">
               {userSelected ? (
                 userMaps.length !== 0 ? (
-                  userMaps.map((obj, index) => <MSCard name={obj.name} />)
+                  userMaps.map((obj, index) => (
+                    <MSCard
+                      handleDelete={handleDelete}
+                      name={obj.name}
+                      _id={obj._id}
+                    />
+                  ))
                 ) : (
                   <div>No Maps</div>
                 )

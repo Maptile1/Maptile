@@ -14,6 +14,9 @@ const MSCard = (props) => {
       "?=" +
       Math.random().toString().substring(2)
   );
+  const handleDelete = () => {
+    props.handleDelete(props._id);
+  };
   return (
     <div className="w-1/4 h-1/4 shadow-2xl rounded mt-5 mx-14 bg-maptile-background-dark flex flex-col">
       {props.search ? (
@@ -85,7 +88,7 @@ const MSCard = (props) => {
                     <Menu.Item>
                       {({ active }) => (
                         <button
-                          //   onClick={() => handleDelete()}
+                          onClick={() => handleDelete()}
                           className={`${
                             active
                               ? "bg-violet-500 text-white"
