@@ -168,6 +168,33 @@ router.post("/map/like/:id", async (req, res) => {
   }
 });
 
+router.post("/map/getBatch", async (req, res) => {
+  var limit = req.body.limit ? req.body.limit : 0;
+  if (limit <= 0) {
+    limit = 1;
+  }
+  var page = req.body.page ? req.body.page * limit : 0;
+  if (page < 0) {
+    page = 0;
+  }
+  if (req.body.ids == undefined) {
+    res.json({ maps: [] });
+    return;
+  }
+  var ids = req.body.ids.map((id) => {
+    return { _id: id };
+  });
+  if (ids == undefined || ids.length == 0) {
+    res.json({ maps: [] });
+    return;
+  }
+  var maps = await Map.find({ $or: ids }, req.body.fields)
+    .sort({ timeEdited: -1, _id: 1 })
+    .skip(page)
+    .limit(limit);
+  res.json({ maps: maps });
+});
+
 router.post("/map/dislike/:id", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
