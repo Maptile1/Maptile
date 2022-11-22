@@ -23,9 +23,9 @@ const SearchScreen = (props) => {
   const [resultCount, setResultCount] = useState(0);
   const didMount = useRef(false);
   const [loading, setLoading] = useState(true);
+  console.log(searchResults);
   useEffect(() => {
     if (didMount.current) {
-      setLoading(true);
       let selectedTags = [];
       let tagChoices = document.getElementsByName("tagBox");
       for (let i = 0; tagChoices[i]; i++) {
@@ -43,10 +43,10 @@ const SearchScreen = (props) => {
         }
       ).then((response) => {
         console.log(response.data);
+        setLoading(false);
         setResultCount(response.data.count);
         setSearchResults(response.data.tilesets);
       });
-      setLoading(false);
     } else {
       didMount.current = true;
     }
@@ -81,10 +81,10 @@ const SearchScreen = (props) => {
 
   const updateSelect = (boolean) => {
     updateUserSelected(boolean);
-    handleSearch();
+    handleSearch(boolean);
   };
 
-  const handleSearch = async (e) => {
+  const handleSearch = async (boolean) => {
     let selectedTags = [];
     let tagChoices = document.getElementsByName("tagBox");
     for (let i = 0; tagChoices[i]; i++) {
@@ -93,7 +93,8 @@ const SearchScreen = (props) => {
       }
     }
     setCurrentPage(0);
-    if (!userSelected) {
+    if (boolean) {
+      setLoading(true);
       var response = await Axios.post(
         "https://maptile1.herokuapp.com/tileset/search",
         {
@@ -106,6 +107,7 @@ const SearchScreen = (props) => {
       setResultCount(response.data.count);
       setSearchResults(response.data.tilesets);
     } else {
+      setLoading(true);
       var response = await Axios.post(
         "https://maptile1.herokuapp.com/map/search",
         {
@@ -118,6 +120,7 @@ const SearchScreen = (props) => {
       setResultCount(response.data.count);
       setSearchResults(response.data.maps);
     }
+    setLoading(false);
   };
 
   const handleAddTag = (e) => {
@@ -132,8 +135,8 @@ const SearchScreen = (props) => {
 
   return user ? (
     <div>
-      <Sidebar setTheUser={props.setTheUser} />
-      {!loading && (
+      <div>
+        <Sidebar setTheUser={props.setTheUser} s />
         <main className="mx-auto flex flex-col min-h-screen w-full items-center justify-top bg-maptile-background-dark text-white">
           <div className="pt-5 text-center text-4xl font-bold text-white">
             Search
@@ -202,35 +205,37 @@ const SearchScreen = (props) => {
               </div>
             </div>
             <div className="bg-maptile-background-mid w-10/12 h-[50rem] rounded-r-xl rounded-b-xl overflow-y-auto overflow-x-hidden">
-              <div className="flex flex-row flex-wrap py-20 left-[130px] relative gap-y-10 gap-x-5 ">
-                {userSelected ? (
-                  searchResults.length !== 0 ? (
+              {!loading && (
+                <div className="flex flex-row flex-wrap py-20 left-[130px] relative gap-y-10 gap-x-5 ">
+                  {userSelected ? (
+                    searchResults.length !== 0 ? (
+                      getPaginatedData().map((obj, index) => (
+                        <SearchCard
+                          search={true}
+                          owner={obj.owner}
+                          name={obj.name}
+                          _id={obj._id}
+                          type={"tileset"}
+                        />
+                      ))
+                    ) : (
+                      <div>No Tileset Search Results</div>
+                    )
+                  ) : searchResults.length !== 0 ? (
                     getPaginatedData().map((obj, index) => (
                       <SearchCard
+                        type={"map"}
                         search={true}
                         owner={obj.owner}
                         name={obj.name}
                         _id={obj._id}
-                        type={"tileset"}
                       />
                     ))
                   ) : (
-                    <div>No Tileset Search Results</div>
-                  )
-                ) : searchResults.length !== 0 ? (
-                  getPaginatedData().map((obj, index) => (
-                    <SearchCard
-                      type={"map"}
-                      search={true}
-                      owner={obj.owner}
-                      name={obj.name}
-                      _id={obj._id}
-                    />
-                  ))
-                ) : (
-                  <div>No Map Search Results</div>
-                )}
-              </div>
+                    <div>No Map Search Results</div>
+                  )}
+                </div>
+              )}
             </div>
             <div className="absolute text-white top-10 mt-48 mr-10 right-4">
               <div className="text-3xl font-bold text-center">Tags</div>
@@ -263,7 +268,7 @@ const SearchScreen = (props) => {
             </div>
           </div>
         </main>
-      )}
+      </div>
     </div>
   ) : (
     <Navigate to="/" replace state={{ from: location }} />
