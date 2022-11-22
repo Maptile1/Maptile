@@ -32,7 +32,12 @@ router.post("/map/create", async (req, res) => {
     usersDisliked: [],
   });
   await map.save();
-  res.json({ map: map });
+  var user = await User.findOneAndUpdate(
+    { _id: req.session._id },
+    { $addToSet: { maps: map._id } },
+    { new: true }
+  );
+  res.json({ map: map, user: user });
 });
 
 // Get map
