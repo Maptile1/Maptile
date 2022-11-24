@@ -32,18 +32,33 @@ const SearchScreen = (props) => {
         selectedTags.push(tagChoices[i].value);
       }
     }
-    var response = Axios.post("https://maptile1.herokuapp.com/tileset/search", {
-      search: searchRef.current.value,
-      limit: itemsPerPage,
-      page: currentPage,
-      tags: selectedTags,
-    }).then((response) => {
-      console.log(response.data);
-      setLoading(false);
-      setResultCount(response.data.count);
-      setSearchResults(response.data.tilesets);
-    });
-  }, [currentPage]);
+    if (userSelected) {
+      var response = Axios.post(
+        "https://maptile1.herokuapp.com/tileset/search",
+        {
+          search: searchRef.current.value,
+          limit: itemsPerPage,
+          page: currentPage,
+          tags: selectedTags,
+        }
+      ).then((response) => {
+        console.log(response.data);
+        setLoading(false);
+        setResultCount(response.data.count);
+        setSearchResults(response.data.tilesets);
+      });
+    } else {
+      Axios.post("https://maptile1.herokuapp.com/map/search", {
+        search: searchRef.current.value,
+        limit: itemsPerPage,
+        page: currentPage,
+        tags: selectedTags,
+      }).then((response) => {
+        setResultCount(response.data.count);
+        setSearchResults(response.data.maps);
+      });
+    }
+  }, [currentPage, userSelected]);
 
   const handleNextPageCall = () => {
     console.log((currentPage + 2) * itemsPerPage);
@@ -53,6 +68,7 @@ const SearchScreen = (props) => {
     } else {
       setCurrentPage(currentPage + 1);
     }
+    // handleSearch(userSelected);
   };
 
   const handlePrevPageCall = () => {
@@ -66,16 +82,17 @@ const SearchScreen = (props) => {
         setCurrentPage(Math.floor(resultCount / itemsPerPage));
       }
     }
+    // handleSearch(userSelected);
   };
 
   const getPaginatedData = () => {
     return searchResults;
   };
 
-  const updateSelect = (boolean) => {
-    updateUserSelected(boolean);
-    handleSearch(boolean);
-  };
+  // const updateSelect = (boolean) => {
+  //   updateUserSelected(boolean);
+  //   handleSearch(boolean);
+  // };
 
   const handleSearch = async (boolean) => {
     console.log(boolean);
@@ -94,7 +111,7 @@ const SearchScreen = (props) => {
         {
           search: searchRef.current.value,
           limit: itemsPerPage,
-          page: 0,
+          page: currentPage,
           tags: selectedTags,
         }
       );
@@ -107,7 +124,7 @@ const SearchScreen = (props) => {
         {
           search: searchRef.current.value,
           limit: itemsPerPage,
-          page: 0,
+          page: currentPage,
           tags: selectedTags,
         }
       );
@@ -181,13 +198,13 @@ const SearchScreen = (props) => {
             <div className="grid grid-cols-8 grid-rows-1 place-items-left w-full">
               <div
                 className={`${userSelected ? tab_selected : tab_unselected}`}
-                onClick={() => updateSelect(true)}
+                onClick={() => updateUserSelected(true)}
               >
                 Tilesets
               </div>
               <div
                 className={`${!userSelected ? tab_selected : tab_unselected}`}
-                onClick={() => updateSelect(false)}
+                onClick={() => updateUserSelected(false)}
               >
                 Maps
               </div>
