@@ -7,10 +7,16 @@ import { Menu, Transition } from '@headlessui/react'
 const LayerCard =(props) => {
     return(
     <Menu as="div" className=" relative inline-block text-left ">
-    <div className="grid grid-cols-2 justify-items-start mb-10">
-        <div className="col-start-1 text-center text-2xl p-2 underline cursor-pointer">
+    <div className="grid grid-cols-2 justify-items-start mb-10" onClick={()=>props.changeLayer(props.id)}>
+        {props.active ? 
+        <div className="col-start-1 text-center text-2xl p-2 underline cursor-pointer text-maptile-green">
             {props.name}
         </div>
+        :
+        <div className="col-start-1 text-center text-2xl p-2 underline cursor-pointer text-white">
+            {props.name}
+        </div>}
+        
             <Menu.Button className="col-start-2 inline-flex items-center justify-top rounded-md bg-opacity-20 px-4 py-2 text-5xl font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
             <BiCog className="mr-2 h-5 w-5"aria-hidden="true"/>
 

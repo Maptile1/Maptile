@@ -210,3 +210,7 @@
   .rl-scroll-card {
     height: 89.25%;
   }
+
+  .tile-selector {
+    outline: 3px solid cyan;
+  }
