@@ -17,7 +17,16 @@ const EditMap = (props) => {
   const [mapPropModal, setMapPropModal] = useState(false);
   const [map, setMap] = useState(null);
   const [gridSize, setGridSize] = useState({ x: 20, y: 20 });
-  const [layers, setLayers] = useState([{name:"1",data:[]},{name:"2",data:[]}])
+  // ! Layer Formating
+  // * Name: Name of the Layer
+  // ? Name todo: Implement Name Change Function
+  // * Data: 1D array of integers, these represent the tile id
+  // ! Data Important : ID's are shifted by 1 as 0 is a blank space, so the true ID: 0 on the tileset is actually 1
+  // * Active: Flag Determining if the layer is to be rendered, NYI
+  // * Custom Prop: Object that contains a type, ex. : boolean, int , and a value for that prop type
+  // ! Custom Prop: This is for use in a game engine so it must be formatted like the data Tiled (that other app for making tilesets) produces 
+  const [layers, setLayers] = useState([{name:"1",data:[], active:true, customProp:{type: "", value:""}, id:0}])
+  const [layerCount, setLayerCount] = useState(0)
   const [currentLayer, setCurrentLayer] = useState(0)
   const [tileSelection, setTileSelection] = useState([0,0])
   const [grid, setGrid] = useState([]);
@@ -93,6 +102,7 @@ const EditMap = (props) => {
 
         if(tile === 0){
           // ! GIGA HARD CODE -- Replace 16 with Tile width and height
+          ctx.globalAlpha = 0
           ctx.drawImage(
             tilesetImage,
             100,
@@ -104,6 +114,7 @@ const EditMap = (props) => {
             crop_size,
             crop_size
           )
+          ctx.globalAlpha = 1
           ctx.strokeStyle = '#000000';  // some color/style
           ctx.lineWidth = 1; 
           ctx.strokeRect(x * 16,y * 16, crop_size, crop_size)
@@ -150,6 +161,7 @@ const EditMap = (props) => {
         let tileX = tile % (64/16)
         let tileY = Math.floor((tile - tileX) / (64/16))
         if(tile === 0){
+          ctx.globalAlpha = 0
           ctx.drawImage(
             tilesetImage,
             1000,
@@ -161,6 +173,7 @@ const EditMap = (props) => {
             crop_size,
             crop_size
           )
+          ctx.globalAlpha = 1
           ctx.strokeStyle = '#000000';  // some color/style
           ctx.lineWidth = 1; 
           ctx.opacity = 0.5;
@@ -216,7 +229,6 @@ const EditMap = (props) => {
     let newCoords = getCoords(e)
     // ! GIGA HARD CODE -- Replace 64/16 with MapWidth/TileWidth and MapHeight/TileHeight respectivly
     if(!(newCoords[0] >=64/16) && !(newCoords[1] >=64/16)){
-      console.log(newCoords)
       setTileSelection(newCoords)
       // ! GIGA HARD CODE -- Replace 16 with Tile Size
       tilesetSelection.style.left = newCoords[0] * 16 + "px"
@@ -247,6 +259,14 @@ const EditMap = (props) => {
         alert("No user with that email");
       });
   };
+
+  const addNewLayer = () => {
+    let newLayer = {name:layers.length + 1,data:[], active:true, customProp:{type: "", value:""},id:layers.length}
+    for(let i = 0;i< 64*64;i++){
+      newLayer.data.push(0)
+    }
+    setLayers([...layers, newLayer])
+  }
 
   // * Canvas Listeners
   const canvasMouseDown = (e) => {
@@ -310,12 +330,18 @@ const EditMap = (props) => {
               </div>
               <div className="flex flex-col w-1/6 ml-2 h-[50rem]">
                 <div className="bg-maptile-background-mid w-full h-1/2 rounded-xl overflow-auto">
-                  <div className="text-white text-2xl text-center w-full underline">
-                    Layers
+                  <div className="flex flex-row">
+                    <div className="text-white text-2xl text-left w-1/2 underline ml-5">
+                      Layers
+                    </div>
+                    <div className="text-maptile-green text-2xl text-right w-1/2 mr-5 cursor-pointer" onClick={()=>addNewLayer()}>
+                      +
+                    </div>
                   </div>
+                  
                   <div className="bg-maptile-background-bright w-5/6 h-5/6 ml-5 mt-5 rounded-xl overflow-auto">
-                    {layers.map((layer, i) => {
-                      return <LayerCard name={layer.name} id={i} active={i === currentLayer} changeLayer={setCurrentLayer}/>;
+                    {layers.slice(0).reverse().map((layer, i) => {
+                      return <LayerCard name={layer.name} id={layer.id} active={layer.id === currentLayer} changeLayer={setCurrentLayer}/>;
                     })}
                   </div>
                 </div>
