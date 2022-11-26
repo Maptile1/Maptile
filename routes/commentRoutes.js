@@ -54,15 +54,7 @@ router.get("/comment/:id", async (req, res) => {
     res.status(400).json({errorMessage: 'Not logged in'})
     return;
   }
-  let tileset = await Tileset.findById(req.params.id);
-  let comments = []  
-  var comment;
-  await Promise.all(
-    tileset.comments.map(async (obj, index) => {
-      comment = await Comment.findById(obj);
-      comments.push(comment);
-    })
-  );
+  let comments = await Comment.find({post: req.params.id})
   res.json({comments: comments})
 });
 

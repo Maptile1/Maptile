@@ -84,22 +84,23 @@ const TilesetDisplay = (props) => {
       })
       .then((response) => {
         console.log(response);
+        let comments1 = comments;
+        comments1.push(response.data.comment)
+        setComments(comments1)
       })
       .catch((err) => {
         console.log(err);
       })
-    // REFETCH
-    commentRef.current.value = ""
-    getComments();
+      commentRef.current.value = ""
   };
 
-  const getComments = async () => {
-    await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
-      (response) => {
-        setComments(response.data.comments)
-      }
-    );
-  }
+//   const getComments = async () => {
+//     await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
+//       (response) => {
+//         setComments(response.data.comments)
+//       }
+//     );
+//   }
 
   const getLikesAndDislikes = async () => {
     await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + id).then(
