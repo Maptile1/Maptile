@@ -4,7 +4,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { BsSave } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 import { MdOutlineContentCopy } from "react-icons/md";
-import { Fragment, useEffect, useState, useRef } from "react";
+import { Fragment, useEffect, useState, useRef, useReducer } from "react";
 import Comment from "../comment/Comment";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Axios from "axios";
@@ -24,6 +24,7 @@ const TilesetDisplay = (props) => {
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState();
   const [dislikes, setDislikes] = useState();
+  const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
   const commentRef = useRef(null);
 
   const handleOtherUserProfile = () => {
@@ -83,15 +84,13 @@ const TilesetDisplay = (props) => {
         post: id
       })
       .then((response) => {
-        console.log(response);
-        let comments1 = comments;
-        comments1.push(response.data.comment)
-        setComments(comments1)
+        console.log("RESPONSE:", response);
       })
       .catch((err) => {
         console.log(err);
       })
       commentRef.current.value = ""
+      forceUpdate();
   };
 
 //   const getComments = async () => {
@@ -164,7 +163,7 @@ const TilesetDisplay = (props) => {
       );
       await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
         (response) => {
-          // console.log("COMMENTS:", response.data.comments)
+          console.log("COMMENTS:", response.data.comments)
           setComments(response.data.comments)
         }
       );
@@ -172,6 +171,18 @@ const TilesetDisplay = (props) => {
     };
     getOwner();
   }, [location.state._id, location.state.owner, id]);
+
+  useEffect(() => {
+    const getComments = async () => {
+        await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
+            (response) => {
+              console.log("COMMENTS:", response.data.comments)
+              setComments(response.data.comments)
+            }
+          );
+    }
+    getComments();
+  }, [reducerValue])
 
   let like_color = "gray";
   let dislike_color = "gray";
