@@ -48,7 +48,7 @@ router.post("/comment/update/:id", async (req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-// Get all comments from Tileset
+// Get all comments from Tileset/Map
 router.get("/comment/:id", async (req, res) => {
   if (req.session._id == undefined){
     res.status(400).json({errorMessage: 'Not logged in'})

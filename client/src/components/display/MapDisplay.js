@@ -4,12 +4,13 @@ import { Menu, Transition } from "@headlessui/react";
 import { BsSave } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 import { MdOutlineContentCopy } from "react-icons/md";
-import { Fragment, useEffect, useState, useRef } from "react";
+import { Fragment, useEffect, useState, useRef, useReducer } from "react";
 import Comment from "../comment/Comment";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Axios from "axios";
 import { saveAs } from "file-saver";
 import { FaUserAlt, FaHeart } from "react-icons/fa";
+// import { mapReduce } from "../../../../schema/user-schema";
 
 Axios.defaults.withCredentials = true;
 
@@ -25,6 +26,7 @@ const MapDisplay = (props) => {
   const [likes, setLikes] = useState();
   const [dislikes, setDislikes] = useState();
   const commentRef = useRef(null);
+  const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
 
   const handleOtherUserProfile = () => {
     nav("/user/" + location.state.owner, {
@@ -79,25 +81,25 @@ const MapDisplay = (props) => {
   //       });
   //   };
 
-  //   const handleCommentChange = (event) => {
-  //     setComment(event.target.value);
-  //   };
+    const handleCommentChange = (event) => {
+      setComment(event.target.value);
+    };
 
-  //   const handleAddComment = async () => {
-  //     await Axios.post("https://maptile1.herokuapp.com/comment/create", {
-  //       comment_text: comment,
-  //       post: id,
-  //     })
-  //       .then((response) => {
-  //         console.log(response);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //     // REFETCH
-  //     commentRef.current.value = "";
-  //     getComments();
-  //   };
+    const handleAddComment = async () => {
+      await Axios.post("https://maptile1.herokuapp.com/comment/create", {
+        comment_text: comment,
+        post: id,
+      })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      // REFETCH
+      commentRef.current.value = "";
+      forceUpdate()
+    };
 
   //   const getComments = async () => {
   //     await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
@@ -107,49 +109,50 @@ const MapDisplay = (props) => {
   //     );
   //   };
 
-  //   const getLikesAndDislikes = async () => {
-  //     await Axios.get("https://maptile1.herokuapp.com/map/get/" + id).then(
-  //       (response) => {
-  //         setTileset(response.data.tileset);
-  //         setLikes(response.data.tileset.likes);
-  //         setDislikes(response.data.tileset.dislikes);
-  //       }
-  //     );
-  //   };
+    const getLikesAndDislikes = async () => {
+      await Axios.get("https://maptile1.herokuapp.com/map/get/" + id).then(
+        (response) => {
+          setMap(response.data.map);
+          setLikes(response.data.map.likes);
+          setDislikes(response.data.map.dislikes);
+        }
+      );
+    };
 
-  //   const likeTileset = async () => {
-  //     let like_status = tileset.usersLiked.includes(props.user._id);
-  //     await Axios.post("https://maptile1.herokuapp.com/tileset/like/" + map._id, {
-  //       like: !like_status,
-  //     })
-  //       .then((response) => {
-  //         console.log(response);
-  //         setLikes(response.data.tileset.likes);
-  //         setDislikes(response.data.tileset.dislikes);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //     getLikesAndDislikes();
-  //   };
+    const likeMap = async () => {
+      let like_status = map.usersLiked.includes(props.user._id);
+      await Axios.post("https://maptile1.herokuapp.com/map/like/" + map._id, {
+        like: !like_status,
+      })
+        .then((response) => {
+          console.log(response);
+          setLikes(response.data.map.likes);
+          setDislikes(response.data.map.dislikes);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      getLikesAndDislikes();
+    };
 
-  //   const dislikeTileset = async () => {
-  //     let dislike_status = tileset.usersDisliked.includes(props.user._id);
-  //     await Axios.post(
-  //       "https://maptile1.herokuapp.com/tileset/dislike/" + tileset._id,
-  //       { dislike: !dislike_status }
-  //     )
-  //       .then((response) => {
-  //         console.log(response);
-  //         setLikes(response.data.tileset.likes);
-  //         setDislikes(response.data.tileset.dislikes);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //     getLikesAndDislikes();
-  //   };
-  //
+    const dislikeMap = async () => {
+      let dislike_status = map.usersDisliked.includes(props.user._id);
+      await Axios.post(
+        "https://maptile1.herokuapp.com/map/dislike/" + map._id,
+        { dislike: !dislike_status }
+      )
+        .then((response) => {
+          console.log(response);
+          setLikes(response.data.tileset.likes);
+          setDislikes(response.data.tileset.dislikes);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      getLikesAndDislikes();
+    };
+  
+
   useEffect(() => {
     // console.log("TILESET ID: ", id);
     const getOwner = async () => {
@@ -165,33 +168,36 @@ const MapDisplay = (props) => {
             response.data.user._id
         );
       });
-      //   await Axios.get("https://maptile1.herokuapp.com/map/get/" + id).then(
-      //     (response) => {
-      //       // console.log("TILESET:", response.data.tileset);
-      //       setMap(response.data.map);
-      //       setLikes(response.data.tileset.likes);
-      //       setDislikes(response.data.tileset.dislikes);
-      //     }
-      //   );
-      //   await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
-      //     (response) => {
-      //       // console.log("COMMENTS:", response.data.comments)
-      //       setComments(response.data.comments);
-      //     }
-      //   );
+        await Axios.get("https://maptile1.herokuapp.com/map/get/" + id).then(
+          (response) => {
+            // console.log("TILESET:", response.data.tileset);
+            setMap(response.data.map);
+            setLikes(response.data.map.likes);
+            setDislikes(response.data.map.dislikes);
+          }
+        );
+        await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
+          (response) => {
+            // console.log("COMMENTS:", response.data.comments)
+            setComments(response.data.comments);
+          }
+        );
       setLoading(false);
     };
     getOwner();
-  }, [location.state._id, location.state.owner, id]);
+  }, [location.state._id, location.state.owner, id, reducerValue]);
+
+
+
 
   let like_color = "gray";
   let dislike_color = "gray";
-  //   if (tileset !== null) {
-  //     like_color = tileset.usersLiked.includes(props.user._id) ? "green" : "gray";
-  //     dislike_color = tileset.usersDisliked.includes(props.user._id)
-  //       ? "red"
-  //       : "gray";
-  //   }
+    if (map !== null) {
+      like_color = map.usersLiked.includes(props.user._id) ? "green" : "gray";
+      dislike_color = map.usersDisliked.includes(props.user._id)
+        ? "red"
+        : "gray";
+    }
   return (
     <div>
       {!loading && (
@@ -353,7 +359,7 @@ const MapDisplay = (props) => {
                   {" "}
                   <FaThumbsUp
                     color={like_color}
-                    // onClick={likeTileset}
+                    onClick={likeMap}
                     size={100}
                     stroke={1}
                   />
@@ -362,7 +368,7 @@ const MapDisplay = (props) => {
 
                 <div class="flex flex-col text-6xl font-bold bg-maptile-background-mid rounded-r-3xl p-2">
                   <FaThumbsDown
-                    // onClick={dislikeTileset}
+                    onClick={dislikeMap}
                     color={dislike_color}
                     size={100}
                   />
@@ -406,7 +412,7 @@ const MapDisplay = (props) => {
                     <div class="w-full  px-3 mb-2 mt-2">
                       <textarea
                         ref={commentRef}
-                        // onChange={handleCommentChange}
+                        onChange={handleCommentChange}
                         class="bg-gray-700 rounded border border-white leading-normal resize-none w-full h-20 py-2 px-3 font-medium placeholder-white focus:outline-none focus:bg-gray-600"
                         name="body"
                         placeholder="Type Your Comment"
@@ -419,7 +425,7 @@ const MapDisplay = (props) => {
                       <div class="-mr-1">
                         <input
                           type="submit"
-                          //   onClick={() => handleAddComment()}
+                            onClick={() => handleAddComment()}
                           class="bg-grayfont-medium py-1 px-4 border border-white bg-gray-700 rounded-lg tracking-wide mr-1 hover:bg-gray-600"
                           value="Post Comment"
                         />
