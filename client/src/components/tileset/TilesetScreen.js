@@ -150,7 +150,7 @@ const TilesetScreen = (props) => {
             <div className="flex flex-row flex-wrap px-5 py-5 pl-10 gap-y-5  ">
               {userSelected ? (
                 userTilesets.length !== 0 ? (
-                  userTilesets.map((obj, index) => (
+                  userTilesets.filter(n => n).map((obj, index) => (
                     <TSSCard
                       handleDelete={handleDelete}
                       name={obj.name}

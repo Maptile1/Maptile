@@ -401,7 +401,7 @@ const EditMap = (props) => {
                         NOTE: Tile data is off set by 1 to account for blank spaces. This means tile ID 0 is ID 1 in the data, because 0 is an empty space.
                         I am 99% sure this is how it should be, this slight difference is already accounted for in the code for getting the tile.
                         */}
-                    <img id="tileset-source" className="" style={{ "imageRendering": "pixelated" }} src={"https://maptilefiles.blob.core.windows.net/maptile-tileset-image/637287cbdf17e9e9316f1cf6"} crossOrigin="true" alt="" />
+                    <img id="tileset-source" className="" style={{ "imageRendering": "pixelated" }} src={"https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" + map.tilesets[0]} crossOrigin="true" alt="" />
                   </div>
                 </div>
               </div>
