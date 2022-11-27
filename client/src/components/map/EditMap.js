@@ -13,7 +13,7 @@ const EditMap = (props) => {
   const [shareModalOpen, setShareModal] = useState(false);
   // const [gridRow, setGridRow] = useState(64)
   // const [gridCol, setGridCol] = useState(64)
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [mapPropModal, setMapPropModal] = useState(false);
   const [map, setMap] = useState(null);
   const [gridSize, setGridSize] = useState({ x: 20, y: 20 });
@@ -25,13 +25,13 @@ const EditMap = (props) => {
   // * Active: Flag Determining if the layer is to be rendered, NYI
   // * Custom Prop: Object that contains a type, ex. : boolean, int , and a value for that prop type
   // ! Custom Prop: This is for use in a game engine so it must be formatted like the data Tiled (that other app for making tilesets) produces 
-  const [layers, setLayers] = useState([{name:"1",data:[], active:true, customProp:{type: "", value:""}, id:0}])
+  const [layers, setLayers] = useState([{ name: "1", data: [], active: true, customProp: { type: "", value: "" }, id: 0 }])
   const [layerCount, setLayerCount] = useState(0)
   const [currentLayer, setCurrentLayer] = useState(0)
-  const [tileSelection, setTileSelection] = useState([0,0])
+  const [tileSelection, setTileSelection] = useState([0, 0])
   const [grid, setGrid] = useState([]);
   const [isMouseDown, setMouseDown] = useState(false)
-  //var location = useLocation();
+  var location = useLocation();
 
   // useEffect(() => {
   //   let tempGrid = [];
@@ -63,12 +63,29 @@ const EditMap = (props) => {
   //   };
   //   getMap();
   // }, [gridSize]);
-  useEffect(()=> {
-    console.log()
-    if(layers[0].data.length === 0){
+  useEffect(() => {
+    const getMap = async () => {
+      await Axios.get(
+        "https://maptile1.herokuapp.com/map/get/" + location.state._id
+      ).then((response) => {
+        setMap(response.data.map);
+        setLoading(false);
+        console.log(response.data)
+      }
+      ).then((err) => {
+        console.log(err)
+      });
+    };
+    getMap();
+  }, [])
+
+
+  useEffect(() => {
+    if (layers[0].data.length === 0 && map != null) {
       initMap();
     }
-  },[])
+    console.log("asbc");
+  }, [map])
 
   const initMap = () => {
     // ! GIGA HARD CODE -- Self Explanatory but replace temp width and height with actual values
@@ -76,11 +93,11 @@ const EditMap = (props) => {
     let tempH = 64
 
     layers.forEach((layer) => {
-      for(let i = 0;i< tempW*tempH;i++){
+      for (let i = 0; i < tempW * tempH; i++) {
         layer.data.push(0)
       }
     })
-    
+
     console.log(layers)
     initDraw()
   }
@@ -89,58 +106,58 @@ const EditMap = (props) => {
     let canvas = document.querySelector("canvas")
     let ctx = canvas.getContext("2d")
     let tilesetImage = document.querySelector("#tileset-source");
-    ctx.clearRect(0,0,canvas.width, canvas.height)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
     // ! GIGA HARD CODE -- Replace 16 with Tile Size
     let crop_size = 16
     tilesetImage.onload = function () {
-      
-    layers.forEach((layer) => {
-      layer.data.forEach((tile, i) => {
-        // ! GIGA HARD CODE -- Replace 64 with Map Width and Height
-        let x = i % 64
-        let y = Math.floor((i - x) / 64)
 
-        if(tile === 0){
-          // ! GIGA HARD CODE -- Replace 16 with Tile width and height
-          ctx.globalAlpha = 0
-          ctx.drawImage(
-            tilesetImage,
-            100,
-            100,
-            crop_size,
-            crop_size,
-            x * 16,
-            y * 16,
-            crop_size,
-            crop_size
-          )
-          ctx.globalAlpha = 1
-          ctx.strokeStyle = '#000000';  // some color/style
-          ctx.lineWidth = 1; 
-          ctx.strokeRect(x * 16,y * 16, crop_size, crop_size)
-        }
-        else{
-          // ! GIGA HARD CODE -- Replace 64/16 with TilesetWidth/TileWidth or Height, Replace 16 with Tile Size
-          let tileX = i % (64/16)
-          let tileY = Math.floor((tile - x) / (64/16))
-          ctx.drawImage(
-            tilesetImage,
-            tileX * 16,
-            tileY * 16,
-            crop_size,
-            crop_size,
-            x * 16,
-            y * 16,
-            crop_size,
-            crop_size
-          )
-          ctx.strokeStyle = '#000000';  // some color/style
-          ctx.lineWidth = 1; 
-          ctx.strokeRect(x * 16,y * 16, crop_size, crop_size)
-        }
-        
+      layers.forEach((layer) => {
+        layer.data.forEach((tile, i) => {
+          // ! GIGA HARD CODE -- Replace 64 with Map Width and Height
+          let x = i % 64
+          let y = Math.floor((i - x) / 64)
+
+          if (tile === 0) {
+            // ! GIGA HARD CODE -- Replace 16 with Tile width and height
+            ctx.globalAlpha = 0
+            ctx.drawImage(
+              tilesetImage,
+              100,
+              100,
+              crop_size,
+              crop_size,
+              x * 16,
+              y * 16,
+              crop_size,
+              crop_size
+            )
+            ctx.globalAlpha = 1
+            ctx.strokeStyle = '#000000';  // some color/style
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x * 16, y * 16, crop_size, crop_size)
+          }
+          else {
+            // ! GIGA HARD CODE -- Replace 64/16 with TilesetWidth/TileWidth or Height, Replace 16 with Tile Size
+            let tileX = i % (64 / 16)
+            let tileY = Math.floor((tile - x) / (64 / 16))
+            ctx.drawImage(
+              tilesetImage,
+              tileX * 16,
+              tileY * 16,
+              crop_size,
+              crop_size,
+              x * 16,
+              y * 16,
+              crop_size,
+              crop_size
+            )
+            ctx.strokeStyle = '#000000';  // some color/style
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x * 16, y * 16, crop_size, crop_size)
+          }
+
+        })
       })
-    })
     }
   }
 
@@ -148,19 +165,19 @@ const EditMap = (props) => {
     let canvas = document.querySelector("canvas")
     let ctx = canvas.getContext("2d")
     let tilesetImage = document.querySelector("#tileset-source");
-    ctx.clearRect(0,0,canvas.width, canvas.height)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
     // ! GIGA HARD CODE -- Replace 16 with Tile Size
     let crop_size = 16
-     
-    layers.forEach((layer)=>{
-      layer.data.forEach((tile,i)=>{
+
+    layers.forEach((layer) => {
+      layer.data.forEach((tile, i) => {
         // ! GIGA HARD CODE -- Replace 64 with Map Width and Height
         let x = i % 64
         let y = Math.floor((i - x) / 64)
         // ! GIGA HARD CODE -- Replace 64/16 with TilesetWidth/TileWidth or Height, Replace 16 with Tile Size
-        let tileX = tile % (64/16)
-        let tileY = Math.floor((tile - tileX) / (64/16))
-        if(tile === 0){
+        let tileX = tile % (64 / 16)
+        let tileY = Math.floor((tile - tileX) / (64 / 16))
+        if (tile === 0) {
           ctx.globalAlpha = 0
           ctx.drawImage(
             tilesetImage,
@@ -175,14 +192,14 @@ const EditMap = (props) => {
           )
           ctx.globalAlpha = 1
           ctx.strokeStyle = '#000000';  // some color/style
-          ctx.lineWidth = 1; 
+          ctx.lineWidth = 1;
           ctx.opacity = 0.5;
-          ctx.strokeRect(x * 16,y * 16, crop_size, crop_size)
+          ctx.strokeRect(x * 16, y * 16, crop_size, crop_size)
         }
-        else{
+        else {
 
-          tileX = (tile - 1) % (64/16)
-          tileY = Math.floor(((tile - 1) - tileX) / (64/16))
+          tileX = (tile - 1) % (64 / 16)
+          tileY = Math.floor(((tile - 1) - tileX) / (64 / 16))
           ctx.drawImage(
             tilesetImage,
             tileX * 16,
@@ -195,8 +212,8 @@ const EditMap = (props) => {
             crop_size
           )
           ctx.strokeStyle = '#000000';  // some color/style
-          ctx.lineWidth = 1; 
-          ctx.strokeRect(x * 16,y * 16, crop_size, crop_size)
+          ctx.lineWidth = 1;
+          ctx.strokeRect(x * 16, y * 16, crop_size, crop_size)
         }
       })
     })
@@ -206,12 +223,12 @@ const EditMap = (props) => {
     let clicked = getCoords(e)
     // ! GIGA HARD CODE -- Replace 64 with Map Height
     let id = clicked[0] + clicked[1] * 64
-    if(e.shiftKey) {
+    if (e.shiftKey) {
       layers[currentLayer].data[id] = 0
     }
-    else{
+    else {
       // ! GIGA HARD CODE -- Replace 64/16 with TilesetHeight/TileHeight
-      layers[currentLayer].data[id] = (tileSelection[0] + (tileSelection[1] * 64/16)) + 1 
+      layers[currentLayer].data[id] = (tileSelection[0] + (tileSelection[1] * 64 / 16)) + 1
     }
     draw()
   }
@@ -228,14 +245,14 @@ const EditMap = (props) => {
     let tilesetSelection = document.querySelector(".tile-selector");
     let newCoords = getCoords(e)
     // ! GIGA HARD CODE -- Replace 64/16 with MapWidth/TileWidth and MapHeight/TileHeight respectivly
-    if(!(newCoords[0] >=64/16) && !(newCoords[1] >=64/16)){
+    if (!(newCoords[0] >= 64 / 16) && !(newCoords[1] >= 64 / 16)) {
       setTileSelection(newCoords)
       // ! GIGA HARD CODE -- Replace 16 with Tile Size
       tilesetSelection.style.left = newCoords[0] * 16 + "px"
       tilesetSelection.style.top = newCoords[1] * 16 + "px"
     }
   }
-    
+
 
   const zoom = (factor) => {
     if (gridSize.x + factor * 10 <= 60 && gridSize.x + factor * 10 >= 20) {
@@ -261,8 +278,8 @@ const EditMap = (props) => {
   };
 
   const addNewLayer = () => {
-    let newLayer = {name:layers.length + 1,data:[], active:true, customProp:{type: "", value:""},id:layers.length}
-    for(let i = 0;i< 64*64;i++){
+    let newLayer = { name: layers.length + 1, data: [], active: true, customProp: { type: "", value: "" }, id: layers.length }
+    for (let i = 0; i < 64 * 64; i++) {
       newLayer.data.push(0)
     }
     setLayers([...layers, newLayer])
@@ -280,7 +297,7 @@ const EditMap = (props) => {
     setMouseDown(false)
   }
   const canvasMouseMove = (e) => {
-    if(isMouseDown){
+    if (isMouseDown) {
       placeTile(e)
     }
   }
@@ -291,6 +308,7 @@ const EditMap = (props) => {
       {!loading && (
         <main className="mx-auto flex flex-col min-h-screen w-full items-center justify-top bg-maptile-background-dark text-white">
           <div className="pt-5 text-center text-4xl font-bold text-white underline">
+            {map.name}
           </div>
           <div className="flex flex-col h-[53rem] w-5/6 items-left justify-top ml-20 mt-10">
             <div className="grid grid-cols-10 w-full justify-items-end">
@@ -319,7 +337,7 @@ const EditMap = (props) => {
             <div className="flex flew-row">
               <div className="bg-maptile-background-mid w-5/6 h-[50rem]  overflow-x-auto">
                 <div className="flex flex-wrap overflow-auto">
-                  <canvas width={16*64} height={16*64} 
+                  <canvas width={16 * 64} height={16 * 64}
                     onMouseDown={canvasMouseDown}
                     onMouseUp={canvasMouseUp}
                     onMouseMove={canvasMouseMove}
@@ -334,14 +352,14 @@ const EditMap = (props) => {
                     <div className="text-white text-2xl text-left w-1/2 underline ml-5">
                       Layers
                     </div>
-                    <div className="text-maptile-green text-2xl text-right w-1/2 mr-5 cursor-pointer" onClick={()=>addNewLayer()}>
+                    <div className="text-maptile-green text-2xl text-right w-1/2 mr-5 cursor-pointer" onClick={() => addNewLayer()}>
                       +
                     </div>
                   </div>
-                  
+
                   <div className="bg-maptile-background-bright w-5/6 h-5/6 ml-5 mt-5 rounded-xl overflow-auto">
                     {layers.slice(0).reverse().map((layer, i) => {
-                      return <LayerCard name={layer.name} id={layer.id} active={layer.id === currentLayer} changeLayer={setCurrentLayer}/>;
+                      return <LayerCard name={layer.name} id={layer.id} active={layer.id === currentLayer} changeLayer={setCurrentLayer} />;
                     })}
                   </div>
                 </div>
@@ -354,7 +372,7 @@ const EditMap = (props) => {
                       <EditMapTileDisplay tile={tile} />
                     ))} */}
                     <div className={`absolute tile-selector left-0 top-0 w-[16px] h-[16px] p-2 z-30`}></div>
-                    <img id="tileset-source" className="" style={{ "imageRendering": "pixelated" }}src={"https://maptilefiles.blob.core.windows.net/maptile-tileset-image/637287cbdf17e9e9316f1cf6"}crossOrigin="true" alt=""/>
+                    <img id="tileset-source" className="" style={{ "imageRendering": "pixelated" }} src={"https://maptilefiles.blob.core.windows.net/maptile-tileset-image/637287cbdf17e9e9316f1cf6"} crossOrigin="true" alt="" />
                   </div>
                 </div>
               </div>
@@ -365,7 +383,6 @@ const EditMap = (props) => {
             setShareModal={setShareModal}
             handleShare={handleShare}
           />
-
           {/* <MapPropModal
             mapPropModal={mapPropModal}
             setMapPropModal={setMapPropModal}
