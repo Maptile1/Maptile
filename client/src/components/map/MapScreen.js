@@ -9,6 +9,7 @@ const MapScreen = (props) => {
   const [modalOpen, setModal] = useState(false);
   const [userMaps, setUserMaps] = useState([]);
   const [userSharedMaps, setUserSharedMaps] = useState([]);
+  const [userTilesets, setUserTilesets] = useState([]);
   const [shareModalOpen, setShareModal] = useState(false);
   const [input, setInput] = useState({
     name: "",
@@ -63,6 +64,18 @@ const MapScreen = (props) => {
       }).then((response) => {
         setUserSharedMaps(response.data.maps);
       });
+      await Axios.post("https://maptile1.herokuapp.com/tileset/getBatch", {
+        ids: props.user.tilesets,
+        page: 0,
+        limit: 9999
+      })
+      .then(response => {
+          console.log("USER TILESETS:", response.data.tilesets)
+          setUserTilesets(response.data.tilesets)
+      })
+      .catch(err => {
+          console.log(err);
+      });
     };
     getMaps();
   }, []);
@@ -80,16 +93,30 @@ const MapScreen = (props) => {
     const updated = { ...input, [name]: value };
     setInput(updated);
     setInputValid(
-      updated.name !== "" &&
+        updated.name !== "" &&
         updated.tilewidth !== "" &&
         updated.tileheight !== "" &&
         updated.mapwidth !== "" &&
-        updated.mapheight !== ""
+        updated.mapheight !== "" &&
+        updated.tileset !== ""
     );
   };
 
+  const updateSelectedTileset = (tileset_id, tile_width, tile_height) => {
+      const updated = {...input, "tileset": tileset_id, "tilewidth": tile_width, "tileheight": tile_height};
+      setInput(updated);
+      setInputValid(
+          updated.name !== "" &&
+          updated.tilewidth !== "" &&
+          updated.tileheight !== "" &&
+          updated.mapwidth !== "" &&
+          updated.mapheight !== "" &&
+          updated.tileset !== ""
+      );
+  }
+
   const handleCreate = async (e) => {
-    console.log(input);
+    console.log("CREATED MAP: ", input);
     if (inputValid) {
       setModal(false);
       await Axios.post("https://maptile1.herokuapp.com/map/create", {
@@ -195,6 +222,8 @@ const MapScreen = (props) => {
               updateInput={updateInput}
               handleCreate={handleCreate}
               handleClose={handleClose}
+              userTilesets={userTilesets}
+              updateSelectedTileset={updateSelectedTileset}
             />
             <ShareModal
               modalOpen={shareModalOpen}
