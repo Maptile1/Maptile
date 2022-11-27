@@ -89,8 +89,8 @@ const EditMap = (props) => {
 
   const initMap = () => {
     // ! GIGA HARD CODE -- Self Explanatory but replace temp width and height with actual values
-    let tempW = 64
-    let tempH = 64
+    let tempW = map.width
+    let tempH = map.height;
 
     layers.forEach((layer) => {
       for (let i = 0; i < tempW * tempH; i++) {
@@ -383,12 +383,12 @@ const EditMap = (props) => {
             setShareModal={setShareModal}
             handleShare={handleShare}
           />
-          {/* <MapPropModal
+          <MapPropModal
             mapPropModal={mapPropModal}
             setMapPropModal={setMapPropModal}
             updateMap={updateMap}
             map={map}
-          /> */}
+          />
         </main>
       )}
     </div>
