@@ -125,6 +125,7 @@ const MapScreen = (props) => {
         width: input.mapwidth,
         height: input.mapheight,
         name: input.name,
+        tilesets: [input.tileset]
       }).then(() => {
         getMaps();
       });

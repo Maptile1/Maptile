@@ -21,7 +21,7 @@ router.post("/map/create", async (req, res) => {
     tags: [],
     likes: 0,
     dislikes: 0,
-    tilesets: [],
+    tilesets: req.body.tilesets,
     comments: [],
     public: false,
     mapCreated: Date.now(),
