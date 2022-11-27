@@ -1,10 +1,17 @@
 import { BiCog } from "react-icons/bi"
-import { MdDriveFileRenameOutline, MdDelete} from "react-icons/md"
+import { MdDriveFileRenameOutline, MdDelete, MdOutlineHideImage} from "react-icons/md"
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 
 
 const LayerCard =(props) => {
+    let visFlag = props.visible
+
+    const toggleVis = () => {
+        props.layerVis(props.id)
+        visFlag = !visFlag
+    }
+
     return(
     <Menu as="div" className=" relative inline-block text-left ">
     <div className="grid grid-cols-2 justify-items-start mb-10" onClick={()=>props.changeLayer(props.id)}>
@@ -31,7 +38,7 @@ const LayerCard =(props) => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
         >
-            <Menu.Items className=" absolute bottom-[-50px] left-[120px] rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-visible">
+            <Menu.Items className=" fixed right-[75px] top-[250px] rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none overflow-visible">
             <Menu.Item>
                         {({ active }) => (
                             <button
@@ -78,20 +85,42 @@ const LayerCard =(props) => {
                                             <button
                                                 className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
                                                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                                onClick={()=>toggleVis()}    
                                             >
                                                 {active ? (
-                                                    <MdDelete
+                                                    <MdOutlineHideImage
                                                         className="mr-2 h-5 w-5"
                                                         aria-hidden="true"
                                                     />
                                                 ) : (
-                                                    <MdDelete
+                                                    <MdOutlineHideImage
                                                         className="mr-2 h-5 w-5"
                                                         aria-hidden="true"
                                                     />
                                                 )}
-                                                Delete
+                                                {visFlag? "Hide Layer":"Show Layer"}
                                             </button>
+                                        )}
+                                    </Menu.Item>
+                    <Menu.Item>
+                        {({ active }) => (
+                            <button
+                                className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
+                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                >
+                                {active ? (
+                                    <MdDelete
+                                        className="mr-2 h-5 w-5"
+                                        aria-hidden="true"
+                                    />
+                                    ) : (
+                                    <MdDelete
+                                        className="mr-2 h-5 w-5"
+                                        aria-hidden="true"
+                                    />
+                                    )}
+                                    Delete
+                                </button>
                                         )}
                                     </Menu.Item>
             </Menu.Items>

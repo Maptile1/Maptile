@@ -73,7 +73,7 @@ const EditMap = (props) => {
         console.log(response.data)
       }
       ).then((err) => {
-        console.log(err)
+        //console.log(err)
       });
     };
     getMap();
@@ -81,10 +81,21 @@ const EditMap = (props) => {
 
 
   useEffect(() => {
-    if (layers[0].data.length === 0 && map != null) {
-      initMap();
+    if(!loading){
+      if (map.layers.length === 0) {
+        console.log("hello?")
+        initMap();
+      }
+      else{
+        for(let i = 1;i < map.layers.length;i++){
+          addNewLayer()
+        }
+        layers.forEach((layer, i) => {
+          layer.data = map.layers[i]
+        })
+      }
+      console.log("asbc");
     }
-    console.log("asbc");
   }, [map])
 
   const initMap = () => {
@@ -171,51 +182,54 @@ const EditMap = (props) => {
 
     layers.forEach((layer) => {
       layer.data.forEach((tile, i) => {
-        // ! GIGA HARD CODE -- Replace 64 with Map Width and Height
-        let x = i % 64
-        let y = Math.floor((i - x) / 64)
-        // ! GIGA HARD CODE -- Replace 64/16 with TilesetWidth/TileWidth or Height, Replace 16 with Tile Size
-        let tileX = tile % (64 / 16)
-        let tileY = Math.floor((tile - tileX) / (64 / 16))
-        if (tile === 0) {
-          ctx.globalAlpha = 0
-          ctx.drawImage(
-            tilesetImage,
-            1000,
-            1000,
-            crop_size,
-            crop_size,
-            x * 16,
-            y * 16,
-            crop_size,
-            crop_size
-          )
-          ctx.globalAlpha = 1
-          ctx.strokeStyle = '#000000';  // some color/style
-          ctx.lineWidth = 1;
-          ctx.opacity = 0.5;
-          ctx.strokeRect(x * 16, y * 16, crop_size, crop_size)
-        }
-        else {
+        if(layer.active === true){
+          // ! GIGA HARD CODE -- Replace 64 with Map Width and Height
+          let x = i % 64
+          let y = Math.floor((i - x) / 64)
+          // ! GIGA HARD CODE -- Replace 64/16 with TilesetWidth/TileWidth or Height, Replace 16 with Tile Size
+          let tileX = tile % (64 / 16)
+          let tileY = Math.floor((tile - tileX) / (64 / 16))
+          if (tile === 0) {
+            ctx.globalAlpha = 0
+            ctx.drawImage(
+              tilesetImage,
+              1000,
+              1000,
+              crop_size,
+              crop_size,
+              x * 16,
+              y * 16,
+              crop_size,
+              crop_size
+            )
+            ctx.globalAlpha = 1
+            ctx.strokeStyle = '#000000';  // some color/style
+            ctx.lineWidth = 1;
+            ctx.opacity = 0.5;
+            ctx.strokeRect(x * 16, y * 16, crop_size, crop_size)
+          }
+          else {
 
-          tileX = (tile - 1) % (64 / 16)
-          tileY = Math.floor(((tile - 1) - tileX) / (64 / 16))
-          ctx.drawImage(
-            tilesetImage,
-            tileX * 16,
-            tileY * 16,
-            crop_size,
-            crop_size,
-            x * 16,
-            y * 16,
-            crop_size,
-            crop_size
-          )
-          ctx.strokeStyle = '#000000';  // some color/style
-          ctx.lineWidth = 1;
-          ctx.strokeRect(x * 16, y * 16, crop_size, crop_size)
+            tileX = (tile - 1) % (64 / 16)
+            tileY = Math.floor(((tile - 1) - tileX) / (64 / 16))
+            ctx.drawImage(
+              tilesetImage,
+              tileX * 16,
+              tileY * 16,
+              crop_size,
+              crop_size,
+              x * 16,
+              y * 16,
+              crop_size,
+              crop_size
+            )
+            ctx.strokeStyle = '#000000';  // some color/style
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x * 16, y * 16, crop_size, crop_size)
+          }
         }
       })
+      
     })
   }
 
@@ -283,6 +297,11 @@ const EditMap = (props) => {
       newLayer.data.push(0)
     }
     setLayers([...layers, newLayer])
+  }
+
+  const layerVis = (id) => {
+    layers[id].active = !layers[id].active
+    draw()
   }
 
   // * Canvas Listeners
@@ -359,7 +378,7 @@ const EditMap = (props) => {
 
                   <div className="bg-maptile-background-bright w-5/6 h-5/6 ml-5 mt-5 rounded-xl overflow-auto">
                     {layers.slice(0).reverse().map((layer, i) => {
-                      return <LayerCard name={layer.name} id={layer.id} active={layer.id === currentLayer} changeLayer={setCurrentLayer} />;
+                      return <LayerCard name={layer.name} id={layer.id} active={layer.id === currentLayer} changeLayer={setCurrentLayer} visible={layer.active} layerVis={layerVis}/>;
                     })}
                   </div>
                 </div>
