@@ -84,7 +84,10 @@ const TilesetDisplay = (props) => {
         post: id
       })
       .then((response) => {
-        console.log("RESPONSE:", response);
+        console.log("RESPONSE:", response.data.payload.comment);
+        let comments1 = comments;
+        comments.push(response.data.payload.comment)
+        setComments(comments1)
       })
       .catch((err) => {
         console.log(err);
@@ -170,19 +173,20 @@ const TilesetDisplay = (props) => {
       setLoading(false);
     };
     getOwner();
-  }, [location.state._id, location.state.owner, id]);
+  }, [location.state._id, location.state.owner, id, reducerValue]);
 
-  useEffect(() => {
-    const getComments = async () => {
-        await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
-            (response) => {
-              console.log("COMMENTS:", response.data.comments)
-              setComments(response.data.comments)
-            }
-          );
-    }
-    getComments();
-  }, [reducerValue])
+//   useEffect(() => {
+//     // const getComments = async () => {
+//     //     await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
+//     //         (response) => {
+//     //           console.log("COMMENTS:", response.data.comments)
+//     //           setComments(response.data.comments)
+//     //         }
+//     //       );
+//     // }
+//     // getComments();
+//     console.log("COMMENTS: ", comments);
+//   }, [comments, reducerValue])
 
   let like_color = "gray";
   let dislike_color = "gray";
