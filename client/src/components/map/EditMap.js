@@ -584,8 +584,11 @@ const EditMap = (props) => {
                         so a second tileset would need to start at the ID of 16 and go to whatever its dimensions define.
                         NOTE: Tile data is off set by 1 to account for blank spaces. This means tile ID 0 is ID 1 in the data, because 0 is an empty space.
                         I am 99% sure this is how it should be, this slight difference is already accounted for in the code for getting the tile.
-                        */}
-                    <img id="tileset-source" className="" style={{ "imageRendering": "pixelated" }} src={"https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" + map.tilesets[0]} crossOrigin="true" alt="" />
+                        */
+                        map.tilesets.filter(n => n).map(obj => 
+                          <img id="tileset-source" className="" style={{ "imageRendering": "pixelated" }} src={"https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" + obj} crossOrigin="true" alt="" />
+                          )
+                        }
                   </div>
                 </div>
               </div>
@@ -603,8 +606,10 @@ const EditMap = (props) => {
             map={map}
           />
           <AddTilesetModal 
+            user={props.user}
             modalOpen={addTilesetModalOpen}
             setTilesetModal={setTilesetModal}
+            map={map}
           />
         </main>
       )}
