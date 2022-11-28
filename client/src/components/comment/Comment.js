@@ -43,11 +43,11 @@ const Comment = (props) => {
     }
 
     useEffect(() => {
+        console.log(props)
         const getOwner = async () => {
             await Axios.get(
                 "https://maptile1.herokuapp.com/user/get/" + props.owner
               ).then((response) => {
-                console.log(response.data.user);
                 setOwner(response.data.user);
                 setPfp(
                   "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +

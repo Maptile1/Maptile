@@ -88,12 +88,12 @@ const TilesetDisplay = (props) => {
         let comments1 = comments;
         comments.push(response.data.payload.comment)
         setComments(comments1)
+        forceUpdate();
       })
       .catch((err) => {
         console.log(err);
       })
       commentRef.current.value = ""
-      forceUpdate();
   };
 
 //   const getComments = async () => {
@@ -146,24 +146,24 @@ const TilesetDisplay = (props) => {
     const getOwner = async () => {
       setLoading(true);
       // console.log("USER ID: ", location.state.owner);
-      await Axios.get(
-        "https://maptile1.herokuapp.com/user/get/" + location.state.owner
-      ).then((response) => {
-        console.log(response.data.user);
-        setOwner(response.data.user);
-        setPfp(
-          "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
-          response.data.user._id
+        await Axios.get(
+          "https://maptile1.herokuapp.com/user/get/" + location.state.owner
+        ).then((response) => {
+          console.log(response.data.user);
+          setOwner(response.data.user);
+          setPfp(
+            "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
+            response.data.user._id
+          );
+        });
+        await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + id).then(
+          (response) => {
+            // console.log("TILESET:", response.data.tileset);
+            setTileset(response.data.tileset);
+            setLikes(response.data.tileset.likes)
+            setDislikes(response.data.tileset.dislikes)
+          }
         );
-      });
-      await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + id).then(
-        (response) => {
-          // console.log("TILESET:", response.data.tileset);
-          setTileset(response.data.tileset);
-          setLikes(response.data.tileset.likes)
-          setDislikes(response.data.tileset.dislikes)
-        }
-      );
       await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
         (response) => {
           console.log("COMMENTS:", response.data.comments)
@@ -172,21 +172,24 @@ const TilesetDisplay = (props) => {
       );
       setLoading(false);
     };
-    getOwner();
+    // getOwner();
+    const getComments = async () => {
+      setLoading(true);
+      await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
+          (response) => {
+            console.log("COMMENTS:", response.data.comments)
+            setComments(response.data.comments)
+          }
+        );
+      setLoading(false);
+    }
+    if(reducerValue === 0){
+      getOwner();
+    }
+    else{
+      getComments();
+    }
   }, [location.state._id, location.state.owner, id, reducerValue]);
-
-//   useEffect(() => {
-//     // const getComments = async () => {
-//     //     await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
-//     //         (response) => {
-//     //           console.log("COMMENTS:", response.data.comments)
-//     //           setComments(response.data.comments)
-//     //         }
-//     //       );
-//     // }
-//     // getComments();
-//     console.log("COMMENTS: ", comments);
-//   }, [comments, reducerValue])
 
   let like_color = "gray";
   let dislike_color = "gray";
@@ -362,7 +365,6 @@ const TilesetDisplay = (props) => {
                       if(obj == null){
                         return null
                       }
-                      console.log(obj)
                       return (
                       <Comment
                       owner={obj.owner}
@@ -400,7 +402,7 @@ const TilesetDisplay = (props) => {
                       <div class="-mr-1">
                         <input
                           type="submit"
-                          onClick={() => handleAddComment()}
+                          onClick={handleAddComment}
                           class="bg-grayfont-medium py-1 px-4 border border-white bg-gray-700 rounded-lg tracking-wide mr-1 hover:bg-gray-600"
                           value="Post Comment"
                         />
