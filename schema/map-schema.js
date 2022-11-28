@@ -82,6 +82,10 @@ const mapSchema = new Schema(
         usersDisliked: {
             type: [ObjectId],
             required: true
+        },
+        sharedUsers:{
+            type: [ObjectId],
+            required: true
         }
     }
 )
