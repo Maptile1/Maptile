@@ -8,9 +8,19 @@ import LayerCard from "../card/LayerCard";
 import MapPropModal from "./MapPropModal";
 import Axios from "axios";
 import { useLocation } from "react-router-dom";
+import {
+  BsFillBrushFill,
+  BsFillEraserFill,
+  BsPaintBucket,
+  BsArrowCounterclockwise,
+  BsArrowClockwise
+} from "react-icons/bs";
+import { FiSave } from "react-icons/fi";
+import AddTilesetModal from "./AddTilesetModal";
 
 const EditMap = (props) => {
   const [shareModalOpen, setShareModal] = useState(false);
+  const [addTilesetModalOpen, setTilesetModal] = useState(false)
   // const [gridRow, setGridRow] = useState(64)
   // const [gridCol, setGridCol] = useState(64)
   const [loading, setLoading] = useState(true);
@@ -27,12 +37,13 @@ const EditMap = (props) => {
     // ! Custom Prop: This is for use in a game engine so it must be formatted like the data Tiled (that other app for making tilesets) produces 
   // ! Map Layers Data vs. Layers state in EditMap
     // * Both data formats are formatted the same, a 1D array of ints representing ID's
-    // * To get the data from one to the other, you simple take layers[index].data = map.layers[index]
+    // * To get the data from one to the other, you simple take layers[index].data = map.layers[index].data
     // * This is done because there is additional layer data we have that is not in the DB version of the data
-  const [layers, setLayers] = useState([{ name: "1", data: [], active: true, customProp: { type: "", value: "" }, id: 0 }])
+  const [layers, setLayers] = useState([{ name: "1", data: [], active: true, customProp: { name:"",type: "", value: "" }, id: 0 }])
   const [currentLayer, setCurrentLayer] = useState(0)
   const [tileSelection, setTileSelection] = useState([0, 0])
   const [isMouseDown, setMouseDown] = useState(false)
+  const [tool, setTool] = useState("brush")
   var location = useLocation();
 
   // * This fetches the map data from the DB when first loading the page.
@@ -58,7 +69,6 @@ const EditMap = (props) => {
   useEffect(() => {
     if(!loading){
       if (map.layers.length === 0) {
-        console.log("hello?")
         initMap();
       }
       else{
@@ -70,7 +80,6 @@ const EditMap = (props) => {
           layer.data = map.layers[i]
         })
       }
-      console.log("asbc");
     }
   }, [map])
 
@@ -226,21 +235,124 @@ const EditMap = (props) => {
     })
   }
 
+  const forceDraw = (newLayers) => {
+    // * Get the required elements and store them for easy access
+    let canvas = document.querySelector("canvas")
+    let ctx = canvas.getContext("2d")
+    let tilesetImage = document.querySelector("#tileset-source");
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    // ! GIGA HARD CODE -- Replace 16 with Tile Size
+    let crop_size = 16
+
+    // * Draw each layer
+    newLayers.forEach((layer) => {
+      layer.data.forEach((tile, i) => {
+        // * Layer.active represents the visibility of the layer
+        if(layer.active === true){
+          // ! GIGA HARD CODE -- Replace 64 with Map Width and Height
+          let x = i % 64
+          let y = Math.floor((i - x) / 64)
+          // ! GIGA HARD CODE -- Replace 64/16 with TilesetWidth/TileWidth or Height, Replace 16 with Tile Size
+          let tileX = tile % (64 / 16)
+          let tileY = Math.floor((tile - tileX) / (64 / 16))
+          // * 0 case, draws and empty tile
+          // ? The empty tile is chosen in a weird way, may break in the future
+          if (tile === 0) {
+            ctx.globalAlpha = 0
+            ctx.drawImage(
+              tilesetImage,
+              1000,
+              1000,
+              crop_size,
+              crop_size,
+              x * 16,
+              y * 16,
+              crop_size,
+              crop_size
+            )
+            ctx.globalAlpha = 1
+            // * Draws a border rect for illusion of a grid
+            // ? this is not reflected in the data, purley visual
+            ctx.strokeStyle = '#000000';  // some color/style
+            ctx.lineWidth = 1;
+            ctx.opacity = 0.5;
+            ctx.strokeRect(x * 16, y * 16, crop_size, crop_size)
+          }
+          // * Non-zero case
+          else {
+            tileX = (tile - 1) % (64 / 16)
+            tileY = Math.floor(((tile - 1) - tileX) / (64 / 16))
+            ctx.drawImage(
+              tilesetImage,
+              tileX * 16,
+              tileY * 16,
+              crop_size,
+              crop_size,
+              x * 16,
+              y * 16,
+              crop_size,
+              crop_size
+            )
+            // * Draws a border rect for illusion of a grid
+            // ? this is not reflected in the data, purley visual
+            ctx.strokeStyle = '#000000';  // some color/style
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x * 16, y * 16, crop_size, crop_size)
+          }
+        }
+      })
+      
+    })
+  }
+
   // * Addes a tile to the specified mouse location and redraws the canvas
   const placeTile = (e) => {
     let clicked = getCoords(e)
     // ! GIGA HARD CODE -- Replace 64 with Map Height
     let id = clicked[0] + clicked[1] * 64
     // * Erases data if shift is held and you click
-    if (e.shiftKey) {
+    if (e.shiftKey || tool === "eraser") {
       layers[currentLayer].data[id] = 0
     }
     else {
-      // ! GIGA HARD CODE -- Replace 64/16 with TilesetHeight/TileHeight
-      layers[currentLayer].data[id] = (tileSelection[0] + (tileSelection[1] * 64 / 16)) + 1
+      if(tool === "brush"){
+        // ! GIGA HARD CODE -- Replace 64/16 with TilesetHeight/TileHeight
+        layers[currentLayer].data[id] = (tileSelection[0] + (tileSelection[1] * 64 / 16)) + 1
+      }
+      else if(tool === "fill"){
+        fill(clicked)
+      }
     }
     draw()
   }
+
+  const fill = (mPos) => {
+    let cellid = mPos[0] + mPos[1] * 64
+    let tile = layers[currentLayer].data[cellid]
+    if (tile === (tileSelection[0] + (tileSelection[1] * 64 / 16)) + 1) {
+      return;
+    }
+    
+    fillUtil(layers[currentLayer].data, mPos[0], mPos[1], tile);
+  };
+
+  const fillUtil = (screen, x, y, tile) => {
+    // ! GIGA HARD CODE -- Replace 64 with Map width and height
+    if (x < 0 || x >= 64 || y < 0 || y >= 64) {
+      return;
+    }
+    let id = x + y * 64
+    if (screen[id] !== tile) {
+      return;
+    }
+
+    screen[id] = (tileSelection[0] + (tileSelection[1] * 64 / 16)) + 1;
+
+    fillUtil(screen, x + 1, y, tile);
+    fillUtil(screen, x - 1, y, tile);
+    fillUtil(screen, x, y + 1, tile);
+    fillUtil(screen, x, y - 1, tile);
+  };
 
   // * Returns the grid coords from mouse click location
   function getCoords(e) {
@@ -290,13 +402,35 @@ const EditMap = (props) => {
       });
   };
 
+  const renameLayer = (newName, id) => {
+    console.log(newName, id)
+    let layersClone = [...layers]
+    let layerToRename = layersClone.find((layer) => {
+      return layer.id === id
+    })
+    layerToRename.name = newName
+    console.log(layersClone)
+    setLayers(layersClone)
+  }
+
   // * Adds a new layer to the map when the button is pressed
   const addNewLayer = () => {
-    let newLayer = { name: layers.length + 1, data: [], active: true, customProp: { type: "", value: "" }, id: layers.length }
+    let newLayer = { name: layers.length + 1, data: [], active: true, customProp: { name:"", type: "", value: "" }, id: layers.length }
     for (let i = 0; i < 64 * 64; i++) {
       newLayer.data.push(0)
     }
     setLayers([...layers, newLayer])
+  }
+
+  const deleteLayer = (id) => {
+    if(id !== 0){
+      let newLayers = layers.filter((layer) => {
+        return layer.id !== id
+      })
+      setCurrentLayer(currentLayer - 1)
+      setLayers(newLayers)
+      forceDraw(newLayers)
+    }
   }
 
   // * Updated the visibility of a layer and redraws the screen without that layer
@@ -331,28 +465,73 @@ const EditMap = (props) => {
             {map.name}
           </div>
           <div className="flex flex-col h-[53rem] w-5/6 items-left justify-top ml-20 mt-10">
-            <div className="grid grid-cols-10 w-full justify-items-end">
-              <div className="col-start-8 justify-items-start flex flex-row">
-                <button
-                  className="text-4xl text-maptile-green cursor-pointer"
-                  
-                >
-                  -
-                </button>
-                <button
-                  className="ml-5 mr-[-40px] text-4xl text-maptile-green cursor-pointer"
-                  
-                >
-                  +
-                </button>
-              </div>
-              <div className="col-start-10 flex flex-row ">
-                <EditMapMenu
+          <div className="grid grid-cols-10 w-full justify-items-end select-none">
+                <div className="col-start-1 justify-items-start flex flex-row">
+                  <BsFillBrushFill
+                    className={`${
+                      tool === "brush"
+                        ? "mr-2 h-5 w-5 cursor-pointer mt-[14px] text-maptile-green"
+                        : "mr-2 h-5 w-5 cursor-pointer mt-[14px]"
+                    }`}
+                    onClick={() => setTool("brush")}
+                  />
+                  <BsFillEraserFill
+                    className={`${
+                      tool === "eraser"
+                        ? "mr-2 h-5 w-5 cursor-pointer mt-[14px] text-maptile-green"
+                        : "mr-2 h-5 w-5 cursor-pointer mt-[14px]"
+                    }`}
+                    onClick={() => setTool("eraser")}
+                  />
+                  <BsPaintBucket
+                    className={`${
+                      tool === "fill"
+                        ? "mr-2 h-5 w-5 cursor-pointer mt-[14px] mr-[60px] text-maptile-green"
+                        : "mr-2 h-5 w-5 cursor-pointer mt-[14px] mr-[60px]"
+                    }`}
+                    onClick={() => setTool("fill")}
+                  />
+                </div>
+                <div className="col-start-2 justify-items-start flex flex-row">
+                  <BsArrowCounterclockwise
+                    className="mr-2 h-5 w-5 cursor-pointer mt-[15px]"
+                    // onClick={() => undoAction()}
+                  />
+                  <BsArrowClockwise
+                    className="mr-2 h-5 w-5 cursor-pointer mt-[15px] mr-[140px]"
+                    // onClick={() => redoAction()}
+                  />
+                </div>
+                <div className="col-start-8 justify-items-start flex flex-row">
+                  <button
+                    className="text-4xl text-maptile-green cursor-pointer"
+                    // onClick={() => updateZoom(-1)}
+                  >
+                    -
+                  </button>
+                  <button
+                    className="ml-5 mr-[-40px] text-4xl text-maptile-green cursor-pointer"
+                    // onClick={() => updateZoom(1)}
+                  >
+                    +
+                  </button>
+                </div>
+                
+                <div className="col-start-10 flex flex-row ">
+                  <FiSave
+                    // onClick={() => saveTileset()}
+                    className="mt-[10px] h-5 w-5 text-maptile-green"
+                  />
+                  <EditMapMenu
                   setMapPropModal={setMapPropModal}
                   setShareModal={setShareModal}
                 />
+                </div>
               </div>
-            </div>
+            {/* <EditMapMenu
+                  setMapPropModal={setMapPropModal}
+                  setShareModal={setShareModal}
+                /> */}
 
             <div className="flex flew-row">
               <div className="bg-maptile-background-mid w-5/6 h-[50rem]  overflow-x-auto">
@@ -379,13 +558,18 @@ const EditMap = (props) => {
 
                   <div className="bg-maptile-background-bright w-5/6 h-5/6 ml-5 mt-5 rounded-xl overflow-auto">
                     {layers.slice(0).reverse().map((layer, i) => {
-                      return <LayerCard name={layer.name} id={layer.id} active={layer.id === currentLayer} changeLayer={setCurrentLayer} visible={layer.active} layerVis={layerVis}/>;
+                      return <LayerCard name={layer.name} id={layer.id} active={layer.id === currentLayer} changeLayer={setCurrentLayer} visible={layer.active} layerVis={layerVis} renameLayer={renameLayer} deleteLayer={deleteLayer}/>;
                     })}
                   </div>
                 </div>
                 <div className="bg-maptile-background-mid w-full h-1/2 rounded-xl overflow-auto mt-2">
-                  <div className="text-white text-2xl text-center w-full underline">
-                    Tiles
+                <div className="flex flex-row">
+                    <div className="text-white text-2xl text-left w-1/2 underline ml-5">
+                      Tiles
+                    </div>
+                    <div className="text-maptile-green text-2xl text-right w-1/2 mr-5 cursor-pointer" onClick={() => setTilesetModal(true)}>
+                      +
+                    </div>
                   </div>
                   <div className="bg-maptile-background-bright w-5/6 h-5/6 ml-5 mt-5 rounded-xl relative" onMouseDown={tilesetClick}>
                     {/* {tempTiles.map((tile) => (
@@ -417,6 +601,10 @@ const EditMap = (props) => {
             setMapPropModal={setMapPropModal}
             updateMap={updateMap}
             map={map}
+          />
+          <AddTilesetModal 
+            modalOpen={addTilesetModalOpen}
+            setTilesetModal={setTilesetModal}
           />
         </main>
       )}
