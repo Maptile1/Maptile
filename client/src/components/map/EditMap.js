@@ -235,6 +235,76 @@ const EditMap = (props) => {
     })
   }
 
+  const forceDraw = (newLayers) => {
+    // * Get the required elements and store them for easy access
+    let canvas = document.querySelector("canvas")
+    let ctx = canvas.getContext("2d")
+    let tilesetImage = document.querySelector("#tileset-source");
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    // ! GIGA HARD CODE -- Replace 16 with Tile Size
+    let crop_size = 16
+
+    // * Draw each layer
+    newLayers.forEach((layer) => {
+      layer.data.forEach((tile, i) => {
+        // * Layer.active represents the visibility of the layer
+        if(layer.active === true){
+          // ! GIGA HARD CODE -- Replace 64 with Map Width and Height
+          let x = i % 64
+          let y = Math.floor((i - x) / 64)
+          // ! GIGA HARD CODE -- Replace 64/16 with TilesetWidth/TileWidth or Height, Replace 16 with Tile Size
+          let tileX = tile % (64 / 16)
+          let tileY = Math.floor((tile - tileX) / (64 / 16))
+          // * 0 case, draws and empty tile
+          // ? The empty tile is chosen in a weird way, may break in the future
+          if (tile === 0) {
+            ctx.globalAlpha = 0
+            ctx.drawImage(
+              tilesetImage,
+              1000,
+              1000,
+              crop_size,
+              crop_size,
+              x * 16,
+              y * 16,
+              crop_size,
+              crop_size
+            )
+            ctx.globalAlpha = 1
+            // * Draws a border rect for illusion of a grid
+            // ? this is not reflected in the data, purley visual
+            ctx.strokeStyle = '#000000';  // some color/style
+            ctx.lineWidth = 1;
+            ctx.opacity = 0.5;
+            ctx.strokeRect(x * 16, y * 16, crop_size, crop_size)
+          }
+          // * Non-zero case
+          else {
+            tileX = (tile - 1) % (64 / 16)
+            tileY = Math.floor(((tile - 1) - tileX) / (64 / 16))
+            ctx.drawImage(
+              tilesetImage,
+              tileX * 16,
+              tileY * 16,
+              crop_size,
+              crop_size,
+              x * 16,
+              y * 16,
+              crop_size,
+              crop_size
+            )
+            // * Draws a border rect for illusion of a grid
+            // ? this is not reflected in the data, purley visual
+            ctx.strokeStyle = '#000000';  // some color/style
+            ctx.lineWidth = 1;
+            ctx.strokeRect(x * 16, y * 16, crop_size, crop_size)
+          }
+        }
+      })
+      
+    })
+  }
+
   // * Addes a tile to the specified mouse location and redraws the canvas
   const placeTile = (e) => {
     let clicked = getCoords(e)
@@ -350,6 +420,17 @@ const EditMap = (props) => {
       newLayer.data.push(0)
     }
     setLayers([...layers, newLayer])
+  }
+
+  const deleteLayer = (id) => {
+    if(id !== 0){
+      let newLayers = layers.filter((layer) => {
+        return layer.id !== id
+      })
+      setCurrentLayer(currentLayer - 1)
+      setLayers(newLayers)
+      forceDraw(newLayers)
+    }
   }
 
   // * Updated the visibility of a layer and redraws the screen without that layer
@@ -477,7 +558,7 @@ const EditMap = (props) => {
 
                   <div className="bg-maptile-background-bright w-5/6 h-5/6 ml-5 mt-5 rounded-xl overflow-auto">
                     {layers.slice(0).reverse().map((layer, i) => {
-                      return <LayerCard name={layer.name} id={layer.id} active={layer.id === currentLayer} changeLayer={setCurrentLayer} visible={layer.active} layerVis={layerVis} renameLayer={renameLayer}/>;
+                      return <LayerCard name={layer.name} id={layer.id} active={layer.id === currentLayer} changeLayer={setCurrentLayer} visible={layer.active} layerVis={layerVis} renameLayer={renameLayer} deleteLayer={deleteLayer}/>;
                     })}
                   </div>
                 </div>
