@@ -280,6 +280,10 @@ userRouter.post("/user/share", async (req, res) => {
     )
       .then((user) => {
         if (user != null) {
+          Tileset.findOneAndUpdate(
+            { _id: req.body.id },
+            { $addToSet: { shared_users: sharedUserEmail }}
+          )
           res.json({ user: user });
         } else {
           res.status(400).json({ errorMessage: "User doesn't exist" });
@@ -296,6 +300,10 @@ userRouter.post("/user/share", async (req, res) => {
     )
       .then((user) => {
         if (user != null) {
+          Map.findOneAndUpdate(
+            { _id: req.body.id },
+            { $addToSet: { shared_users: sharedUserEmail }}
+          )
           res.json({ user: user });
         } else {
           res.status(400).json({ errorMessage: "User doesn't exist" });
@@ -318,6 +326,10 @@ userRouter.post("/user/deleteshared", async (req, res) => {
       { new: true }
     )
       .then((user) => {
+        Tileset.findOneAndUpdate(
+          { _id: req.body.id },
+          { $pull: { shared_users: sharedUserEmail }}
+        )
         if (user != null) {
           res.json({ user: user });
         } else {
@@ -334,6 +346,10 @@ userRouter.post("/user/deleteshared", async (req, res) => {
       { new: true }
     )
       .then((user) => {
+        Map.findOneAndUpdate(
+          { _id: req.body.id },
+          { $pull: { shared_users: sharedUserEmail }}
+        )
         if (user != null) {
           res.json({ user: user });
         } else {
