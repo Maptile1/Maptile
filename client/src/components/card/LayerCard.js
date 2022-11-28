@@ -2,6 +2,8 @@ import { BiCog } from "react-icons/bi"
 import { MdDriveFileRenameOutline, MdDelete, MdOutlineHideImage} from "react-icons/md"
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
+import RenameLayerModal from "../map/RenameLayerModal"
+import { React, useState} from "react"
 
 
 const LayerCard =(props) => {
@@ -12,7 +14,10 @@ const LayerCard =(props) => {
         visFlag = !visFlag
     }
 
+    const [renameLayerModalOpen, setRenameLayerModal] = useState(false)
+
     return(
+    <div>
     <Menu as="div" className=" relative inline-block text-left ">
     <div className="grid grid-cols-2 justify-items-start mb-10" onClick={()=>props.changeLayer(props.id)}>
         {props.active ? 
@@ -44,6 +49,7 @@ const LayerCard =(props) => {
                             <button
                                 className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
                                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                onClick={()=>setRenameLayerModal(true)}
                             >
                                 {active ? (
                                     <MdDriveFileRenameOutline
@@ -126,7 +132,15 @@ const LayerCard =(props) => {
             </Menu.Items>
             
         </Transition>
-    </Menu>)
+    </Menu>
+    <RenameLayerModal 
+        modalOpen={renameLayerModalOpen}
+        setRenameLayerModal={setRenameLayerModal}
+        renameLayer={props.renameLayer}
+        name={props.name}
+        id={props.id}
+    />
+    </div>)
 }
 
 export default LayerCard

@@ -332,6 +332,17 @@ const EditMap = (props) => {
       });
   };
 
+  const renameLayer = (newName, id) => {
+    console.log(newName, id)
+    let layersClone = [...layers]
+    let layerToRename = layersClone.find((layer) => {
+      return layer.id === id
+    })
+    layerToRename.name = newName
+    console.log(layersClone)
+    setLayers(layersClone)
+  }
+
   // * Adds a new layer to the map when the button is pressed
   const addNewLayer = () => {
     let newLayer = { name: layers.length + 1, data: [], active: true, customProp: { name:"", type: "", value: "" }, id: layers.length }
@@ -466,7 +477,7 @@ const EditMap = (props) => {
 
                   <div className="bg-maptile-background-bright w-5/6 h-5/6 ml-5 mt-5 rounded-xl overflow-auto">
                     {layers.slice(0).reverse().map((layer, i) => {
-                      return <LayerCard name={layer.name} id={layer.id} active={layer.id === currentLayer} changeLayer={setCurrentLayer} visible={layer.active} layerVis={layerVis}/>;
+                      return <LayerCard name={layer.name} id={layer.id} active={layer.id === currentLayer} changeLayer={setCurrentLayer} visible={layer.active} layerVis={layerVis} renameLayer={renameLayer}/>;
                     })}
                   </div>
                 </div>
