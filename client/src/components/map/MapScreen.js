@@ -65,7 +65,7 @@ const MapScreen = (props) => {
         setUserSharedMaps(response.data.maps);
       });
       await Axios.post("https://maptile1.herokuapp.com/tileset/getBatch", {
-        ids: props.user.tilesets,
+        ids: props.user.tilesets.concat(props.user.shared_tilesets),
         page: 0,
         limit: 9999
       })
