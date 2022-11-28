@@ -95,16 +95,28 @@ router.post("/map/update/:id", async (req, res) => {
   updates.height = req.body.height;
   updates.render_order = req.body.render_order;
   updates.description = req.body.description;
-  updates.tilesets = req.body.tilesets;
   updates.public = req.body.public;
   updates.layers = req.body.layers;
   updates.tags = req.body.tags;
   updates.timeEdited = Date.now();
+  var addTilesets = req.body.tilesetsToAdd || [];
+  var removeTilesets = req.body.tilesetsToRemove || [];
   var map = await Map.findOneAndUpdate(
     { _id: req.params.id, owner: req.session._id },
-    { $set: updates },
+    { $set: updates, 
+      $addToSet: {tilesets: {$each: addTilesets}},
+    },  
     { new: true }
   );
+  if (removeTilesets){
+    map = await Map.findOneAndUpdate(
+      { _id: req.params.id, owner: req.session._id },
+      { $set: updates, 
+        $pull: {tilesets: {$in: removeTilesets}},
+      },  
+      { new: true }
+    );
+  }
   if (map != null) {
     res.json({ map: map });
   } else {
