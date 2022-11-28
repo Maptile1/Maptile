@@ -103,7 +103,7 @@ const ProfileScreen = (props) => {
           ></div>
           <div class="mt-10 grid grid-cols-4 col-span-10 col-start-2 row-start-7 gap-5">
             {userTilesets.length !== 0 ? (
-              userTilesets.map((obj, index) => (
+              userTilesets.filter(n => n).map((obj, index) => (
                 <TilesetCard
                   key={obj}
                   name={obj.name}
