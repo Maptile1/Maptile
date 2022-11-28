@@ -35,7 +35,8 @@ router.post("/tileset/create", async (req, res) => {
     owner: req.session._id,
     timeEdited: Date.now(),
     usersLiked: [],
-    usersDisliked: []
+    usersDisliked: [],
+    sharedUsers: []
   });
   tileset = await tileset.save();
   var user = await User.findOneAndUpdate(

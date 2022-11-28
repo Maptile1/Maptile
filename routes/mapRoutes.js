@@ -30,6 +30,7 @@ router.post("/map/create", async (req, res) => {
     timeEdited: Date.now(),
     usersLiked: [],
     usersDisliked: [],
+    sharedUsers: []
   });
   await map.save();
   var user = await User.findOneAndUpdate(
@@ -102,7 +103,8 @@ router.post("/map/update/:id", async (req, res) => {
   var addTilesets = req.body.tilesetsToAdd || [];
   var removeTilesets = req.body.tilesetsToRemove || [];
   var map = await Map.findOneAndUpdate(
-    { _id: req.params.id, owner: req.session._id },
+    { $or: [{ _id: req.params.id, shared_users: { $in: [req.session._id] } },
+      { _id: req.params.id, owner: req.session._id }] },
     { $set: updates, 
       $addToSet: {tilesets: {$each: addTilesets}},
     },  
@@ -110,7 +112,8 @@ router.post("/map/update/:id", async (req, res) => {
   );
   if (removeTilesets){
     map = await Map.findOneAndUpdate(
-      { _id: req.params.id, owner: req.session._id },
+      { $or: [{ _id: req.params.id, shared_users: { $in: [req.session._id] } },
+        { _id: req.params.id, owner: req.session._id }] },
       { $set: updates, 
         $pull: {tilesets: {$in: removeTilesets}},
       },  

@@ -83,7 +83,7 @@ const mapSchema = new Schema(
             type: [ObjectId],
             required: true
         },
-        sharedUsers:{
+        shared_users:{
             type: [ObjectId],
             required: true
         }
