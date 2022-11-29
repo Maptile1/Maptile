@@ -12,9 +12,6 @@ const AddTilesetModal = (props) => {
       console.log("SELECTED OPTIONS:", selectedOptions)
     };
 
-    /**
-     * NEED NEW ROUTE FOR ADDING TILESETS
-     */
     const submitAddTilesets = async () => {
         console.log("OPTIONS:",selectedOptions);
         await Axios.post("https://maptile1.herokuapp.com/map/update/" + props.map._id, {
@@ -24,6 +21,8 @@ const AddTilesetModal = (props) => {
             console.log(response);
         })
         .catch(err => console.log(err));
+        props.setTilesetModal(false)
+        props.forceUpdate();
     }
 
     useEffect(() => {

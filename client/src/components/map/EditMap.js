@@ -1,7 +1,7 @@
 import Sidebar from "../sidebar/Sidebar";
 import EditMapMenu from "./EditMapMenu";
 import ShareModal from "./ShareModal";
-import { React, useState, useEffect } from "react";
+import { React, useState, useEffect, useReducer } from "react";
 import EditMapTileDisplay from "./EditMapTileDisplay";
 import EditMapGridCell from "./EditMapGridCell";
 import LayerCard from "../card/LayerCard";
@@ -27,6 +27,8 @@ const EditMap = (props) => {
   const [mapPropModal, setMapPropModal] = useState(false);
   const [map, setMap] = useState(null);
   const [gridSize, setGridSize] = useState({ x: 20, y: 20 });
+  const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
+
   // ! Layer Formating
     // * Name: Name of the Layer
     // ? Name todo: Implement Name Change Function
@@ -61,7 +63,7 @@ const EditMap = (props) => {
       });
     };
     getMap();
-  }, [])
+  }, [reducerValue])
 
 
   // * When the map loads and the state changes, this runs to render the inital data
@@ -610,6 +612,7 @@ const EditMap = (props) => {
             modalOpen={addTilesetModalOpen}
             setTilesetModal={setTilesetModal}
             map={map}
+            forceUpdate={forceUpdate}
           />
         </main>
       )}
