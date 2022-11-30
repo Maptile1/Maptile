@@ -56,6 +56,7 @@ const EditMap = (props) => {
   const [isMouseDown, setMouseDown] = useState(false);
   const [tool, setTool] = useState("brush");
   const [currentTileset, setCurrentTileset] = useState(0);
+  var [tilesets, setTilesets] = useState(null);
   var location = useLocation();
 
   // * This fetches the map data from the DB when first loading the page.
@@ -64,14 +65,21 @@ const EditMap = (props) => {
       await Axios.get(
         "https://maptile1.herokuapp.com/map/get/" + location.state._id
       )
-        .then((response) => {
+        .then(async (response) => {
           setMap(response.data.map);
           setLoading(false);
-          console.log(response.data.map.tilesets);
+          await Axios.post("https://maptile1.herokuapp.com/tileset/getBatch", {
+            ids: response.data.map.tilesets,
+            limit: 10,
+            page: 0,
+            fields:
+              "_id name tile_width tile_height tileset_width tileset_height",
+          }).then((response) => {
+            setTilesets(response.data.tilesets);
+            console.log(response.data.tilesets);
+          });
         })
-        .then((err) => {
-          //console.log(err)
-        });
+        .then((err) => {});
     };
     getMap();
   }, [reducerValue]);
@@ -106,7 +114,6 @@ const EditMap = (props) => {
       }
     });
 
-    console.log(layers);
     initDraw();
   };
 
@@ -385,12 +392,21 @@ const EditMap = (props) => {
   const tilesetClick = (e) => {
     let tilesetSelection = document.querySelector(".tile-selector");
     let newCoords = getCoords(e);
+    console.log(map.tilesets[currentTileset]);
+    let tilesetwidth = map.tilesets[currentTileset].tileset_width;
+    let tilesetheight = map.tilesets[currentTileset].tileset_height;
+    let tilewidth = map.tilesets[currentTileset].tile_width;
+    let tileheight = map.tilesets[currentTileset].tile_height;
+
     // ! GIGA HARD CODE -- Replace 64/16 with MapWidth/TileWidth and MapHeight/TileHeight respectivly
-    if (!(newCoords[0] >= 64 / 16) && !(newCoords[1] >= 64 / 16)) {
+    if (
+      !(newCoords[0] >= tilesetwidth / tilewidth) &&
+      !(newCoords[1] >= tilesetheight / tileheight)
+    ) {
       setTileSelection(newCoords);
       // ! GIGA HARD CODE -- Replace 16 with Tile Size
-      tilesetSelection.style.left = newCoords[0] * 16 + "px";
-      tilesetSelection.style.top = newCoords[1] * 16 + "px";
+      tilesetSelection.style.left = newCoords[0] * tilewidth + "px";
+      tilesetSelection.style.top = newCoords[1] * tileheight + "px";
     }
   };
 
@@ -420,13 +436,11 @@ const EditMap = (props) => {
   };
 
   const renameLayer = (newName, id) => {
-    console.log(newName, id);
     let layersClone = [...layers];
     let layerToRename = layersClone.find((layer) => {
       return layer.id === id;
     });
     layerToRename.name = newName;
-    console.log(layersClone);
     setLayers(layersClone);
   };
 
@@ -639,7 +653,6 @@ const EditMap = (props) => {
 
                       <img
                         id="tileset-source"
-                        className=""
                         style={{ imageRendering: "pixelated" }}
                         src={
                           "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
