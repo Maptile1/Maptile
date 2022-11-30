@@ -394,11 +394,11 @@ const EditMap = (props) => {
   const tilesetClick = (e) => {
     let tilesetSelection = document.querySelector(".tile-selector");
     let newCoords = getCoords(e);
-    console.log(map.tilesets[currentTileset]);
-    let tilesetwidth = map.tilesets[currentTileset].tileset_width;
-    let tilesetheight = map.tilesets[currentTileset].tileset_height;
-    let tilewidth = map.tilesets[currentTileset].tile_width;
-    let tileheight = map.tilesets[currentTileset].tile_height;
+    console.log(tilesets[currentTileset]);
+    let tilesetwidth = tilesets[currentTileset].tileset_width;
+    let tilesetheight = tilesets[currentTileset].tileset_height;
+    let tilewidth = tilesets[currentTileset].tile_width;
+    let tileheight = tilesets[currentTileset].tile_height;
 
     // ! GIGA HARD CODE -- Replace 64/16 with MapWidth/TileWidth and MapHeight/TileHeight respectivly
     if (
