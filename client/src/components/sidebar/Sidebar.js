@@ -8,6 +8,9 @@ import {
   BsFillHouseFill,
 } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import Axios from "axios";
+
+Axios.defaults.withCredentials = true;
 
 const Sidebar = (props) => {
   const iconsize = 30;
@@ -33,8 +36,19 @@ const Sidebar = (props) => {
     }
     if (id === "sidebar-LogOut") {
       //Log Out Shit goes here, wont actually do anything until we set up auth and whatever.
-      props.setTheUser(null);
-      nav("/", { replace: true });
+      var response = Axios.post(
+        "https://maptile1.herokuapp.com/user/logout"
+      )
+      .then((response) => {
+        console.log(response)
+        props.setTheUser(null);
+        nav("/", { replace: true });
+      })
+      .catch((err) => {
+        console.log(err)
+        props.setTheUser(null);
+        nav("/", { replace: true });
+      })   
     }
   };
 
