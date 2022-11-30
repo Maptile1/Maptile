@@ -131,68 +131,6 @@ router.post("/map/update/:id", async (req, res) => {
   }
 });
 
-router.post("/map/like/:id", async (req, res) => {
-  if (req.session._id == undefined) {
-    res.status(400).json({ errorMessage: "Not logged in" });
-    return;
-  }
-  if (req.body.like) {
-    var map = await Map.findOneAndUpdate(
-      { _id: req.params.id, usersDisliked: { $in: [req.session._id] } },
-      {
-        $inc: { likes: 1, dislikes: -1 },
-        $addToSet: { usersLiked: req.session._id },
-        $pull: { usersDisliked: req.session._id },
-      },
-      { new: true }
-    );
-    if (map == null) {
-      map = await Map.findOneAndUpdate(
-        { _id: req.params.id, usersLiked: { $nin: [req.session._id] } },
-        { $inc: { likes: 1 }, $addToSet: { usersLiked: req.session._id } },
-        { new: true }
-      );
-      if (map == null) {
-        res.status(400).json({
-          errorMessage: "Could not find appropriate map or have already liked",
-        });
-        return;
-      } else {
-        await User.findOneAndUpdate({ _id: map.owner }, { $inc: { likes: 1 } });
-      }
-    } else {
-      await User.findOneAndUpdate(
-        { _id: map.owner },
-        { $inc: { likes: 1, dislikes: -1 } }
-      );
-    }
-    await User.findOneAndUpdate(
-      { _id: req.session._id },
-      { $addToSet: { liked_maps: map._id } }
-    );
-    res.json({ map: map });
-  } else {
-    var map = await Map.findOneAndUpdate(
-      { _id: req.params.id, usersLiked: { $in: [req.session._id] } },
-      { $inc: { likes: -1 }, $pull: { usersLiked: req.session._id } },
-      { new: true }
-    );
-    if (map == null) {
-      res.status(400).json({
-        errorMessage: "Could not find appropriate map or have already unliked",
-      });
-      return;
-    } else {
-      await User.findOneAndUpdate({ _id: map.owner }, { $inc: { likes: -1 } });
-      await User.findOneAndUpdate(
-        { _id: req.session._id },
-        { $pull: { liked_maps: map._id } }
-      );
-      res.json({ map: map });
-    }
-  }
-});
-
 router.post("/map/getBatch", async (req, res) => {
   var limit = req.body.limit ? req.body.limit : 0;
   if (limit <= 0) {
@@ -220,74 +158,125 @@ router.post("/map/getBatch", async (req, res) => {
   res.json({ maps: maps });
 });
 
+router.post("/map/like/:id", async (req, res) => {
+  if (req.session._id == undefined) {
+    res.status(400).json({ errorMessage: "Not logged in" });
+    return;
+  }
+  if (req.body.like){
+    var map = await Map.findOneAndUpdate(
+      {_id: req.params.id, usersDisliked: {$in: [req.session._id]}},
+      {$inc: {likes: 1, dislikes: -1}, $addToSet: { usersLiked: req.session._id },
+      $pull: {usersDisliked: req.session._id}},
+      {new: true})
+    if (map == null){
+      map = await Map.findOneAndUpdate(
+        {_id: req.params.id, usersLiked: {$nin: [req.session._id]}},
+        {$inc: {likes: 1}, $addToSet: { usersLiked: req.session._id }},
+        {new: true})
+      if (map == null){
+        res.status(400).json({ errorMessage: "Could not find appropriate map or have already liked" });
+        return;
+      }
+      else{
+        await User.findOneAndUpdate(
+          {_id: map.owner},
+          {$inc: {likes: 1}}
+        )
+      }
+    }
+    else{
+      await User.findOneAndUpdate(
+        {_id: map.owner},
+        {$inc: {likes: 1, dislikes: -1}}
+      )
+    }
+    await User.findOneAndUpdate(
+      {_id: req.session._id},
+      {$addToSet: {liked_maps: map._id}},
+    )
+    res.json({ map: map });
+  }
+  else{
+    var map = await Map.findOneAndUpdate(
+      {_id: req.params.id, usersLiked: {$in: [req.session._id]}},
+      {$inc: {likes: -1}, $pull: { usersLiked: req.session._id }},
+      {new: true})
+    if (map == null){
+      res.status(400).json({ errorMessage: "Could not find appropriate map or have already unliked" });
+        return;
+    }
+    else{
+      await User.findOneAndUpdate(
+        {_id: map.owner},
+        {$inc: {likes: -1}}
+      )
+      await User.findOneAndUpdate(
+        {_id: req.session._id},
+        {$pull:{liked_maps: map._id}}
+      )
+      res.json({ map: map });
+    }
+  }
+})
+
 router.post("/map/dislike/:id", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
     return;
   }
-  if (req.body.dislike) {
+  if (req.body.dislike){
     var map = await Map.findOneAndUpdate(
-      { _id: req.params.id, usersLiked: { $in: [req.session._id] } },
-      {
-        $inc: { likes: -1, dislikes: 1 },
-        $addToSet: { usersDisliked: req.session._id },
-        $pull: { usersLiked: req.session._id },
-      },
-      { new: true }
-    );
-    if (map == null) {
+      {_id: req.params.id, usersLiked: {$in: [req.session._id]}},
+      {$inc: {likes: -1, dislikes: 1}, $addToSet: { usersDisliked: req.session._id },
+      $pull: {usersLiked: req.session._id}},
+      {new: true})
+    if (map == null){
       map = await Map.findOneAndUpdate(
-        { _id: req.params.id, usersDisliked: { $nin: [req.session._id] } },
-        {
-          $inc: { dislikes: 1 },
-          $addToSet: { usersDisliked: req.session._id },
-        },
-        { new: true }
-      );
-      if (map == null) {
-        res.status(400).json({
-          errorMessage:
-            "Could not find appropriate map or have already disliked",
-        });
+        {_id: req.params.id, usersDisliked: {$nin: [req.session._id]}},
+        {$inc: {dislikes: 1}, $addToSet: { usersDisliked: req.session._id }},
+        {new: true})
+      if (map == null){
+        res.status(400).json({ errorMessage: "Could not find appropriate map or have already disliked" });
         return;
-      } else {
-        await User.findOneAndUpdate(
-          { _id: map.owner },
-          { $inc: { dislikes: 1 } }
-        );
       }
-    } else {
+      else{
+        await User.findOneAndUpdate(
+          {_id: map.owner},
+          {$inc: {dislikes: 1}}
+        )
+      }
+    }
+    else{
       await User.findOneAndUpdate(
-        { _id: map.owner },
-        { $inc: { likes: -1, dislikes: 1 } }
-      );
+        {_id: map.owner},
+        {$inc: {likes: -1, dislikes: 1}}
+      )
       await User.findOneAndUpdate(
-        { _id: req.session._id },
-        { $pull: { liked_maps: map._id } }
-      );
+        {_id: req.session._id},
+        {$pull:{liked_maps: map._id}}
+      )
     }
     res.json({ map: map });
-  } else {
+  }
+  else{
     var map = await Map.findOneAndUpdate(
-      { _id: req.params.id, usersDisliked: { $in: [req.session._id] } },
-      { $inc: { dislikes: -1 }, $pull: { usersDisliked: req.session._id } },
-      { new: true }
-    );
-    if (map == null) {
-      res.status(400).json({
-        errorMessage:
-          "Could not find appropriate map or have already undisliked",
-      });
-      return;
-    } else {
+      {_id: req.params.id, usersDisliked: {$in: [req.session._id]}},
+      {$inc: {dislikes: -1}, $pull: { usersDisliked: req.session._id }},
+      {new: true})
+    if (map == null){
+      res.status(400).json({ errorMessage: "Could not find appropriate map or have already undisliked" });
+        return;
+    }
+    else{
       await User.findOneAndUpdate(
-        { _id: map.owner },
-        { $inc: { dislikes: -1 } }
-      );
+        {_id: map.owner},
+        {$inc: {dislikes: -1}}
+      )
       res.json({ map: map });
     }
   }
-});
+})
 
 router.post("/map/search", async (req, res) => {
   var tags = req.body.tags
