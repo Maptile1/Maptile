@@ -61,7 +61,7 @@ const TopPostCard = (props) => {
                         <FaUserAlt className=" text-3xl ml-3 mt-3 cursor-pointer " />
                     </div>
                     <div className="flex flex-row ">
-                        <div className="text-2xl p-2">{props.likes}</div>
+                        <div className="text-2xl p-2">{props.likes - props.dislikes}</div>
                         <FaHeart className=" text-3xl ml-3 mt-3 cursor-pointer text-red-400" />
                     </div>
 

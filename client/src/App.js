@@ -20,7 +20,6 @@ function App() {
     setUser(newuser);
   };
 
-
   return (
     <BrowserRouter>
       <div className="app-container">
@@ -53,29 +52,15 @@ function App() {
           />
           <Route
             path="/user/:id"
-            element={
-              <OtherUserProfile user={user} setTheUser={setTheUser}
-              />
-            }
+            element={<OtherUserProfile user={user} setTheUser={setTheUser} />}
           />
           <Route
             path="/tilesets/:id"
-            element={
-            <TilesetDisplay
-              user={user}
-              setTheUser={setTheUser}
-            />
-            }
+            element={<TilesetDisplay user={user} setTheUser={setTheUser} />}
           />
           <Route
-            path="/mapdisplay"
-            element={
-              <MapDisplay
-                user={user}
-                setTheUser={setTheUser}
-
-              />
-            }
+            path="/maps/:id"
+            element={<MapDisplay user={user} setTheUser={setTheUser} />}
           />
           <Route
             path="/tileset_edit"

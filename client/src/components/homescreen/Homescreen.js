@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SplashScreen from "../splash_screen/SplashScreen";
 import CreateAccount from "../createAccount/CreateAccount";
 import Login from "../login/LogIn";
 import { useNavigate } from "react-router-dom";
+import Axios from 'axios';
 
+Axios.defaults.withCredentials = true
 
 const Homescreen = (props) => {
   const [createAccountView, toggleCreateAccountView] = useState(false);
@@ -15,6 +17,22 @@ const Homescreen = (props) => {
     toggleCreateAccountView(true);
     toggleLogInView(false);
   }
+  
+  useEffect(() => {
+    var response = Axios.get(
+      "https://maptile1.herokuapp.com/user/loggedin"
+    )
+    .then((response) => {
+      console.log(response.data)
+      if (response.data.user !== undefined){
+        props.setTheUser(response.data.user)
+        nav("/home", { replace: true })
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })   
+  }, []);
 
   const handleLogIn = (user) => { ///temp usage
     // setauth(true);

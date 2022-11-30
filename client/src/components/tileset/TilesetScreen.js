@@ -5,13 +5,13 @@ import TSSCard from "../card/TSSCard";
 import ShareModal from "../map/ShareModal";
 import Axios from "axios";
 
-Axios.defaults.withCredentials = true
+Axios.defaults.withCredentials = true;
 
 const TilesetScreen = (props) => {
   const [userSelected, updateUserSelected] = useState(true);
   const [modalOpen, setModal] = useState(false);
   var [userTilesets, setUserTilesets] = useState([]);
-  var [sharedTilesets, setSharedTilesets] = useState([])
+  var [sharedTilesets, setSharedTilesets] = useState([]);
   const [input, setInput] = useState({
     name: "",
     tilewidth: "",
@@ -20,7 +20,6 @@ const TilesetScreen = (props) => {
     tilesetheight: "",
   });
   const [inputValid, setInputValid] = useState(false);
-  const [shareModalOpen, setShareModal] = useState(false);
   let tab_selected =
     "bg-maptile-background-mid text-center rounded-t-xl cursor-pointer  mt-[10px] duration-300";
   let tab_unselected =
@@ -34,11 +33,11 @@ const TilesetScreen = (props) => {
         "https://maptile1.herokuapp.com/tileset/getUser/" + user._id
       );
       setUserTilesets(response.data.usertilesets);
-      setSharedTilesets(response.data.sharedtilesets)
+      setSharedTilesets(response.data.sharedtilesets);
     };
     getTilesets();
-    if (localStorage.getItem('imgData') !== null) {
-      localStorage.removeItem('imgData')
+    if (localStorage.getItem("imgData") !== null) {
+      localStorage.removeItem("imgData");
     }
   }, [user]);
 
@@ -48,10 +47,10 @@ const TilesetScreen = (props) => {
     setInput(updated);
     setInputValid(
       updated.name !== "" &&
-      updated.tilewidth !== "" &&
-      updated.tileheight !== "" &&
-      updated.tilesetwidth !== "" &&
-      updated.tilesetheight !== ""
+        updated.tilewidth !== "" &&
+        updated.tileheight !== "" &&
+        updated.tilesetwidth !== "" &&
+        updated.tilesetheight !== ""
     );
   };
   const handleDelete = async (id) => {
@@ -69,22 +68,22 @@ const TilesetScreen = (props) => {
   };
 
   const handleDeleteShare = async (id) => {
-    await Axios.post(
-      "https://maptile1.herokuapp.com/tileset/deleteshared/" + user._id, {
-      tilesetid: id
-    }
-    ).then((response) => {
-      console.log(response.data.sharedtilesets);
-    })
+    await Axios.post("https://maptile1.herokuapp.com/user/deleteshared/", {
+      type: "tileset",
+      _id: props.user._id,
+      asset_id: id,
+    }).then((response) => {
+      console.log(response.data.user);
+    });
     const getTilesets = async () => {
       var response = await Axios.get(
         "https://maptile1.herokuapp.com/tileset/getUser/" + user._id
       );
       setUserTilesets(response.data.usertilesets);
-      setSharedTilesets(response.data.sharedtilesets)
+      setSharedTilesets(response.data.sharedtilesets);
     };
     getTilesets();
-  }
+  };
 
   const handleCreate = async (e) => {
     if (inputValid) {
@@ -105,6 +104,7 @@ const TilesetScreen = (props) => {
       setModal(false);
     }
   };
+
   const handleClose = (e) => {
     setInput({
       name: "",
@@ -148,31 +148,33 @@ const TilesetScreen = (props) => {
           </div>
           <div className="bg-maptile-background-mid w-full h-[50rem] rounded-r-xl rounded-b-xl overflow-auto">
             <div className="flex flex-row flex-wrap px-5 py-5 pl-10 gap-y-5  ">
-              {userSelected ?
-                userTilesets.length !== 0 ?
-
-                  userTilesets.map((obj, index) => (
+              {userSelected ? (
+                userTilesets.length !== 0 ? (
+                  userTilesets.filter(n => n).map((obj, index) => (
                     <TSSCard
                       handleDelete={handleDelete}
                       name={obj.name}
                       owner={obj.owner}
                       _id={obj._id}
                     />
-                  )) : <div>No Tilesets</div>
-                :
-                sharedTilesets.length !== 0 ?
-
-                  sharedTilesets.map((obj, index) => (
-                    <TSSCard
-                      handleDelete={handleDelete}
-                      shared={true}
-                      name={obj.name}
-                      owner={obj.owner}
-                      handleDeleteShare={handleDeleteShare}
-                      _id={obj._id}
-                    />
-                  )) : <div>No Shared Tilesets</div>
-              }
+                  ))
+                ) : (
+                  <div>No Tilesets</div>
+                )
+              ) : sharedTilesets.length !== 0 ? (
+                sharedTilesets.map((obj, index) => (
+                  <TSSCard
+                    handleDelete={handleDelete}
+                    shared={true}
+                    name={obj.name}
+                    owner={obj.owner}
+                    handleDeleteShare={handleDeleteShare}
+                    _id={obj._id}
+                  />
+                ))
+              ) : (
+                <div>No Shared Tilesets</div>
+              )}
             </div>
             <CreateTilesetModal
               modalOpen={modalOpen}
@@ -180,10 +182,6 @@ const TilesetScreen = (props) => {
               updateInput={updateInput}
               handleCreate={handleCreate}
               handleClose={handleClose}
-            />
-            <ShareModal
-              modalOpen={shareModalOpen}
-              setShareModal={setShareModal}
             />
           </div>
         </div>
