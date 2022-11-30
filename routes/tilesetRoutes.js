@@ -377,10 +377,11 @@ router.post("/tileset/getBatch", async (req, res) => {
     return;
   }
   if (req.body.nosort == "nosort") {
-    var tilesets = await Tileset.find({ $or: ids }, req.body.fields)
-      .skip(page)
-      .limit(limit);
-    res.json({ tilesets: tilesets });
+    var tilesets = await Tileset.find({ $or: ids }, req.body.fields);
+    let obj = {};
+    tilesets.forEach((x) => (obj[x._id] = x));
+    const ordered = req.body.ids.map((key) => obj[key]);
+    res.json({ tilesets: ordered });
   } else {
     var tilesets = await Tileset.find({ $or: ids }, req.body.fields)
       .sort({ timeEdited: -1, _id: 1 })

@@ -68,10 +68,12 @@ const EditMap = (props) => {
         .then(async (response) => {
           setMap(response.data.map);
           setLoading(false);
+          console.log(response.data.map.tilesets);
           await Axios.post("https://maptile1.herokuapp.com/tileset/getBatch", {
             ids: response.data.map.tilesets,
             limit: 10,
             page: 0,
+            nosort: "nosort",
             fields:
               "_id name tile_width tile_height tileset_width tileset_height",
           }).then((response) => {
