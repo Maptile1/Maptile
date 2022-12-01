@@ -17,7 +17,6 @@ const TilesetDisplay = (props) => {
   const nav = useNavigate();
   const { id } = useParams();
   var [owner, setOwner] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [tileset, setTileset] = useState(null);
   const [userPfp, setPfp] = useState("");
   const [comment, setComment] = useState("");
@@ -85,10 +84,9 @@ const TilesetDisplay = (props) => {
       })
       .then((response) => {
         console.log("RESPONSE:", response.data.payload.comment);
-        let comments1 = comments;
-        comments.push(response.data.payload.comment)
-        setComments(comments1)
-        forceUpdate();
+        setComments([response.data.payload.comment, ...comments])
+        console.log("NEW COMMENTS:",[response.data.payload.comment, ...comments])
+        // forceUpdate();
       })
       .catch((err) => {
         console.log(err);
@@ -141,10 +139,14 @@ const TilesetDisplay = (props) => {
       getLikesAndDislikes();
   }
 
+  const likeComment = async (comment_id) => {
+      console.log("COMMENT TO BE LIKED:", comment_id)
+  }
+
   useEffect(() => {
+    console.log("USE EFFECT")
     // console.log("TILESET ID: ", id);
     const getOwner = async () => {
-      setLoading(true);
       // console.log("USER ID: ", location.state.owner);
         await Axios.get(
           "https://maptile1.herokuapp.com/user/get/" + location.state.owner
@@ -166,40 +168,23 @@ const TilesetDisplay = (props) => {
         );
       await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
         (response) => {
-          console.log("COMMENTS:", response.data.comments)
+          // console.log("COMMENTS:", response.data.comments)
           setComments(response.data.comments)
         }
       );
-      setLoading(false);
     };
-    // getOwner();
-    const getComments = async () => {
-      setLoading(true);
-      await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
-          (response) => {
-            console.log("COMMENTS:", response.data.comments)
-            setComments(response.data.comments)
-          }
-        );
-      setLoading(false);
-    }
-    if(reducerValue === 0){
       getOwner();
-    }
-    else{
-      getComments();
-    }
-  }, [location.state._id, location.state.owner, id, reducerValue]);
+  }, [location.state._id, location.state.owner, id]);
 
   let like_color = "gray";
   let dislike_color = "gray";
-  if(tileset !== null){
+  if(tileset !== null && props.user != null){
     like_color = tileset.usersLiked.includes(props.user._id) ? "green" : "gray";
     dislike_color = tileset.usersDisliked.includes(props.user._id) ? "red" : "gray";
   }
   return (
     <div>
-      {!loading && (
+      {(owner && tileset && comments) ? (
         <div>
           <Sidebar setTheUser={props.setTheUser} />
           <div class="container px-6 text-xl py-10 mx-auto text-white">
@@ -359,26 +344,11 @@ const TilesetDisplay = (props) => {
               <div class="row-start-4 mt-5 col-span-5 ">
                 Comments
                 {
-                  comments.filter(n => n).sort(function (a,b) {
-                      return new Date(a.comment_date) - new Date(b.comment_date)
-                  }).reverse().map((obj, index) => {
-                      if(obj == null){
-                        return null
-                      }
-                      return (
                       <Comment
-                      owner={obj.owner}
-                      date={obj.comment_date}
-                      comment_text={obj.comment_text}
-                      likes={obj.likes}
-                      dislikes={obj.dislikes}
-                      comment_id={obj._id}
+                      comments={comments}
                       curr_user={props.user}
-                      liked_by={obj.usersLiked}
-                      disliked_by={obj.usersDisliked}
-                    />)
-                  }
-                  )
+                      likeComment={likeComment}
+                    />
                 }
               </div>
 
@@ -414,7 +384,7 @@ const TilesetDisplay = (props) => {
             </div>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };
