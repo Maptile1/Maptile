@@ -137,7 +137,7 @@ const EditMap = (props) => {
     console.log(layers);
     // create file in browser
     const fileName = map.name;
-    const exportData = [
+    var exportData = [
       {
         compressionLevel: -1,
         height: map.height,
@@ -151,9 +151,11 @@ const EditMap = (props) => {
     ];
     exportData.push({ layers: layers });
     exportData.push({ tilesets: tilesets });
-
-    const json = JSON.stringify(exportData);
-    const blob = new Blob([json], { type: "application/json" });
+    exportData = exportData.map(function (e) {
+      return JSON.stringify(e);
+    });
+    exportData = exportData.join(",");
+    const blob = new Blob([exportData], { type: "application/json" });
     const href = URL.createObjectURL(blob);
 
     // create "a" HTLM element with href to file
