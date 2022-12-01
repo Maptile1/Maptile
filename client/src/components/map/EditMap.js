@@ -131,6 +131,34 @@ const EditMap = (props) => {
     }
   };
 
+  const handleDownload = () => {
+    const fileName = map.name;
+    var data = {
+      compressionLevel: -1,
+      height: map.height,
+      width: map.width,
+      infinite: false,
+      orientation: "orthogonal",
+      renderorder: "right-down",
+      tileheight: tilesets[0].height,
+      tilewidth: tilesets[0].width,
+    };
+    var both = Object.assign({}, { layers: layers }, { tilesets: tilesets });
+    var all = Object.assign({}, both, data);
+    var exportData = JSON.stringify(all);
+    const blob = new Blob([exportData], { type: "application/json" });
+    const href = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = href;
+    link.download = fileName + ".json";
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    URL.revokeObjectURL(href);
+  };
+
   // * Draws the data from the initMap function
   // ? Has a case for non-0 data, probably not needed, will leave for now so it dont break
   const initDraw = () => {
@@ -564,6 +592,7 @@ const EditMap = (props) => {
                 <EditMapMenu
                   setMapPropModal={setMapPropModal}
                   setShareModal={setShareModal}
+                  handleDownload={handleDownload}
                 />
               </div>
             </div>
