@@ -105,10 +105,11 @@ const EditMap = (props) => {
 
   useEffect(() => {
     console.log("TEST!", tilesets, layers[0].data)
-    if (tilesets !== null && layers[0].data.length !== 0){
+    if (tilesets !== null && layers[0].data.length !== 0 && loading === true){
       setLoading(false);
     }
-    if (tilesets !== null && map !== null && map.layers.length !== 0) {
+    else if (tilesets !== null && layers[0].data.length !== 0 && loading === false) {
+      draw()
     }
   }, [layers, tilesets]);
 
@@ -540,7 +541,6 @@ const EditMap = (props) => {
       });
       setCurrentLayer(currentLayer - 1);
       setLayers(newLayers);
-      forceDraw(newLayers);
     }
   };
 
