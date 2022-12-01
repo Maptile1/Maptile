@@ -49,7 +49,7 @@ const EditMap = (props) => {
       name: "1",
       data: [],
       active: true,
-      customProp: { name: "", type: "", value: "" },
+      customProp: { name: "", type: "", value: null },
       id: 0,
     },
   ]);
@@ -541,6 +541,17 @@ const EditMap = (props) => {
     }
   };
 
+  const updateLayerProp = (id, propName, propType, propVal) => {
+    let newLayers = layers.map((layer) => {
+      if(layer.id === id){
+        return { ...layer, customProp:{name:propName, type:propType, value:propVal}}
+      }
+      return layer
+    });
+    console.log(newLayers)
+    setLayers(newLayers)
+  }
+
   // * Updated the visibility of a layer and redraws the screen without that layer
   const layerVis = (id) => {
     layers[id].active = !layers[id].active;
@@ -697,6 +708,7 @@ const EditMap = (props) => {
                             layerVis={layerVis}
                             renameLayer={renameLayer}
                             deleteLayer={deleteLayer}
+                            updateLayerProp={updateLayerProp}
                           />
                         );
                       })}
