@@ -4,6 +4,7 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import RenameLayerModal from "../map/RenameLayerModal"
 import { React, useState} from "react"
+import CustomOptionsModal from "../map/CustomOptionsModal"
 
 
 const LayerCard =(props) => {
@@ -15,6 +16,7 @@ const LayerCard =(props) => {
     }
 
     const [renameLayerModalOpen, setRenameLayerModal] = useState(false)
+    const [customPropModal, setCustomPropModal] = useState(false)
 
     return(
     <div>
@@ -70,6 +72,7 @@ const LayerCard =(props) => {
                         {({ active }) => (
                             <button className={`${active ? 'bg-violet-500 text-white' : 'text-gray-900'
                                     } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                    onClick={()=>setCustomPropModal(true)}
                                 >
                                 {active ? (
                                     <BiCog
@@ -139,6 +142,12 @@ const LayerCard =(props) => {
         setRenameLayerModal={setRenameLayerModal}
         renameLayer={props.renameLayer}
         name={props.name}
+        id={props.id}
+    />
+    <CustomOptionsModal 
+        modalOpen={customPropModal}
+        setCustomPropModal={setCustomPropModal}
+        updateLayerProp={props.updateLayerProp}
         id={props.id}
     />
     </div>)
