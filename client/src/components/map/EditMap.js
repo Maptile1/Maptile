@@ -105,11 +105,10 @@ const EditMap = (props) => {
   }, [map]);
 
   useEffect(() => {
-    if (map !== null && map.layers.length !== 0) {
-      console.log(layers)
+    if (tilesets !== null && map !== null && map.layers.length !== 0) {
       draw()
     }
-  }, [layers]);
+  }, [layers, tilesets]);
 
   // * Initalizes an empty map with empty cells, only adds one layer
   const initMap = () => {
