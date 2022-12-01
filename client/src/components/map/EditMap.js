@@ -137,9 +137,22 @@ const EditMap = (props) => {
     console.log(layers);
     // create file in browser
     const fileName = map.name;
-    const layerData = JSON.stringify({ layers: layers });
-    const tilesetData = JSON.stringify({ tilesets: tilesets });
-    const json = layerData.concat(tilesetData);
+    const exportData = [
+      {
+        compressionLevel: -1,
+        height: map.height,
+        width: map.width,
+        infinite: false,
+        orientation: "orthogonal",
+        renderorder: "right-down",
+        tileheight: tilesets[0].height,
+        tilewidth: tilesets[0].width,
+      },
+    ];
+    exportData.push({ layers: layers });
+    exportData.push({ tilesets: tilesets });
+
+    const json = JSON.stringify(exportData);
     const blob = new Blob([json], { type: "application/json" });
     const href = URL.createObjectURL(blob);
 
