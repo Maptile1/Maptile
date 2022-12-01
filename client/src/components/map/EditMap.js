@@ -96,15 +96,20 @@ const EditMap = (props) => {
         initMap();
       } else {
         // ! This is that part that idk if it works, wont need it until data exporting is setup
-        for (let i = 1; i < map.layers.length; i++) {
-          addNewLayer();
-        }
-        layers.forEach((layer, i) => {
-          layer.data = map.layers[i];
-        });
+        console.log(map.layers);
+        setLayers(map.layers);
+        console.log("LAYERS", layers);
+
       }
     }
   }, [map]);
+
+  useEffect(() => {
+    if (map !== null && map.layers.length !== 0) {
+      console.log(layers)
+      draw()
+    }
+  }, [layers]);
 
   // * Initalizes an empty map with empty cells, only adds one layer
   const initMap = () => {
@@ -563,7 +568,8 @@ const EditMap = (props) => {
   const saveMap = () => {
     console.log(layers)
     Axios.post(
-      "https://maptile1.herokuapp.com/map/update/" + location.state._id
+      "https://maptile1.herokuapp.com/map/update/" + location.state._id,
+      { layers: layers }
     )
       .then(async (response) => {
         console.log(response.data.map);
