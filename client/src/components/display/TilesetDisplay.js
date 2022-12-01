@@ -84,9 +84,6 @@ const TilesetDisplay = (props) => {
       })
       .then((response) => {
         console.log("RESPONSE:", response.data.payload.comment);
-        // setComments([response.data.payload.comment, ...comments])
-        // console.log("NEW COMMENTS:",[response.data.payload.comment, ...comments])
-        // forceUpdate();
       })
       .catch((err) => {
         console.log(err);

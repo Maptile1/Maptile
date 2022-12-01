@@ -18,7 +18,6 @@ const MapDisplay = (props) => {
   const nav = useNavigate();
   const { id } = useParams();
   var [owner, setOwner] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [map, setMap] = useState(null);
   const [userPfp, setPfp] = useState("");
   const [comment, setComment] = useState("");
@@ -86,17 +85,17 @@ const MapDisplay = (props) => {
     };
 
     const handleAddComment = async () => {
+      console.log("ADDING")
       await Axios.post("https://maptile1.herokuapp.com/comment/create", {
         comment_text: comment,
         post: id,
       })
         .then((response) => {
-          console.log(response);
+          console.log("ADD COMMENT RESPONSE:", response.data.payload.comment);
         })
         .catch((err) => {
           console.log(err);
         });
-      // REFETCH
       commentRef.current.value = "";
       forceUpdate()
     };
@@ -143,20 +142,42 @@ const MapDisplay = (props) => {
       )
         .then((response) => {
           console.log(response);
-          setLikes(response.data.tileset.likes);
-          setDislikes(response.data.tileset.dislikes);
+          setLikes(response.data.map.likes);
+          setDislikes(response.data.map.dislikes);
         })
         .catch((err) => {
           console.log(err);
         });
       getLikesAndDislikes();
     };
-  
+
+    const likeComment = async (comment) => {
+      let like_status = comment.usersLiked.includes(props.user._id);
+      await Axios.post("https://maptile1.herokuapp.com/comment/like/" + comment._id, {like: !like_status})
+      .then((response) => {
+          console.log(response.data.comment);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        forceUpdate();
+    }
+
+  const dislikeComment = async (comment) => {
+    let dislike_status = comment.usersDisliked.includes(props.user._id);
+    await Axios.post("https://maptile1.herokuapp.com/comment/dislike/" + comment._id, {dislike: !dislike_status})
+    .then((response) => {
+          console.log(response.data.comment);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      forceUpdate()
+    }
 
   useEffect(() => {
     // console.log("TILESET ID: ", id);
     const getOwner = async () => {
-      setLoading(true);
       // console.log("USER ID: ", location.state.owner);
       await Axios.get(
         "https://maptile1.herokuapp.com/user/get/" + location.state.owner
@@ -178,17 +199,12 @@ const MapDisplay = (props) => {
         );
         await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
           (response) => {
-            // console.log("COMMENTS:", response.data.comments)
             setComments(response.data.comments);
           }
         );
-      setLoading(false);
     };
-    getOwner();
+    getOwner(); 
   }, [location.state._id, location.state.owner, id, reducerValue]);
-
-
-
 
   let like_color = "gray";
   let dislike_color = "gray";
@@ -200,7 +216,7 @@ const MapDisplay = (props) => {
     }
   return (
     <div>
-      {!loading && (
+      {(owner && map && comments) ? (
         <div>
           <Sidebar setTheUser={props.setTheUser} />
           <div class="container px-6 text-xl py-10 mx-auto text-white">
@@ -378,31 +394,14 @@ const MapDisplay = (props) => {
 
               <div class="row-start-4 mt-5 col-span-5 ">
                 Comments
-                {comments
-                  .filter((n) => n)
-                  .sort(function (a, b) {
-                    return new Date(a.comment_date) - new Date(b.comment_date);
-                  })
-                  .reverse()
-                  .map((obj, index) => {
-                    if (obj == null) {
-                      return null;
-                    }
-                    console.log(obj);
-                    return (
-                      <Comment
-                        owner={obj.owner}
-                        date={obj.comment_date}
-                        comment_text={obj.comment_text}
-                        likes={obj.likes}
-                        dislikes={obj.dislikes}
-                        comment_id={obj._id}
+                {
+                  <Comment
+                        comments={comments}
                         curr_user={props.user}
-                        liked_by={obj.usersLiked}
-                        disliked_by={obj.usersDisliked}
+                        likeComment={likeComment}
+                        dislikeComment={dislikeComment}
                       />
-                    );
-                  })}
+                  }
               </div>
 
               <div class="row-start-5 col-start-1 col-span-5 shadow-lg mt-2 w-full">
@@ -425,7 +424,7 @@ const MapDisplay = (props) => {
                       <div class="-mr-1">
                         <input
                           type="submit"
-                            onClick={() => handleAddComment()}
+                            onClick={handleAddComment}
                           class="bg-grayfont-medium py-1 px-4 border border-white bg-gray-700 rounded-lg tracking-wide mr-1 hover:bg-gray-600"
                           value="Post Comment"
                         />
@@ -437,7 +436,7 @@ const MapDisplay = (props) => {
             </div>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };

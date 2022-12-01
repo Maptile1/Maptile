@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { FaThumbsDown, FaThumbsUp } from "react-icons/fa";
 
@@ -6,6 +6,7 @@ const Comment = (props) => {
     const [comments, setComments] = useState(null)
 
     useEffect(() => {
+        console.log("PROPS COMMENTS:", props.comments)
         const getCommentOwners = async () => {
           let namedComments = []
           for(let comment of props.comments){
