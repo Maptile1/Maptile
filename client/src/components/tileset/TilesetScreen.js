@@ -1,7 +1,7 @@
 import Sidebar from "../sidebar/Sidebar";
 import React, { useEffect, useState } from "react";
 import CreateTilesetModal from "./CreateTilesetModal";
-import TSSCard from "../card/TSSCard";
+import TSSCard from "../display/TSSCard";
 import ShareModal from "../map/ShareModal";
 import Axios from "axios";
 

@@ -84,23 +84,40 @@ const TilesetDisplay = (props) => {
       })
       .then((response) => {
         console.log("RESPONSE:", response.data.payload.comment);
-        setComments([response.data.payload.comment, ...comments])
-        console.log("NEW COMMENTS:",[response.data.payload.comment, ...comments])
+        // setComments([response.data.payload.comment, ...comments])
+        // console.log("NEW COMMENTS:",[response.data.payload.comment, ...comments])
         // forceUpdate();
       })
       .catch((err) => {
         console.log(err);
       })
       commentRef.current.value = ""
+      forceUpdate()
   };
 
-//   const getComments = async () => {
-//     await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
-//       (response) => {
-//         setComments(response.data.comments)
-//       }
-//     );
-//   }
+  const likeComment = async (comment) => {
+    let like_status = comment.usersLiked.includes(props.user._id);
+    await Axios.post("https://maptile1.herokuapp.com/comment/like/" + comment._id, {like: !like_status})
+    .then((response) => {
+        console.log(response.data.comment);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      forceUpdate();
+  }
+
+const dislikeComment = async (comment) => {
+  let dislike_status = comment.usersDisliked.includes(props.user._id);
+  await Axios.post("https://maptile1.herokuapp.com/comment/dislike/" + comment._id, {dislike: !dislike_status})
+  .then((response) => {
+        console.log(response.data.comment);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    forceUpdate()
+  }
 
   const getLikesAndDislikes = async () => {
     await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + id).then(
@@ -139,10 +156,6 @@ const TilesetDisplay = (props) => {
       getLikesAndDislikes();
   }
 
-  const likeComment = async (comment_id) => {
-      console.log("COMMENT TO BE LIKED:", comment_id)
-  }
-
   useEffect(() => {
     console.log("USE EFFECT")
     // console.log("TILESET ID: ", id);
@@ -174,7 +187,7 @@ const TilesetDisplay = (props) => {
       );
     };
       getOwner();
-  }, [location.state._id, location.state.owner, id]);
+  }, [location.state._id, location.state.owner, id, reducerValue]);
 
   let like_color = "gray";
   let dislike_color = "gray";
@@ -348,6 +361,7 @@ const TilesetDisplay = (props) => {
                       comments={comments}
                       curr_user={props.user}
                       likeComment={likeComment}
+                      dislikeComment={dislikeComment}
                     />
                 }
               </div>
