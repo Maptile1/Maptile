@@ -132,40 +132,29 @@ const EditMap = (props) => {
   };
 
   const handleDownload = () => {
-    // const { myData } = layers;
-    console.log(map.name);
-    console.log(layers);
-    // create file in browser
     const fileName = map.name;
-    var exportData = [
-      {
-        compressionLevel: -1,
-        height: map.height,
-        width: map.width,
-        infinite: false,
-        orientation: "orthogonal",
-        renderorder: "right-down",
-        tileheight: tilesets[0].height,
-        tilewidth: tilesets[0].width,
-      },
-    ];
-    exportData.push({ layers: layers });
-    exportData.push({ tilesets: tilesets });
-    exportData = exportData.map(function (e) {
-      return JSON.stringify(e);
-    });
-    exportData = exportData.join(",");
+    var data = {
+      compressionLevel: -1,
+      height: map.height,
+      width: map.width,
+      infinite: false,
+      orientation: "orthogonal",
+      renderorder: "right-down",
+      tileheight: tilesets[0].height,
+      tilewidth: tilesets[0].width,
+    };
+    var both = Object.assign({}, { layers: layers }, { tilesets: tilesets });
+    var all = Object.assign({}, both, data);
+    var exportData = JSON.stringify(all);
     const blob = new Blob([exportData], { type: "application/json" });
     const href = URL.createObjectURL(blob);
 
-    // create "a" HTLM element with href to file
     const link = document.createElement("a");
     link.href = href;
     link.download = fileName + ".json";
     document.body.appendChild(link);
     link.click();
 
-    // clean up "a" element & remove ObjectURL
     document.body.removeChild(link);
     URL.revokeObjectURL(href);
   };
