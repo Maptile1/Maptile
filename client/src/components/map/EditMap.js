@@ -7,6 +7,7 @@ import EditMapGridCell from "./EditMapGridCell";
 import LayerCard from "../card/LayerCard";
 import MapPropModal from "./MapPropModal";
 import Axios from "axios";
+
 import { useLocation } from "react-router-dom";
 import { AiFillForward, AiFillBackward } from "react-icons/ai";
 import {
@@ -20,6 +21,7 @@ import { FiSave } from "react-icons/fi";
 import AddTilesetModal from "./AddTilesetModal";
 
 const EditMap = (props) => {
+  var beautify = require("json-beautify");
   const [shareModalOpen, setShareModal] = useState(false);
   const [addTilesetModalOpen, setTilesetModal] = useState(false);
   // const [gridRow, setGridRow] = useState(64)
@@ -94,15 +96,20 @@ const EditMap = (props) => {
         initMap();
       } else {
         // ! This is that part that idk if it works, wont need it until data exporting is setup
-        for (let i = 1; i < map.layers.length; i++) {
-          addNewLayer();
-        }
-        layers.forEach((layer, i) => {
-          layer.data = map.layers[i];
-        });
+        console.log(map.layers);
+        setLayers(map.layers);
+        console.log("LAYERS", layers);
+
       }
     }
   }, [map]);
+
+  useEffect(() => {
+    if (map !== null && map.layers.length !== 0) {
+      console.log(layers)
+      draw()
+    }
+  }, [layers]);
 
   // * Initalizes an empty map with empty cells, only adds one layer
   const initMap = () => {
@@ -143,9 +150,44 @@ const EditMap = (props) => {
       tileheight: tilesets[0].height,
       tilewidth: tilesets[0].width,
     };
-    var both = Object.assign({}, { layers: layers }, { tilesets: tilesets });
+    var exportTilesetData = [];
+    tilesets.map((tileset) => {
+      exportTilesetData.push({
+        name: tileset.name,
+        image: tileset.name + ".img",
+        imageheight: tileset.tileset_height,
+        imagewidth: tileset.tileset_width,
+        margin: 0,
+        spacing: 0,
+        tileheight: tileset.tile_height,
+        tilewidth: tileset.tile_width,
+        firstgid: 1,
+        tilecount:
+          (tileset.tileset_width / tileset.tile_width) *
+          (tileset.tileset_height / tileset.tile_height),
+        columns: tileset.tileset_width / tileset.tile_width,
+      });
+    });
+    console.log(exportTilesetData);
+    var both = Object.assign(
+      {},
+      { layers: layers },
+      { tilesets: exportTilesetData }
+    );
     var all = Object.assign({}, both, data);
-    var exportData = JSON.stringify(all);
+    var exportData = beautify(
+      all,
+      function (k, v) {
+        if (v instanceof Array) return JSON.stringify(v);
+        return v;
+      },
+      2
+    )
+      .replace(/\\/g, "")
+      .replace(/\"\[/g, "[")
+      .replace(/\]\"/g, "]")
+      .replace(/\"\{/g, "{")
+      .replace(/\}\"/g, "}");
     const blob = new Blob([exportData], { type: "application/json" });
     const href = URL.createObjectURL(blob);
 
@@ -523,6 +565,18 @@ const EditMap = (props) => {
     }
   };
 
+  const saveMap = () => {
+    console.log(layers)
+    Axios.post(
+      "https://maptile1.herokuapp.com/map/update/" + location.state._id,
+      { layers: layers }
+    )
+      .then(async (response) => {
+        console.log(response.data.map);
+      })
+      .catch((err) => {console.log(err)});
+  }
+
   return (
     <div>
       <Sidebar setTheUser={props.setTheUser} />
@@ -586,7 +640,7 @@ const EditMap = (props) => {
 
               <div className="col-start-10 flex flex-row ">
                 <FiSave
-                  // onClick={() => saveTileset()}
+                  onClick={() => saveMap()}
                   className="mt-[10px] h-5 w-5 text-maptile-green"
                 />
                 <EditMapMenu
