@@ -560,6 +560,17 @@ const EditMap = (props) => {
     }
   };
 
+  const saveMap = () => {
+    console.log(layers)
+    Axios.post(
+      "https://maptile1.herokuapp.com/map/update/" + location.state._id
+    )
+      .then(async (response) => {
+        console.log(response.data.map);
+      })
+      .catch((err) => {console.log(err)});
+  }
+
   return (
     <div>
       <Sidebar setTheUser={props.setTheUser} />
@@ -623,7 +634,7 @@ const EditMap = (props) => {
 
               <div className="col-start-10 flex flex-row ">
                 <FiSave
-                  // onClick={() => saveTileset()}
+                  onClick={() => saveMap()}
                   className="mt-[10px] h-5 w-5 text-maptile-green"
                 />
                 <EditMapMenu
