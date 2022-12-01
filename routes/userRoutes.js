@@ -7,6 +7,7 @@ const saltRounds = 10;
 const multer = require("multer");
 const inMemoryStorage = multer.memoryStorage();
 const Tileset = require("../schema/tileset-schema");
+const Map = require("../schema/map-schema");
 const uploadStrategy = multer({ storage: inMemoryStorage }).single("image");
 const { BlockBlobClient } = require("@azure/storage-blob");
 const getStream = require("into-stream");
@@ -282,8 +283,8 @@ userRouter.post("/user/share", async (req, res) => {
         if (user != null) {
           Tileset.findOneAndUpdate(
             { _id: req.body.id },
-            { $addToSet: { shared_users: sharedUserEmail }}
-          )
+            { $addToSet: { shared_users: sharedUserEmail } }
+          );
           res.json({ user: user });
         } else {
           res.status(400).json({ errorMessage: "User doesn't exist" });
@@ -302,14 +303,15 @@ userRouter.post("/user/share", async (req, res) => {
         if (user != null) {
           Map.findOneAndUpdate(
             { _id: req.body.id },
-            { $addToSet: { shared_users: sharedUserEmail }}
-          )
+            { $addToSet: { shared_users: sharedUserEmail } }
+          );
           res.json({ user: user });
         } else {
           res.status(400).json({ errorMessage: "User doesn't exist" });
         }
       })
       .catch((err) => {
+        console.log(err);
         res.status(400).json({ errorMessage: err });
       });
   }
@@ -328,8 +330,8 @@ userRouter.post("/user/deleteshared", async (req, res) => {
       .then((user) => {
         Tileset.findOneAndUpdate(
           { _id: req.body.id },
-          { $pull: { shared_users: sharedUserEmail }}
-        )
+          { $pull: { shared_users: sharedUserEmail } }
+        );
         if (user != null) {
           res.json({ user: user });
         } else {
@@ -348,8 +350,8 @@ userRouter.post("/user/deleteshared", async (req, res) => {
       .then((user) => {
         Map.findOneAndUpdate(
           { _id: req.body.id },
-          { $pull: { shared_users: sharedUserEmail }}
-        )
+          { $pull: { shared_users: sharedUserEmail } }
+        );
         if (user != null) {
           res.json({ user: user });
         } else {
