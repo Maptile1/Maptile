@@ -18,9 +18,20 @@ const MSCard = (props) => {
     props.handleDelete(props._id);
   };
 
+  useEffect(() => {
+    setImage(
+      "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
+        props._id +
+        "?=" +
+        Math.random().toString().substring(2)
+    );
+    console.log(image);
+  }, [props._id]);
+
   const handleMapView = () => {
     nav("/map_edit", { state: { _id: props._id } });
   };
+  console.log(image);
   return (
     <div className="w-1/4 h-1/4 shadow-2xl rounded mt-5 mx-14 bg-maptile-background-dark flex flex-col">
       {props.search ? (

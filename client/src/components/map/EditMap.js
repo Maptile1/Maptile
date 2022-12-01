@@ -1,7 +1,7 @@
 import Sidebar from "../sidebar/Sidebar";
 import EditMapMenu from "./EditMapMenu";
 import ShareModal from "./ShareModal";
-import { React, useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import EditMapTileDisplay from "./EditMapTileDisplay";
 import EditMapGridCell from "./EditMapGridCell";
 import LayerCard from "../card/LayerCard";
@@ -88,6 +88,8 @@ const EditMap = (props) => {
     getMap();
   }, [reducerValue]);
 
+  const canvasRef = React.useRef(null);
+
   // * When the map loads and the state changes, this runs to render the inital data
   // ? TODO: Not actually tested with incoming data, so far only tested with no data and creating a new map.
   useEffect(() => {
@@ -99,14 +101,13 @@ const EditMap = (props) => {
         console.log(map.layers);
         setLayers(map.layers);
         console.log("LAYERS", layers);
-
       }
     }
   }, [map]);
 
   useEffect(() => {
     if (tilesets !== null && map !== null && map.layers.length !== 0) {
-      draw()
+      draw();
     }
   }, [layers, tilesets]);
 
@@ -543,14 +544,17 @@ const EditMap = (props) => {
 
   const updateLayerProp = (id, propName, propType, propVal) => {
     let newLayers = layers.map((layer) => {
-      if(layer.id === id){
-        return { ...layer, customProp:{name:propName, type:propType, value:propVal}}
+      if (layer.id === id) {
+        return {
+          ...layer,
+          customProp: { name: propName, type: propType, value: propVal },
+        };
       }
-      return layer
+      return layer;
     });
-    console.log(newLayers)
-    setLayers(newLayers)
-  }
+    console.log(newLayers);
+    setLayers(newLayers);
+  };
 
   // * Updated the visibility of a layer and redraws the screen without that layer
   const layerVis = (id) => {
@@ -576,7 +580,6 @@ const EditMap = (props) => {
   };
 
   const saveMap = () => {
-    console.log(layers)
     Axios.post(
       "https://maptile1.herokuapp.com/map/update/" + location.state._id,
       { layers: layers }
@@ -584,9 +587,27 @@ const EditMap = (props) => {
       .then(async (response) => {
         console.log(response.data.map);
       })
-      .catch((err) => {console.log(err)});
-  }
+      .catch((err) => {
+        console.log(err);
+      });
+    const canvas = document.getElementById("my-canvas");
+    console.log(canvas);
+    canvas.toBlob(function (blob) {
+      const formData = new FormData();
+      formData.append("image", blob);
 
+      Axios.post(
+        "https://maptile1.herokuapp.com/map/image/" + map._id,
+        formData
+      )
+        .then(function (response) {
+          console.log("HEY" + response.data.message);
+        })
+        .catch(function (error) {
+          console.log("ERR" + error);
+        });
+    });
+  };
   return (
     <div>
       <Sidebar setTheUser={props.setTheUser} />
@@ -669,6 +690,7 @@ const EditMap = (props) => {
               <div className="bg-maptile-background-mid w-5/6 h-[50rem]  overflow-x-auto">
                 <div className="flex flex-wrap overflow-auto">
                   <canvas
+                    id="my-canvas"
                     width={16 * 64}
                     height={16 * 64}
                     onMouseDown={canvasMouseDown}
