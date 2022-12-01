@@ -69,7 +69,6 @@ const EditMap = (props) => {
       )
         .then(async (response) => {
           setMap(response.data.map);
-          setLoading(false);
           console.log(response.data.map.tilesets);
           await Axios.post("https://maptile1.herokuapp.com/tileset/getBatch", {
             ids: response.data.map.tilesets,
@@ -91,7 +90,7 @@ const EditMap = (props) => {
   // * When the map loads and the state changes, this runs to render the inital data
   // ? TODO: Not actually tested with incoming data, so far only tested with no data and creating a new map.
   useEffect(() => {
-    if (!loading) {
+    if (map !== null) {
       if (map.layers.length === 0) {
         initMap();
       } else {
@@ -105,8 +104,11 @@ const EditMap = (props) => {
   }, [map]);
 
   useEffect(() => {
+    console.log("TEST!", tilesets, layers[0].data)
+    if (tilesets !== null && layers[0].data.length !== 0){
+      setLoading(false);
+    }
     if (tilesets !== null && map !== null && map.layers.length !== 0) {
-      draw()
     }
   }, [layers, tilesets]);
 
@@ -116,13 +118,14 @@ const EditMap = (props) => {
     let tempW = map.width;
     let tempH = map.height;
 
-    layers.forEach((layer) => {
-      for (let i = 0; i < tempW * tempH; i++) {
-        layer.data.push(0);
-      }
-    });
-
-    initDraw();
+    let copy = layers
+    var data = [];
+    for (let i = 0; i < tempW * tempH; i++) {
+      data.push(0);
+    }
+    copy[0].data = data;
+    setLayers(copy);
+    
   };
 
   const nextTileset = () => {
@@ -271,10 +274,10 @@ const EditMap = (props) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     // ! GIGA HARD CODE -- Replace 16 with Tile Size
     let crop_size = 16;
-
     // * Draw each layer
     layers.forEach((layer) => {
-      layer.data.forEach((tile, i) => {
+      for (let i = 0; i < layer.data.length; i++){
+        let tile = layer.data[i];
         // * Layer.active represents the visibility of the layer
         if (layer.active === true) {
           // ! GIGA HARD CODE -- Replace 64 with Map Width and Height
@@ -328,7 +331,7 @@ const EditMap = (props) => {
             ctx.strokeRect(x * 16, y * 16, crop_size, crop_size);
           }
         }
-      });
+      }
     });
   };
 
@@ -742,6 +745,7 @@ const EditMap = (props) => {
                           "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
                           map.tilesets[currentTileset]
                         }
+                        onLoad={() => draw()}
                         crossOrigin="true"
                         alt=""
                       />
