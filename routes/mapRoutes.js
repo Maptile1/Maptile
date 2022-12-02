@@ -139,6 +139,26 @@ router.post("/map/update/:id", async (req, res) => {
   }
 });
 
+///Get all maps of user
+router.get("/map/getUser/:id", async (req, res) => {
+  var user = await User.findById(req.params.id);
+  var userMaps = [];
+  var userSharedMaps = [];
+  await Promise.all(
+    user.maps.map(async (obj, index) => {
+      map = await Map.findById(obj);
+      userMaps.push(tileset);
+    })
+  );
+  await Promise.all(
+    user.shared_maps.map(async (obj, index) => {
+      let map = await Map.findById(obj);
+      userSharedMaps.push(map);
+    })
+  );
+  res.json({ userMaps: userMaps, sharedMaps: userSharedMaps });
+});
+
 router.post("/map/getBatch", async (req, res) => {
   var limit = req.body.limit ? req.body.limit : 0;
   if (limit <= 0) {
