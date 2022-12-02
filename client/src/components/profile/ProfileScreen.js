@@ -1,9 +1,8 @@
 import { BsMapFill, BsFillPuzzleFill } from "react-icons/bs";
 import { BiLike, BiCog } from "react-icons/bi";
 import TilesetCard from "../card/TilesetCard";
-import MapCard from "../card/MapCard";
 import Sidebar from "../sidebar/Sidebar";
-// import MapCard from "../card/MapCard";
+import MapCard from "../card/MapCard";
 import { React, useState, useEffect } from "react";
 import ProfileEditModal from "./ProfileEditModal";
 import { Navigate, useLocation } from "react-router-dom";
@@ -47,18 +46,19 @@ const ProfileScreen = (props) => {
           )
       })
       .catch(err => console.log(err));
-      await Axios.get("https://maptile1.herokuapp.com/map/getUser/" + props.user._id)
+      await Axios.get("http://localhost:8080/map/getUser/" + props.user._id)
       .then(response => {
-            setUserMaps(response.data.userMaps)
+        console.log("USER MAPS:", response.data.userMaps)
+        setUserMaps(response.data.userMaps)
       })
       .catch(err => console.log(err))
     };
     getData();
   }, []);
 
-    if(!props.user){
-      return <Navigate to="/" replace state={{ from: location }} />
-    }
+  if(!props.user){
+    return <Navigate to="/" replace state={{ from: location }} />
+  }
   return user && userTilesets && userMaps ? (
         <div class="grid grid-cols-12 grid-rows-10 gap-4 ">
           <Sidebar setTheUser={props.setTheUser} />
@@ -118,35 +118,37 @@ const ProfileScreen = (props) => {
           ></div>
           <div class="mt-10 grid grid-cols-4 col-span-10 col-start-2 row-start-7 gap-5">
             {
-            userTilesets.length !== 0 ? (
-              userTilesets.filter(n => n).map((obj, index) => (
-                <TilesetCard
-                  key={obj}
-                  name={obj.name}
-                  description={obj.description}
-                  owner={obj.owner}
-                  _id={obj._id} />
-              ))) : null
+              userTilesets.filter(n => n).map((obj) => {
+                 return (
+                  <TilesetCard
+                    key={obj}
+                    name={obj.name}
+                    description={obj.description}
+                    owner={obj.owner}
+                    _id={obj._id} />
+                  )
+              })              
             }
             {
-            userMaps.length !== 0 ? (
-              userMaps.filter(n => n).map((obj, index) => (
-                <MapCard
-                  key={obj}
-                  name={obj.name}
-                  description={obj.description}
-                  owner={obj.owner}
-                  _id={obj._id} />
-              ))) : null
+              userMaps.filter(n => n).map((obj) => {
+                  return (
+                    <MapCard
+                      key={obj}
+                      name={obj.name}
+                      description={obj.description}
+                      owner={obj.owner}
+                      _id={obj._id} />
+                  )
+              })
             }
-          <ProfileEditModal
+            </div>
+        <ProfileEditModal
             user={props.user}
             modalOpen={modalOpen}
             setProfileModal={setProfileModal}
             updateUser={props.setTheUser}
             updatePfp={updatePfp}
           />
-        </div>
     </div>
   ) : null;
 };
