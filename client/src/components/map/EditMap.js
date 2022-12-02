@@ -207,68 +207,6 @@ const EditMap = (props) => {
     URL.revokeObjectURL(href);
   };
 
-  // * Draws the data from the initMap function
-  // ? Has a case for non-0 data, probably not needed, will leave for now so it dont break
-  const initDraw = () => {
-    let canvas = document.querySelector("canvas");
-    let ctx = canvas.getContext("2d");
-    let tilesetImage = document.querySelector("#tileset-source");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // ! GIGA HARD CODE -- Replace 16 with Tile Size
-    let crop_size = 16;
-    tilesetImage.onload = function () {
-      layers.forEach((layer) => {
-        layer.data.forEach((tile, i) => {
-          // ! GIGA HARD CODE -- Replace 64 with Map Width and Height
-          let x = i % 64;
-          let y = Math.floor((i - x) / 64);
-
-          if (tile === 0) {
-            // ! GIGA HARD CODE -- Replace 16 with Tile width and height
-            ctx.globalAlpha = 0;
-            ctx.drawImage(
-              tilesetImage,
-              100,
-              100,
-              crop_size,
-              crop_size,
-              x * 16,
-              y * 16,
-              crop_size,
-              crop_size
-            );
-            // * Draws a border rect for illusion of a grid
-            // ? this is not reflected in the data, purley visual
-            ctx.globalAlpha = 1;
-            ctx.strokeStyle = "#000000"; // some color/style
-            ctx.lineWidth = 1;
-            ctx.strokeRect(x * 16, y * 16, crop_size, crop_size);
-          } else {
-            // ! GIGA HARD CODE -- Replace 64/16 with TilesetWidth/TileWidth or Height, Replace 16 with Tile Size
-            let tileX = i % (64 / 16);
-            let tileY = Math.floor((tile - x) / (64 / 16));
-            ctx.drawImage(
-              tilesetImage,
-              tileX * 16,
-              tileY * 16,
-              crop_size,
-              crop_size,
-              x * 16,
-              y * 16,
-              crop_size,
-              crop_size
-            );
-            // * Draws a border rect for illusion of a grid
-            // ? this is not reflected in the data, purley visual
-            ctx.strokeStyle = "#000000"; // some color/style
-            ctx.lineWidth = 1;
-            ctx.strokeRect(x * 16, y * 16, crop_size, crop_size);
-          }
-        });
-      });
-    };
-  };
-
   // * Main drawing method, rerenders whole screen.
   const draw = () => {
     // * Get the required elements and store them for easy access
@@ -276,8 +214,14 @@ const EditMap = (props) => {
     let ctx = canvas.getContext("2d");
     let tilesetImage = document.querySelector("#tileset-source");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Change this for multiple tilesets
+    let tilesetwidth = tilesets[currentTileset].tileset_width;
+    let tilesetheight = tilesets[currentTileset].tileset_height;
+    let tilewidth = map.tile_width;
+    let tileheight = map.tile_height;
     // ! GIGA HARD CODE -- Replace 16 with Tile Size
-    let crop_size = 16;
+    let crop_size_x = tilewidth;
+    let crop_size_y = tileheight;
     // * Draw each layer
     layers.forEach((layer) => {
       for (let i = 0; i < layer.data.length; i++) {
@@ -285,11 +229,11 @@ const EditMap = (props) => {
         // * Layer.active represents the visibility of the layer
         if (layer.active === true) {
           // ! GIGA HARD CODE -- Replace 64 with Map Width and Height
-          let x = i % 64;
-          let y = Math.floor((i - x) / 64);
+          let x = i % map.width;
+          let y = Math.floor((i - x) / map.height);
           // ! GIGA HARD CODE -- Replace 64/16 with TilesetWidth/TileWidth or Height, Replace 16 with Tile Size
-          let tileX = tile % (64 / 16);
-          let tileY = Math.floor((tile - tileX) / (64 / 16));
+          let tileX = tile % (tilesetwidth / tilewidth);
+          let tileY = Math.floor((tile - tileX) / (tilesetheight / tileheight));
           // * 0 case, draws and empty tile
           // ? The empty tile is chosen in a weird way, may break in the future
           if (tile === 0) {
@@ -298,12 +242,12 @@ const EditMap = (props) => {
               tilesetImage,
               1000,
               1000,
-              crop_size,
-              crop_size,
-              x * 16,
-              y * 16,
-              crop_size,
-              crop_size
+              crop_size_x,
+              crop_size_y,
+              x * tilewidth,
+              y * tileheight,
+              crop_size_x,
+              crop_size_y
             );
             ctx.globalAlpha = 1;
             // * Draws a border rect for illusion of a grid
@@ -311,100 +255,31 @@ const EditMap = (props) => {
             ctx.strokeStyle = "#000000"; // some color/style
             ctx.lineWidth = 1;
             ctx.opacity = 0.5;
-            ctx.strokeRect(x * 16, y * 16, crop_size, crop_size);
+            ctx.strokeRect(x * tilewidth, y * tileheight, crop_size_x, crop_size_y);
           }
           // * Non-zero case
           else {
-            tileX = (tile - 1) % (64 / 16);
-            tileY = Math.floor((tile - 1 - tileX) / (64 / 16));
+            tileX = (tile - 1) % (tilesetwidth / tilewidth);
+            tileY = Math.floor((tile - 1 - tileX) / (tilesetheight / tileheight));
             ctx.drawImage(
               tilesetImage,
-              tileX * 16,
-              tileY * 16,
-              crop_size,
-              crop_size,
-              x * 16,
-              y * 16,
-              crop_size,
-              crop_size
+              tileX * tilewidth,
+              tileY * tileheight,
+              crop_size_x,
+              crop_size_y,
+              x * tilewidth,
+              y * tileheight,
+              crop_size_x,
+              crop_size_y
             );
             // * Draws a border rect for illusion of a grid
             // ? this is not reflected in the data, purley visual
             ctx.strokeStyle = "#000000"; // some color/style
             ctx.lineWidth = 1;
-            ctx.strokeRect(x * 16, y * 16, crop_size, crop_size);
+            ctx.strokeRect(x * tilewidth, y * tileheight, crop_size_x, crop_size_y);
           }
         }
       }
-    });
-  };
-
-  const forceDraw = (newLayers) => {
-    // * Get the required elements and store them for easy access
-    let canvas = document.querySelector("canvas");
-    let ctx = canvas.getContext("2d");
-    let tilesetImage = document.querySelector("#tileset-source");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // ! GIGA HARD CODE -- Replace 16 with Tile Size
-    let crop_size = 16;
-
-    // * Draw each layer
-    newLayers.forEach((layer) => {
-      layer.data.forEach((tile, i) => {
-        // * Layer.active represents the visibility of the layer
-        if (layer.active === true) {
-          // ! GIGA HARD CODE -- Replace 64 with Map Width and Height
-          let x = i % 64;
-          let y = Math.floor((i - x) / 64);
-          // ! GIGA HARD CODE -- Replace 64/16 with TilesetWidth/TileWidth or Height, Replace 16 with Tile Size
-          let tileX = tile % (64 / 16);
-          let tileY = Math.floor((tile - tileX) / (64 / 16));
-          // * 0 case, draws and empty tile
-          // ? The empty tile is chosen in a weird way, may break in the future
-          if (tile === 0) {
-            ctx.globalAlpha = 0;
-            ctx.drawImage(
-              tilesetImage,
-              1000,
-              1000,
-              crop_size,
-              crop_size,
-              x * 16,
-              y * 16,
-              crop_size,
-              crop_size
-            );
-            ctx.globalAlpha = 1;
-            // * Draws a border rect for illusion of a grid
-            // ? this is not reflected in the data, purley visual
-            ctx.strokeStyle = "#000000"; // some color/style
-            ctx.lineWidth = 1;
-            ctx.opacity = 0.5;
-            ctx.strokeRect(x * 16, y * 16, crop_size, crop_size);
-          }
-          // * Non-zero case
-          else {
-            tileX = (tile - 1) % (64 / 16);
-            tileY = Math.floor((tile - 1 - tileX) / (64 / 16));
-            ctx.drawImage(
-              tilesetImage,
-              tileX * 16,
-              tileY * 16,
-              crop_size,
-              crop_size,
-              x * 16,
-              y * 16,
-              crop_size,
-              crop_size
-            );
-            // * Draws a border rect for illusion of a grid
-            // ? this is not reflected in the data, purley visual
-            ctx.strokeStyle = "#000000"; // some color/style
-            ctx.lineWidth = 1;
-            ctx.strokeRect(x * 16, y * 16, crop_size, crop_size);
-          }
-        }
-      });
     });
   };
 
