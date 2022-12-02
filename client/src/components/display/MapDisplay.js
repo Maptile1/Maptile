@@ -25,7 +25,7 @@ const MapDisplay = (props) => {
   const [likes, setLikes] = useState();
   const [dislikes, setDislikes] = useState();
   const commentRef = useRef(null);
-  const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
+  const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const handleOtherUserProfile = () => {
     nav("/user/" + location.state.owner, {
@@ -36,8 +36,7 @@ const MapDisplay = (props) => {
 
   const handleDownload = () => {
     saveAs(
-      "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
-        map._id,
+      "https://maptilefiles.blob.core.windows.net/maptile-map-image/" + map._id,
       map.name + ".jpg"
     );
   };
@@ -80,25 +79,25 @@ const MapDisplay = (props) => {
   //       });
   //   };
 
-    const handleCommentChange = (event) => {
-      setComment(event.target.value);
-    };
+  const handleCommentChange = (event) => {
+    setComment(event.target.value);
+  };
 
-    const handleAddComment = async () => {
-      console.log("ADDING")
-      await Axios.post("https://maptile1.herokuapp.com/comment/create", {
-        comment_text: comment,
-        post: id,
+  const handleAddComment = async () => {
+    console.log("ADDING");
+    await Axios.post("https://maptile1.herokuapp.com/comment/create", {
+      comment_text: comment,
+      post: id,
+    })
+      .then((response) => {
+        console.log("ADD COMMENT RESPONSE:", response.data.payload.comment);
       })
-        .then((response) => {
-          console.log("ADD COMMENT RESPONSE:", response.data.payload.comment);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      commentRef.current.value = "";
-      forceUpdate()
-    };
+      .catch((err) => {
+        console.log(err);
+      });
+    commentRef.current.value = "";
+    forceUpdate();
+  };
 
   //   const getComments = async () => {
   //     await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
@@ -108,72 +107,77 @@ const MapDisplay = (props) => {
   //     );
   //   };
 
-    const getLikesAndDislikes = async () => {
-      await Axios.get("https://maptile1.herokuapp.com/map/get/" + id).then(
-        (response) => {
-          setMap(response.data.map);
-          setLikes(response.data.map.likes);
-          setDislikes(response.data.map.dislikes);
-        }
-      );
-    };
+  const getLikesAndDislikes = async () => {
+    await Axios.get("https://maptile1.herokuapp.com/map/get/" + id).then(
+      (response) => {
+        setMap(response.data.map);
+        setLikes(response.data.map.likes);
+        setDislikes(response.data.map.dislikes);
+      }
+    );
+  };
 
-    const likeMap = async () => {
-      let like_status = map.usersLiked.includes(props.user._id);
-      await Axios.post("https://maptile1.herokuapp.com/map/like/" + map._id, {
-        like: !like_status,
-      })
-        .then((response) => {
-          console.log(response);
-          setLikes(response.data.map.likes);
-          setDislikes(response.data.map.dislikes);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      getLikesAndDislikes();
-    };
-
-    const dislikeMap = async () => {
-      let dislike_status = map.usersDisliked.includes(props.user._id);
-      await Axios.post(
-        "https://maptile1.herokuapp.com/map/dislike/" + map._id,
-        { dislike: !dislike_status }
-      )
-        .then((response) => {
-          console.log(response);
-          setLikes(response.data.map.likes);
-          setDislikes(response.data.map.dislikes);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      getLikesAndDislikes();
-    };
-
-    const likeComment = async (comment) => {
-      let like_status = comment.usersLiked.includes(props.user._id);
-      await Axios.post("https://maptile1.herokuapp.com/comment/like/" + comment._id, {like: !like_status})
+  const likeMap = async () => {
+    let like_status = map.usersLiked.includes(props.user._id);
+    await Axios.post("https://maptile1.herokuapp.com/map/like/" + map._id, {
+      like: !like_status,
+    })
       .then((response) => {
-          console.log(response.data.comment);
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        forceUpdate();
-    }
-
-  const dislikeComment = async (comment) => {
-    let dislike_status = comment.usersDisliked.includes(props.user._id);
-    await Axios.post("https://maptile1.herokuapp.com/comment/dislike/" + comment._id, {dislike: !dislike_status})
-    .then((response) => {
-          console.log(response.data.comment);
+        console.log(response);
+        setLikes(response.data.map.likes);
+        setDislikes(response.data.map.dislikes);
       })
       .catch((err) => {
         console.log(err);
+      });
+    getLikesAndDislikes();
+  };
+
+  const dislikeMap = async () => {
+    let dislike_status = map.usersDisliked.includes(props.user._id);
+    await Axios.post("https://maptile1.herokuapp.com/map/dislike/" + map._id, {
+      dislike: !dislike_status,
+    })
+      .then((response) => {
+        console.log(response);
+        setLikes(response.data.map.likes);
+        setDislikes(response.data.map.dislikes);
       })
-      forceUpdate()
-    }
+      .catch((err) => {
+        console.log(err);
+      });
+    getLikesAndDislikes();
+  };
+
+  const likeComment = async (comment) => {
+    let like_status = comment.usersLiked.includes(props.user._id);
+    await Axios.post(
+      "https://maptile1.herokuapp.com/comment/like/" + comment._id,
+      { like: !like_status }
+    )
+      .then((response) => {
+        console.log(response.data.comment);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    forceUpdate();
+  };
+
+  const dislikeComment = async (comment) => {
+    let dislike_status = comment.usersDisliked.includes(props.user._id);
+    await Axios.post(
+      "https://maptile1.herokuapp.com/comment/dislike/" + comment._id,
+      { dislike: !dislike_status }
+    )
+      .then((response) => {
+        console.log(response.data.comment);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    forceUpdate();
+  };
 
   useEffect(() => {
     // console.log("TILESET ID: ", id);
@@ -189,34 +193,32 @@ const MapDisplay = (props) => {
             response.data.user._id
         );
       });
-        await Axios.get("https://maptile1.herokuapp.com/map/get/" + id).then(
-          (response) => {
-            // console.log("TILESET:", response.data.tileset);
-            setMap(response.data.map);
-            setLikes(response.data.map.likes);
-            setDislikes(response.data.map.dislikes);
-          }
-        );
-        await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
-          (response) => {
-            setComments(response.data.comments);
-          }
-        );
+      await Axios.get("https://maptile1.herokuapp.com/map/get/" + id).then(
+        (response) => {
+          // console.log("TILESET:", response.data.tileset);
+          setMap(response.data.map);
+          setLikes(response.data.map.likes);
+          setDislikes(response.data.map.dislikes);
+        }
+      );
+      await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
+        (response) => {
+          setComments(response.data.comments);
+        }
+      );
     };
-    getOwner(); 
+    getOwner();
   }, [location.state._id, location.state.owner, id, reducerValue]);
 
   let like_color = "gray";
   let dislike_color = "gray";
-    if (map !== null) {
-      like_color = map.usersLiked.includes(props.user._id) ? "green" : "gray";
-      dislike_color = map.usersDisliked.includes(props.user._id)
-        ? "red"
-        : "gray";
-    }
+  if (map !== null) {
+    like_color = map.usersLiked.includes(props.user._id) ? "green" : "gray";
+    dislike_color = map.usersDisliked.includes(props.user._id) ? "red" : "gray";
+  }
   return (
     <div>
-      {(owner && map && comments) ? (
+      {owner && map && comments ? (
         <div>
           <Sidebar setTheUser={props.setTheUser} />
           <div class="container px-6 text-xl py-10 mx-auto text-white">
@@ -264,8 +266,8 @@ const MapDisplay = (props) => {
                   >
                     <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right  rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="px-1 py-1 ">
-                        <Menu.Item>
-                          {({ active }) => (
+                        {/* <Menu.Item> */}
+                        {/* {({ active }) => (
                             <button
                               //   onClick={() => addThenEdit()}
                               className={`${
@@ -313,7 +315,7 @@ const MapDisplay = (props) => {
                               Save to Shared
                             </button>
                           )}
-                        </Menu.Item>
+                        </Menu.Item> */}
 
                         <Menu.Item>
                           {({ active }) => (
@@ -356,7 +358,7 @@ const MapDisplay = (props) => {
                 <img
                   class="object-cover w-full h-full mx-auto rounded-md lg:max-w-2xl"
                   src={
-                    "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
+                    "https://maptilefiles.blob.core.windows.net/maptile-map-image/" +
                     map._id +
                     "?=" +
                     Math.random().toString().substring(2)
@@ -396,12 +398,12 @@ const MapDisplay = (props) => {
                 Comments
                 {
                   <Comment
-                        comments={comments}
-                        curr_user={props.user}
-                        likeComment={likeComment}
-                        dislikeComment={dislikeComment}
-                      />
-                  }
+                    comments={comments}
+                    curr_user={props.user}
+                    likeComment={likeComment}
+                    dislikeComment={dislikeComment}
+                  />
+                }
               </div>
 
               <div class="row-start-5 col-start-1 col-span-5 shadow-lg mt-2 w-full">
@@ -424,7 +426,7 @@ const MapDisplay = (props) => {
                       <div class="-mr-1">
                         <input
                           type="submit"
-                            onClick={handleAddComment}
+                          onClick={handleAddComment}
                           class="bg-grayfont-medium py-1 px-4 border border-white bg-gray-700 rounded-lg tracking-wide mr-1 hover:bg-gray-600"
                           value="Post Comment"
                         />

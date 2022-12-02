@@ -3,12 +3,8 @@ import { React, useState, useEffect } from "react";
 
 const SearchCard = (props) => {
   const nav = useNavigate();
-  const [image, setImage] = useState(
-    "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
-      props._id +
-      "?=" +
-      Math.random().toString().substring(2)
-  );
+  const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(true);
   const handleDisplay = () => {
     console.log("TILESET ID: ", props._id);
     if (props.type === "tileset") {
@@ -23,29 +19,43 @@ const SearchCard = (props) => {
   };
 
   useEffect(() => {
-    setImage(
-      "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
-        props._id +
-        "?=" +
-        Math.random().toString().substring(2)
-    );
+    setLoading(true);
+    if (props.type == "tileset") {
+      setImage(
+        "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
+          props._id +
+          "?=" +
+          Math.random().toString().substring(2)
+      );
+      setLoading(false);
+    } else {
+      setImage(
+        "https://maptilefiles.blob.core.windows.net/maptile-map-image/" +
+          props._id +
+          "?=" +
+          Math.random().toString().substring(2)
+      );
+      setLoading(false);
+    }
   }, [props._id]);
 
   return (
     <div class="w-1/4 h-1/4 rounded shadow-2xl bg-maptile-background-dark overflow-hidden">
-      <img
-        onClick={() => handleDisplay()}
-        class="w-3/4 h-3/4 ml-10 mt-10 border shadow-2xl border-white cursor-pointer object-cover object-center"
-        style={{ "image-rendering": "pixelated" }}
-        src={image}
-        alt=""
-        onError={({ currentTarget }) => {
-          currentTarget.onerror = null;
-          setImage(
-            "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/6372801adf17e9e9316f1b4c"
-          );
-        }}
-      />
+      {!loading && (
+        <img
+          onClick={() => handleDisplay()}
+          class="w-3/4 h-3/4 ml-10 mt-10 border shadow-2xl border-white cursor-pointer object-cover object-center"
+          style={{ "image-rendering": "pixelated" }}
+          src={image}
+          alt=""
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null;
+            setImage(
+              "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/6372801adf17e9e9316f1b4c"
+            );
+          }}
+        />
+      )}
 
       <div
         onClick={() => handleDisplay()}

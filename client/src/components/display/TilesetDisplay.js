@@ -8,7 +8,7 @@ import { Fragment, useEffect, useState, useRef, useReducer } from "react";
 import Comment from "../comment/Comment";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import Axios from "axios";
-import { saveAs } from 'file-saver'
+import { saveAs } from "file-saver";
 import { FaUserAlt, FaHeart } from "react-icons/fa";
 
 Axios.defaults.withCredentials = true;
@@ -23,7 +23,7 @@ const TilesetDisplay = (props) => {
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState();
   const [dislikes, setDislikes] = useState();
-  const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
+  const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
   const commentRef = useRef(null);
 
   const handleOtherUserProfile = () => {
@@ -33,30 +33,37 @@ const TilesetDisplay = (props) => {
   };
   const location = useLocation();
 
-
   const handleDownload = () => {
-    saveAs("https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" + tileset._id, tileset.name + ".jpg");
-  }
+    saveAs(
+      "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
+        tileset._id,
+      tileset.name + ".jpg"
+    );
+  };
   const addThenEdit = async () => {
-    await Axios.post("https://maptile1.herokuapp.com/tileset/addshared/" + props.user._id,
+    await Axios.post(
+      "https://maptile1.herokuapp.com/tileset/addshared/" + props.user._id,
       {
-        tilesetid: id
-      })
+        tilesetid: id,
+      }
+    )
       .then((response) => {
         console.log(response.data.sharedtilesets);
       })
       .catch((err) => {
         console.log(err);
-      })
+      });
     nav("/tileset_edit", { state: { _id: id } });
-  }
+  };
 
   const addToShared = async () => {
     console.log(props.user_id, id);
-    await Axios.post("https://maptile1.herokuapp.com/tileset/addshared/" + props.user._id,
+    await Axios.post(
+      "https://maptile1.herokuapp.com/tileset/addshared/" + props.user._id,
       {
-        tilesetid: id
-      })
+        tilesetid: id,
+      }
+    )
       .then((response) => {
         console.log(response.data);
         alert("Added");
@@ -69,132 +76,146 @@ const TilesetDisplay = (props) => {
           alert("This is your own tileset");
         }
         console.log(err.response.data);
-      })
+      });
   };
 
   const handleCommentChange = (event) => {
     setComment(event.target.value);
-  }
+  };
 
   const handleAddComment = async () => {
-    await Axios.post("https://maptile1.herokuapp.com/comment/create",
-      {
-        comment_text: comment,
-        post: id
-      })
+    await Axios.post("https://maptile1.herokuapp.com/comment/create", {
+      comment_text: comment,
+      post: id,
+    })
       .then((response) => {
         console.log("RESPONSE:", response.data.payload.comment);
       })
       .catch((err) => {
         console.log(err);
-      })
-      commentRef.current.value = ""
-      forceUpdate()
+      });
+    commentRef.current.value = "";
+    forceUpdate();
   };
 
   const likeComment = async (comment) => {
     let like_status = comment.usersLiked.includes(props.user._id);
-    await Axios.post("https://maptile1.herokuapp.com/comment/like/" + comment._id, {like: !like_status})
-    .then((response) => {
+    await Axios.post(
+      "https://maptile1.herokuapp.com/comment/like/" + comment._id,
+      { like: !like_status }
+    )
+      .then((response) => {
         console.log(response.data.comment);
       })
       .catch((err) => {
         console.log(err);
-      })
-      forceUpdate();
-  }
+      });
+    forceUpdate();
+  };
 
-const dislikeComment = async (comment) => {
-  let dislike_status = comment.usersDisliked.includes(props.user._id);
-  await Axios.post("https://maptile1.herokuapp.com/comment/dislike/" + comment._id, {dislike: !dislike_status})
-  .then((response) => {
+  const dislikeComment = async (comment) => {
+    let dislike_status = comment.usersDisliked.includes(props.user._id);
+    await Axios.post(
+      "https://maptile1.herokuapp.com/comment/dislike/" + comment._id,
+      { dislike: !dislike_status }
+    )
+      .then((response) => {
         console.log(response.data.comment);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    forceUpdate()
-  }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    forceUpdate();
+  };
 
   const getLikesAndDislikes = async () => {
     await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + id).then(
       (response) => {
-        setTileset(response.data.tileset)
-        setLikes(response.data.tileset.likes)
-        setDislikes(response.data.tileset.dislikes)
-      });
-  }
+        setTileset(response.data.tileset);
+        setLikes(response.data.tileset.likes);
+        setDislikes(response.data.tileset.dislikes);
+      }
+    );
+  };
 
   const likeTileset = async () => {
-      let like_status = tileset.usersLiked.includes(props.user._id);
-      await Axios.post("https://maptile1.herokuapp.com/tileset/like/" + tileset._id, {like: !like_status})
+    let like_status = tileset.usersLiked.includes(props.user._id);
+    await Axios.post(
+      "https://maptile1.herokuapp.com/tileset/like/" + tileset._id,
+      { like: !like_status }
+    )
       .then((response) => {
         console.log(response);
-        setLikes(response.data.tileset.likes)
-        setDislikes(response.data.tileset.dislikes)
+        setLikes(response.data.tileset.likes);
+        setDislikes(response.data.tileset.dislikes);
       })
       .catch((err) => {
         console.log(err);
-      })
-      getLikesAndDislikes();
-  }
+      });
+    getLikesAndDislikes();
+  };
 
   const dislikeTileset = async () => {
-      let dislike_status = tileset.usersDisliked.includes(props.user._id);
-      await Axios.post("https://maptile1.herokuapp.com/tileset/dislike/" + tileset._id, {dislike: !dislike_status})
+    let dislike_status = tileset.usersDisliked.includes(props.user._id);
+    await Axios.post(
+      "https://maptile1.herokuapp.com/tileset/dislike/" + tileset._id,
+      { dislike: !dislike_status }
+    )
       .then((response) => {
         console.log(response);
-        setLikes(response.data.tileset.likes)
-        setDislikes(response.data.tileset.dislikes)
+        setLikes(response.data.tileset.likes);
+        setDislikes(response.data.tileset.dislikes);
       })
       .catch((err) => {
         console.log(err);
-      })
-      getLikesAndDislikes();
-  }
+      });
+    getLikesAndDislikes();
+  };
 
   useEffect(() => {
-    console.log("USE EFFECT")
+    console.log("USE EFFECT");
     // console.log("TILESET ID: ", id);
     const getOwner = async () => {
       // console.log("USER ID: ", location.state.owner);
-        await Axios.get(
-          "https://maptile1.herokuapp.com/user/get/" + location.state.owner
-        ).then((response) => {
-          console.log(response.data.user);
-          setOwner(response.data.user);
-          setPfp(
-            "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
+      await Axios.get(
+        "https://maptile1.herokuapp.com/user/get/" + location.state.owner
+      ).then((response) => {
+        console.log(response.data.user);
+        setOwner(response.data.user);
+        setPfp(
+          "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
             response.data.user._id
-          );
-        });
-        await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + id).then(
-          (response) => {
-            // console.log("TILESET:", response.data.tileset);
-            setTileset(response.data.tileset);
-            setLikes(response.data.tileset.likes)
-            setDislikes(response.data.tileset.dislikes)
-          }
         );
+      });
+      await Axios.get("https://maptile1.herokuapp.com/tileset/get/" + id).then(
+        (response) => {
+          // console.log("TILESET:", response.data.tileset);
+          setTileset(response.data.tileset);
+          setLikes(response.data.tileset.likes);
+          setDislikes(response.data.tileset.dislikes);
+        }
+      );
       await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
         (response) => {
           // console.log("COMMENTS:", response.data.comments)
-          setComments(response.data.comments)
+          setComments(response.data.comments);
         }
       );
     };
-      getOwner();
+    getOwner();
   }, [location.state._id, location.state.owner, id, reducerValue]);
 
   let like_color = "gray";
   let dislike_color = "gray";
-  if(tileset !== null && props.user != null){
+  if (tileset !== null && props.user != null) {
     like_color = tileset.usersLiked.includes(props.user._id) ? "green" : "gray";
-    dislike_color = tileset.usersDisliked.includes(props.user._id) ? "red" : "gray";
+    dislike_color = tileset.usersDisliked.includes(props.user._id)
+      ? "red"
+      : "gray";
   }
   return (
     <div>
-      {(owner && tileset && comments) ? (
+      {owner && tileset && comments ? (
         <div>
           <Sidebar setTheUser={props.setTheUser} />
           <div class="container px-6 text-xl py-10 mx-auto text-white">
@@ -218,7 +239,7 @@ const dislikeComment = async (comment) => {
                   <div class="flex flex-col justify-between ml-5">
                     <div className="text-white text-lg flex flex-row">
                       <div className="mt-2">{owner.userName}</div>
-                      <FaUserAlt className="mt-3 ml-2"/>
+                      <FaUserAlt className="mt-3 ml-2" />
                     </div>
                     <div className="mb-2 text-lg">{tileset.description}</div>
                   </div>
@@ -242,7 +263,7 @@ const dislikeComment = async (comment) => {
                   >
                     <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right  rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="px-1 py-1 ">
-                        <Menu.Item>
+                        {/* <Menu.Item>
                           {({ active }) => (
                             <button onClick={() => addThenEdit()}
                               className={`${active
@@ -288,15 +309,17 @@ const dislikeComment = async (comment) => {
                               Save to Shared
                             </button>
                           )}
-                        </Menu.Item>
+                        </Menu.Item> */}
 
                         <Menu.Item>
                           {({ active }) => (
-                            <button onClick={() => handleDownload()}
-                              className={`${active
-                                ? "bg-violet-500 text-white"
-                                : "text-gray-900"
-                                } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                            <button
+                              onClick={() => handleDownload()}
+                              className={`${
+                                active
+                                  ? "bg-violet-500 text-white"
+                                  : "text-gray-900"
+                              } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                             >
                               {active ? (
                                 <BsSave
@@ -319,15 +342,20 @@ const dislikeComment = async (comment) => {
                 </Menu>
               </div>
               <div class="mt-10 row-start-2 col-span-1">
-                <div className={`w-full bg-maptile-background-mid rounded-xl p-2`}>Tags: {tileset.tags.join(", ")}</div>
-                
+                <div
+                  className={`w-full bg-maptile-background-mid rounded-xl p-2`}
+                >
+                  Tags: {tileset.tags.join(", ")}
+                </div>
               </div>
               <div class="row-start-3 row-end-4 col-start-1 col-end-4 mb-10 bg-gradient-to-br from-maptile-green/60 to-maptile-green-alt/60 rounded-[50px]">
                 <img
                   class="object-cover w-full h-full mx-auto rounded-md lg:max-w-2xl"
                   src={
                     "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
-                    tileset._id + "?=" + Math.random().toString().substring(2)
+                    tileset._id +
+                    "?=" +
+                    Math.random().toString().substring(2)
                   }
                   alt=""
                   style={{ "image-rendering": "pixelated" }}
@@ -341,12 +369,21 @@ const dislikeComment = async (comment) => {
               <div class="flex flex-row row-start-3 col-start-5 gap-20 h-2/5 bg-maptile-background-mid rounded-l-3xl">
                 <div class="flex flex-col text-6xl font-bold p-2">
                   {" "}
-                  <FaThumbsUp color={like_color} onClick={likeTileset} size={100} stroke={1} />
+                  <FaThumbsUp
+                    color={like_color}
+                    onClick={likeTileset}
+                    size={100}
+                    stroke={1}
+                  />
                   <div class="mt-10">{likes} Likes</div>
                 </div>
 
                 <div class="flex flex-col text-6xl font-bold bg-maptile-background-mid rounded-r-3xl p-2">
-                  <FaThumbsDown onClick={dislikeTileset} color={dislike_color} size={100} />
+                  <FaThumbsDown
+                    onClick={dislikeTileset}
+                    color={dislike_color}
+                    size={100}
+                  />
                   <div class="mt-10 ">{dislikes} Dislikes</div>
                 </div>
               </div>
@@ -354,12 +391,12 @@ const dislikeComment = async (comment) => {
               <div class="row-start-4 mt-5 col-span-5 ">
                 Comments
                 {
-                      <Comment
-                      comments={comments}
-                      curr_user={props.user}
-                      likeComment={likeComment}
-                      dislikeComment={dislikeComment}
-                    />
+                  <Comment
+                    comments={comments}
+                    curr_user={props.user}
+                    likeComment={likeComment}
+                    dislikeComment={dislikeComment}
+                  />
                 }
               </div>
 
