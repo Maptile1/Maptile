@@ -364,8 +364,10 @@ const EditMap = (props) => {
     ) {
       setTileSelection(newCoords);
       // ! GIGA HARD CODE -- Replace 16 with Tile Size
-      tilesetSelection.style.left = newCoords[0] * tilewidth + "px";
-      tilesetSelection.style.top = newCoords[1] * tileheight + "px";
+      tilesetSelection.style.left = newCoords[0] * tileheight + "px";
+      tilesetSelection.style.top = newCoords[1] * tilewidth + "px";
+      tilesetSelection.style.paddingTop = tileheight + "px";
+      tilesetSelection.style.paddingLeft = tilewidth + "px";
     }
   };
 
@@ -642,7 +644,9 @@ const EditMap = (props) => {
                       <EditMapTileDisplay tile={tile} />
                     ))} */}
                     <div
-                      className={`absolute tile-selector left-0 top-0 w-[16px] h-[16px] p-2 z-30`}
+                      className={`absolute tile-selector left-0 top-0 z-30`}
+                      style={{width: tilesets[currentTileset].tile_width + "px",
+                      height:tilesets[currentTileset].tile_height + "px"}}
                     ></div>
                     {
                       /* This is where the tileset Image is hard coded
