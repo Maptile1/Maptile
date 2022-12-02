@@ -9,6 +9,7 @@ import {
 } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
+import logo from './assets/maptile-logo.png'
 
 Axios.defaults.withCredentials = true;
 
@@ -57,7 +58,7 @@ const Sidebar = (props) => {
       <div className="py-5 px-3 bg-maptile-green rounded dark:bg-maptile-green top-0 fixed bottom-0">
         <ul className="space-y-10">
           <div className="w-12 h-12">
-            <img src="maptile-logo.png" className="object-fit " alt="logo" />
+            <img src={logo} className="object-fit " alt="logo" />
           </div>
           <div>
             <div
