@@ -230,7 +230,8 @@ const EditMap = (props) => {
         if (layer.active === true) {
           // ! GIGA HARD CODE -- Replace 64 with Map Width and Height
           let x = i % map.width;
-          let y = Math.floor((i - x) / map.height);
+          let y = Math.floor((i - x) / map.width);
+          console.log(x,y)
           // ! GIGA HARD CODE -- Replace 64/16 with TilesetWidth/TileWidth or Height, Replace 16 with Tile Size
           let tileX = tile % (tilesetwidth / tilewidth);
           let tileY = Math.floor((tile - tileX) / (tilesetheight / tileheight));
@@ -291,7 +292,7 @@ const EditMap = (props) => {
     }
     let tilesetheight = tilesets[currentTileset].tileset_height;
     // ! GIGA HARD CODE -- Replace 64 with Map Height
-    let id = clicked[0] + clicked[1] * map.height;
+    let id = clicked[0] + clicked[1] * map.width;
     // * Erases data if shift is held and you click
     if (e.shiftKey || tool === "eraser") {
       layers[currentLayer].data[id] = 0;
@@ -308,7 +309,7 @@ const EditMap = (props) => {
   };
 
   const fill = (mPos) => {
-    let cellid = mPos[0] + mPos[1] * map.height;
+    let cellid = mPos[0] + mPos[1] * map.width;
     let tilesetheight = tilesets[currentTileset].tileset_height;
     let tile = layers[currentLayer].data[cellid];
     if (tile === tileSelection[0] + (tileSelection[1] * tilesetheight) / map.tile_height + 1) {
@@ -324,7 +325,7 @@ const EditMap = (props) => {
       return;
     }
     let tilesetheight = tilesets[currentTileset].tileset_height;
-    let id = x + y * map.height;
+    let id = x + y * map.width;
     if (screen[id] !== tile) {
       return;
     }
