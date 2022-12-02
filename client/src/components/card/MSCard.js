@@ -9,7 +9,7 @@ import { React, useState, useEffect } from "react";
 const MSCard = (props) => {
   const nav = useNavigate();
   const [image, setImage] = useState(
-    "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
+    "https://maptilefiles.blob.core.windows.net/maptile-map-image/" +
       props._id +
       "?=" +
       Math.random().toString().substring(2)
@@ -20,7 +20,7 @@ const MSCard = (props) => {
 
   useEffect(() => {
     setImage(
-      "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
+      "https://maptilefiles.blob.core.windows.net/maptile-map-image/" +
         props._id +
         "?=" +
         Math.random().toString().substring(2)
