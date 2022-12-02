@@ -107,11 +107,16 @@ userRouter.route("/user/loggedin").get(async (req, res) => {
 });
 
 userRouter.route("/user/get/:id").get(async (req, res) => {
-  var user = await User.findById(req.params.id);
-  if (user != null) {
-    res.json({ user: user });
-  } else {
-    res.status(400).json({ errorMessage: "Couldnt find user" });
+  if (req.session._id == undefined) {
+    res.json({ loggedIn: false });
+  }
+  else{
+    var user = await User.findById(req.params.id);
+    if (user != null) {
+      res.json({ user: user });
+    } else {
+      res.status(400).json({ errorMessage: "Couldnt find user" });
+    }
   }
 });
 

@@ -7,6 +7,7 @@ import { React, useState, useEffect } from "react";
 import { Navigate, useLocation, useParams } from "react-router-dom";
 // import { isRouteErrorResponse } from "react-router-dom";
 import Axios from "axios";
+import MapCard from "../card/MapCard";
 
 Axios.defaults.withCredentials = true
 
@@ -14,9 +15,9 @@ const OtherUserProfile = (props) => {
 
     const {id} = useParams();
     const location = useLocation();
-    const [loading, setLoading] = useState(true);
     const [user, setUser] = useState(null);
     var [userTilesets, setUserTilesets] = useState([]);
+    const [userMaps, setUserMaps] = useState([]);
     const [userPfp, setPfp] = useState(
         "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
         location.state.owner +
@@ -31,52 +32,58 @@ const OtherUserProfile = (props) => {
 
     useEffect(() => {
         const getUser = async () => {
-            setLoading(true);
             await Axios.get("https://maptile1.herokuapp.com/user/get/" + id)
             .then(response => {
                 setUser(response.data.user);
-                setLoading(false);
+                console.log("USER:", response.data.user)
             })
         };
         getUser();
         const getTilesets = async () => {
-            setLoading(true);
-            await Axios.get("https://maptile1.herokuapp.com/tileset/getUser/" + location.state.owner)
+            await Axios.get("https://maptile1.herokuapp.com/tileset/getUser/" + id)
             .then(response => {
                 setUserTilesets(response.data.usertilesets);
                 console.log(response.data.usertilesets)
-                setLoading(false);
             });
         }
         getTilesets();
+        const getMaps = async () => {
+            await Axios.get("https://maptile1.herokuapp.com/map/getUser/" + id)
+            .then(response => {
+                setUserMaps(response.data.userMaps)
+            })
+      .catch(err => console.log(err))
+       }
+       getMaps();
     }, [location.state.owner, id]);
 
-    return location.state.owner ? (
+    if(!location.state.owner){
+        return <Navigate to="/" replace state={{ from: location }} />
+    }
+    return location.state.owner && user && userTilesets && userMaps ? (
         <div>
-            {!loading && (
-                <div class="grid grid-cols-12 grid-rows-10 gap-4 ">
-                    <Sidebar setTheUser={props.setTheUser} />
+            <div class="grid grid-cols-12 grid-rows-10 gap-4 ">
+                <Sidebar setTheUser={props.setTheUser} />
 
-                    <div class="col-start-2 col-span-2 row-start-3 text-white text-center ">
-                        <div class="text-3xl mb-8 text-center"> {user.userName}</div>
+                <div class="col-start-2 col-span-2 row-start-3 text-white text-center ">
+                    <div class="text-3xl mb-8 text-center"> {user.userName}</div>
 
-                        <img
-                            style={{ borderRadius: 400 / 4 }}
-                            class="w-full h-3/4 object-cover object-center border-2 border-maptile-green"
-                            src={userPfp}
-                            alt="blog"
-                            onError={({ currentTarget }) => {
-                                currentTarget.onerror = null;
-                                updatePfp(
-                                    "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png"
-                                );
-                            }}
-                        />
-                        <div className="bg-maptile-background-mid mt-8 p2.5 rounded-xl w-full">
-                            <div class="mt-5 text-left ml-2">{user.bio}</div>
-                        </div>
+                    <img
+                        style={{ borderRadius: 400 / 4 }}
+                        class="w-full h-3/4 object-cover object-center border-2 border-maptile-green"
+                        src={userPfp}
+                        alt="blog"
+                        onError={({ currentTarget }) => {
+                            currentTarget.onerror = null;
+                            updatePfp(
+                                "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png"
+                            );
+                        }}
+                    />
+                    <div className="bg-maptile-background-mid mt-8 p2.5 rounded-xl w-full">
+                        <div class="mt-5 text-left ml-2">{user.bio}</div>
                     </div>
-
+                    </div>
                     <div class="col-start-6 row-start-3 mt-20 text-6xl justify-self-center gap-10 text-white">
                         <BsMapFill />
                         <div class="mt-10">
@@ -104,7 +111,7 @@ const OtherUserProfile = (props) => {
                     <div class="row-start-7 text-white text-3xl col-start-2 col-span-10" style={{ borderTop: "2px solid #fff ", marginRight: 20 }}></div>
                     <div class="mt-10 grid grid-cols-4 col-span-10 col-start-2 row-start-7 gap-5">
                         {userTilesets.length !== 0 ?
-                            userTilesets.map((obj, index) => 
+                            userTilesets.filter(n => n).map((obj, index) => 
                             {
                                 // console.log(obj)
                                 return (
@@ -120,12 +127,27 @@ const OtherUserProfile = (props) => {
                             ) 
                             : <div> No tilesets</div>
                         }
+                        {
+                        userMaps.filter(n => n).map((obj) => 
+                        {
+                            return (
+                                <MapCard
+                                    key={obj}
+                                    name={obj.name}
+                                    description={obj.description}
+                                    owner={obj.owner}
+                                    _id={obj._id}
+                                    />
+                                )
+                            }
+                            ) 
+                        }
                     </div>
                 </div>
-            )}
+            )
         </div>
     ) : (
-        <Navigate to="/" replace state={{ from: location }} />
+        null
     );
 };
 

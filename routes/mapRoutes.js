@@ -139,6 +139,16 @@ router.post("/map/update/:id", async (req, res) => {
   }
 });
 
+///Get all maps of user
+router.get("/map/getUser/:id", async (req, res) => {
+  if (req.session._id == undefined){
+    res.status(400).json({errorMessage: 'Not logged in'})
+    return;
+  }
+  let userMaps = await Map.find({owner: req.params.id})
+  res.json({userMaps: userMaps})
+});
+
 router.post("/map/getBatch", async (req, res) => {
   var limit = req.body.limit ? req.body.limit : 0;
   if (limit <= 0) {

@@ -230,7 +230,7 @@ const EditMap = (props) => {
         if (layer.active === true) {
           // ! GIGA HARD CODE -- Replace 64 with Map Width and Height
           let x = i % map.width;
-          let y = Math.floor((i - x) / map.height);
+          let y = Math.floor((i - x) / map.width);
           // ! GIGA HARD CODE -- Replace 64/16 with TilesetWidth/TileWidth or Height, Replace 16 with Tile Size
           let tileX = tile % (tilesetwidth / tilewidth);
           let tileY = Math.floor((tile - tileX) / (tilesetheight / tileheight));
@@ -253,7 +253,7 @@ const EditMap = (props) => {
             // * Draws a border rect for illusion of a grid
             // ? this is not reflected in the data, purley visual
             ctx.strokeStyle = "#000000"; // some color/style
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 0.1;
             ctx.opacity = 0.5;
             ctx.strokeRect(x * tilewidth, y * tileheight, crop_size_x, crop_size_y);
           }
@@ -275,7 +275,7 @@ const EditMap = (props) => {
             // * Draws a border rect for illusion of a grid
             // ? this is not reflected in the data, purley visual
             ctx.strokeStyle = "#000000"; // some color/style
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 0.1;
             ctx.strokeRect(x * tilewidth, y * tileheight, crop_size_x, crop_size_y);
           }
         }
@@ -291,7 +291,7 @@ const EditMap = (props) => {
     }
     let tilesetheight = tilesets[currentTileset].tileset_height;
     // ! GIGA HARD CODE -- Replace 64 with Map Height
-    let id = clicked[0] + clicked[1] * map.height;
+    let id = clicked[0] + clicked[1] * map.width;
     // * Erases data if shift is held and you click
     if (e.shiftKey || tool === "eraser") {
       layers[currentLayer].data[id] = 0;
@@ -308,7 +308,7 @@ const EditMap = (props) => {
   };
 
   const fill = (mPos) => {
-    let cellid = mPos[0] + mPos[1] * map.height;
+    let cellid = mPos[0] + mPos[1] * map.width;
     let tilesetheight = tilesets[currentTileset].tileset_height;
     let tile = layers[currentLayer].data[cellid];
     if (tile === tileSelection[0] + (tileSelection[1] * tilesetheight) / map.tile_height + 1) {
@@ -324,7 +324,7 @@ const EditMap = (props) => {
       return;
     }
     let tilesetheight = tilesets[currentTileset].tileset_height;
-    let id = x + y * map.height;
+    let id = x + y * map.width;
     if (screen[id] !== tile) {
       return;
     }
@@ -364,8 +364,10 @@ const EditMap = (props) => {
     ) {
       setTileSelection(newCoords);
       // ! GIGA HARD CODE -- Replace 16 with Tile Size
-      tilesetSelection.style.left = newCoords[0] * tilewidth + "px";
-      tilesetSelection.style.top = newCoords[1] * tileheight + "px";
+      tilesetSelection.style.left = newCoords[0] * tileheight + "px";
+      tilesetSelection.style.top = newCoords[1] * tilewidth + "px";
+      tilesetSelection.style.paddingTop = tileheight + "px";
+      tilesetSelection.style.paddingLeft = tilewidth + "px";
     }
   };
 
@@ -642,7 +644,9 @@ const EditMap = (props) => {
                       <EditMapTileDisplay tile={tile} />
                     ))} */}
                     <div
-                      className={`absolute tile-selector left-0 top-0 w-[16px] h-[16px] p-2 z-30`}
+                      className={`absolute tile-selector left-0 top-0 z-30`}
+                      style={{width: tilesets[currentTileset].tile_width + "px",
+                      height:tilesets[currentTileset].tile_height + "px"}}
                     ></div>
                     {
                       /* This is where the tileset Image is hard coded

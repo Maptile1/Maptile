@@ -2,7 +2,7 @@ import { BsMapFill, BsFillPuzzleFill } from "react-icons/bs";
 import { BiLike, BiCog } from "react-icons/bi";
 import TilesetCard from "../card/TilesetCard";
 import Sidebar from "../sidebar/Sidebar";
-// import MapCard from "../card/MapCard";
+import MapCard from "../card/MapCard";
 import { React, useState, useEffect } from "react";
 import ProfileEditModal from "./ProfileEditModal";
 import { Navigate, useLocation } from "react-router-dom";
@@ -14,37 +14,52 @@ Axios.defaults.withCredentials = true;
 const ProfileScreen = (props) => {
   const [modalOpen, setProfileModal] = useState(false);
 
-  const user = props.user;
   const location = useLocation();
-  const [loading, setLoading] = useState(true);
-  var [userTilesets, setUserTilesets] = useState([]);
+  const [user, setUser] = useState(props.user);
+  const [userTilesets, setUserTilesets] = useState(null);
+  const [userMaps, setUserMaps] = useState(null);
 
-  const [userPfp, setPfp] = useState(
-    "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
-      user._id +
-      "?=" +
-      Math.random().toString().substring(2)
-  );
+
+  const [userPfp, setPfp] = useState(null);
 
   const updatePfp = (newImage) => {
     setPfp(newImage + "?=" + Math.random().toString().substring(2));
   };
 
   useEffect(() => {
-    const getTilesets = async () => {
-      setLoading(true);
-      var response = await Axios.get(
-        "https://maptile1.herokuapp.com/tileset/getUser/" + user._id
-      );
-      setUserTilesets(response.data.usertilesets);
-      setLoading(false);
+    const getData = async () => {
+      await Axios.get(
+        "https://maptile1.herokuapp.com/tileset/getUser/" + props.user._id)
+      .then(response => {
+        setUserTilesets(response.data.usertilesets);
+      })
+      .catch(err => console.log(err));
+
+      await Axios.get("https://maptile1.herokuapp.com/user/get/" + props.user._id)
+      .then(response => {
+          setUser(response.data.user)
+          setPfp(
+            "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
+            response.data.user._id +
+            "?=" +
+            Math.random().toString().substring(2)
+          )
+      })
+      .catch(err => console.log(err));
+      await Axios.get("https://maptile1.herokuapp.com/map/getUser/" + props.user._id)
+      .then(response => {
+        console.log("USER MAPS:", response.data.userMaps)
+        setUserMaps(response.data.userMaps)
+      })
+      .catch(err => console.log(err))
     };
-    getTilesets();
-  }, [user._id]);
-  console.log(userTilesets);
-  return user ? (
-    <div>
-      {!loading && (
+    getData();
+  }, []);
+
+  if(!props.user){
+    return <Navigate to="/" replace state={{ from: location }} />
+  }
+  return user && userTilesets && userMaps ? (
         <div class="grid grid-cols-12 grid-rows-10 gap-4 ">
           <Sidebar setTheUser={props.setTheUser} />
 
@@ -81,12 +96,12 @@ const ProfileScreen = (props) => {
           </div>
           <div class="col-start-6 row-start-3 mt-20 text-6xl justify-self-center text-white">
             <BsMapFill />
-            <div class="mt-10">{user.maps.length}</div>
+            <div class="mt-10">{user.maps.filter(n => n).length}</div>
             <div class="mt-4">Maps</div>
           </div>
           <div class="col-start-8 row-start-3 mt-20 text-6xl justify-self-center text-white">
             <BsFillPuzzleFill />
-            <div class="mt-10">{userTilesets.length}</div>
+            <div class="mt-10">{userTilesets.filter(n => n).length}</div>
             <div class="mt-4">Tilesets</div>
           </div>
           <div class="col-start-10 row-start-3 mt-20 text-6xl justify-self-center text-white">
@@ -102,34 +117,40 @@ const ProfileScreen = (props) => {
             style={{ borderTop: "2px solid #fff ", marginRight: 20 }}
           ></div>
           <div class="mt-10 grid grid-cols-4 col-span-10 col-start-2 row-start-7 gap-5">
-            {userTilesets.length !== 0 ? (
-              userTilesets.filter(n => n).map((obj, index) => (
-                <TilesetCard
-                  key={obj}
-                  name={obj.name}
-                  description={obj.description}
-                  owner={obj.owner}
-                  _id={obj._id}
-                />
-              ))
-            ) : (
-              <div> No tilesets</div>
-            )}
-          </div>
-
-          <ProfileEditModal
+            {
+              userTilesets.filter(n => n).map((obj) => {
+                 return (
+                  <TilesetCard
+                    key={obj}
+                    name={obj.name}
+                    description={obj.description}
+                    owner={obj.owner}
+                    _id={obj._id} />
+                  )
+              })              
+            }
+            {
+              userMaps.filter(n => n).map((obj) => {
+                  return (
+                    <MapCard
+                      key={obj}
+                      name={obj.name}
+                      description={obj.description}
+                      owner={obj.owner}
+                      _id={obj._id} />
+                  )
+              })
+            }
+            </div>
+        <ProfileEditModal
             user={props.user}
             modalOpen={modalOpen}
             setProfileModal={setProfileModal}
             updateUser={props.setTheUser}
             updatePfp={updatePfp}
           />
-        </div>
-      )}
     </div>
-  ) : (
-    <Navigate to="/" replace state={{ from: location }} />
-  );
+  ) : null;
 };
 
 export default ProfileScreen;

@@ -1,20 +1,38 @@
 import { useNavigate } from "react-router-dom";
-const TilesetCard = (props) => {
-    const nav = useNavigate()
-    const handleTilesetView = () => {
-        nav("/mapdisplay", { state: { owner: props.owner } });
-    }
-    return (
-        <div class="max-w-sm rounded overflow-hidden shadow-lg border border-white bg-maptile-background-mid">
-            <img class="w-full h-100 object-cover" src="https://images.gnwcdn.com/2020/usgamer/A-Link-to-the-Past-Map-Header1-05292020.jpg/EG11/thumbnail/1920x1080/format/jpg/quality/65/the-20-best-in-game-maps.jpg" alt="" onClick={() => handleTilesetView()} />
-            <div class="px-6 py-4 ">
-                <div class="font-bold text-white text-xl mb-2">{props.mapname}</div>
-                <p class="text-white text-base">
-                    {props.description}
-                </p>
-            </div>
-        </div>
-    );
+import { React, useEffect, useState} from 'react'
+const MapCard = (props) => {
+  const nav = useNavigate();
+  const [image, setImage] = useState("https://maptilefiles.blob.core.windows.net/maptile-map-image/" + props._id + "?=" + Math.random().toString().substring(2))
+
+  const handleMapView = () => {
+    nav("/maps/" + props._id, { state: { owner: props.owner, _id: props._id } });
+  };
+
+  useEffect(() => {
+    setImage("https://maptilefiles.blob.core.windows.net/maptile-map-image/" + props._id + "?=" + Math.random().toString().substring(2)) 
+  }, [props._id])
+
+  return (
+    <div class="max-w-sm rounded overflow-hidden shadow-lg border bg-maptile-background-mid">
+      <img
+          class="w-full h-3/4 border border-white cursor-pointer object-cover object-center"
+          style={{"image-rendering" : "pixelated"}}
+          src={image}
+          alt=""
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null;
+            setImage(
+              "https://maptilefiles.blob.core.windows.net/maptile-map-image/6372801adf17e9e9316f1b4c"
+            );
+          }}
+          onClick={handleMapView}
+        />
+      <div class="px-6 py-4 cursor-pointer" onClick={handleMapView}>
+        <div class="font-bold text-white text-xl mb-2">{props.name}</div>
+        <p class="text-white text-base">{props.description}</p>
+      </div>
+    </div>
+  );
 };
 
-export default TilesetCard;
+export default MapCard;
