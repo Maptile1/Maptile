@@ -46,7 +46,7 @@ const ProfileScreen = (props) => {
           )
       })
       .catch(err => console.log(err));
-      await Axios.get("http://localhost:8080/map/getUser/" + props.user._id)
+      await Axios.get("https://maptile1.herokuapp.com/map/getUser/" + props.user._id)
       .then(response => {
         console.log("USER MAPS:", response.data.userMaps)
         setUserMaps(response.data.userMaps)
