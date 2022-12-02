@@ -286,8 +286,12 @@ const EditMap = (props) => {
   // * Addes a tile to the specified mouse location and redraws the canvas
   const placeTile = (e) => {
     let clicked = getCoords(e);
+    if (clicked[0] < 0 || clicked[0] >= map.width || clicked[1] < 0 || clicked[1] >= map.height) {
+      return;
+    }
+    let tilesetheight = tilesets[currentTileset].tileset_height;
     // ! GIGA HARD CODE -- Replace 64 with Map Height
-    let id = clicked[0] + clicked[1] * 64;
+    let id = clicked[0] + clicked[1] * map.height;
     // * Erases data if shift is held and you click
     if (e.shiftKey || tool === "eraser") {
       layers[currentLayer].data[id] = 0;
@@ -295,7 +299,7 @@ const EditMap = (props) => {
       if (tool === "brush") {
         // ! GIGA HARD CODE -- Replace 64/16 with TilesetHeight/TileHeight
         layers[currentLayer].data[id] =
-          tileSelection[0] + (tileSelection[1] * 64) / 16 + 1;
+          tileSelection[0] + (tileSelection[1] * tilesetheight) / map.tile_height + 1;
       } else if (tool === "fill") {
         fill(clicked);
       }
@@ -304,9 +308,10 @@ const EditMap = (props) => {
   };
 
   const fill = (mPos) => {
-    let cellid = mPos[0] + mPos[1] * 64;
+    let cellid = mPos[0] + mPos[1] * map.height;
+    let tilesetheight = tilesets[currentTileset].tileset_height;
     let tile = layers[currentLayer].data[cellid];
-    if (tile === tileSelection[0] + (tileSelection[1] * 64) / 16 + 1) {
+    if (tile === tileSelection[0] + (tileSelection[1] * tilesetheight) / map.tile_height + 1) {
       return;
     }
 
@@ -315,15 +320,16 @@ const EditMap = (props) => {
 
   const fillUtil = (screen, x, y, tile) => {
     // ! GIGA HARD CODE -- Replace 64 with Map width and height
-    if (x < 0 || x >= 64 || y < 0 || y >= 64) {
+    if (x < 0 || x >= map.width || y < 0 || y >= map.height) {
       return;
     }
-    let id = x + y * 64;
+    let tilesetheight = tilesets[currentTileset].tileset_height;
+    let id = x + y * map.height;
     if (screen[id] !== tile) {
       return;
     }
 
-    screen[id] = tileSelection[0] + (tileSelection[1] * 64) / 16 + 1;
+    screen[id] = tileSelection[0] + (tileSelection[1] * tilesetheight) / map.tile_height + 1;
 
     fillUtil(screen, x + 1, y, tile);
     fillUtil(screen, x - 1, y, tile);
@@ -337,7 +343,7 @@ const EditMap = (props) => {
     const mouseX = e.clientX - x;
     const mouseY = e.clientY - y;
     // ! GIGA HARD CODE -- Replace 16 with Tile Size (width and height [will be same number])
-    return [Math.floor(mouseX / 16), Math.floor(mouseY / 16)];
+    return [Math.floor(mouseX / map.tile_width), Math.floor(mouseY / map.tile_height)];
   }
 
   // * Handles updating the little blue square that shows which tile is selected
