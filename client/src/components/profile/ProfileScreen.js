@@ -59,7 +59,7 @@ const ProfileScreen = (props) => {
     if(!props.user){
       return <Navigate to="/" replace state={{ from: location }} />
     }
-  return user && userTilesets ? (
+  return user && userTilesets && userMaps ? (
         <div class="grid grid-cols-12 grid-rows-10 gap-4 ">
           <Sidebar setTheUser={props.setTheUser} />
 

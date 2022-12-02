@@ -147,11 +147,11 @@ router.get("/map/getUser/:id", async (req, res) => {
   await Promise.all(
     user.maps.map(async (obj, index) => {
       map = await Map.findById(obj);
-      userMaps.push(tileset);
+      userMaps.push(map);
     })
   );
   await Promise.all(
-    user.shared_maps.map(async (obj, index) => {
+    user.shared_maps.map(async (obj) => {
       let map = await Map.findById(obj);
       userSharedMaps.push(map);
     })
