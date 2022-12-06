@@ -145,8 +145,9 @@ router.get("/map/getUser/:id", async (req, res) => {
     res.status(400).json({errorMessage: 'Not logged in'})
     return;
   }
-  let userMaps = await Map.find({owner: req.params.id})
-  res.json({userMaps: userMaps})
+  let userMaps = await Map.find({owner: req.params.id}).sort({timeEdited: -1, _id: 1})
+  let sharedMaps = await Map.find({shared_users: {$in: [req.session._id]}}).sort({timeEdited: -1, _id: 1})
+  res.json({userMaps: userMaps, sharedMaps: sharedMaps})
 });
 
 router.post("/map/getBatch", async (req, res) => {

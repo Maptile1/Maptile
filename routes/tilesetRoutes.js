@@ -122,21 +122,8 @@ router.get("/tileset/get/:id", async (req, res) => {
 ///Get all tilesets of user
 router.get("/tileset/getUser/:id", async (req, res) => {
   var user = await User.findById(req.params.id);
-  var usertilesets = [];
-  var usersharedtilesets = [];
-  var tileset;
-  await Promise.all(
-    user.tilesets.map(async (obj, index) => {
-      tileset = await Tileset.findById(obj);
-      usertilesets.push(tileset);
-    })
-  );
-  await Promise.all(
-    user.shared_tilesets.map(async (obj, index) => {
-      tileset = await Tileset.findById(obj);
-      usersharedtilesets.push(tileset);
-    })
-  );
+  let usertilesets = await Tileset.find({owner: req.params.id}).sort({timeEdited: -1, _id: 1})
+  let usersharedtilesets = await Tileset.find({shared_users: {$in: [req.session._id]}}).sort({timeEdited: -1, _id: 1})
   res.json({ usertilesets: usertilesets, sharedtilesets: usersharedtilesets });
 });
 
