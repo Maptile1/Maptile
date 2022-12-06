@@ -19,6 +19,7 @@ import {
 } from "react-icons/bs";
 import { FiSave } from "react-icons/fi";
 import AddTilesetModal from "./AddTilesetModal";
+import { MdMap } from "react-icons/md";
 
 const EditMap = (props) => {
   var beautify = require("json-beautify");
@@ -46,11 +47,17 @@ const EditMap = (props) => {
   // * This is done because there is additional layer data we have that is not in the DB version of the data
   const [layers, setLayers] = useState([
     {
-      name: "1",
       data: [],
-      active: true,
-      customProp: { name: "", type: "", value: null },
-      id: 0,
+      height: 32, ///CURRENTLY HARDCODED HAVE TO FIND WAY TO GET MAP WIDTH AND HEIGHT BEFORE LOADING
+      id: 0, //HAVE TO CHANGE ID TO 1,2,3 START FROM 1
+      name: "1",
+      opacity: 1,
+      properties: [{ name: "", type: "", value: null }],
+      type: "tilelayer",
+      active: true, //HAVE TO CHANGE TO VISIBLE
+      width: 32, //HARDCODED
+      x: 0,
+      y: 0,
     },
   ]);
   const [currentLayer, setCurrentLayer] = useState(0);
@@ -153,8 +160,8 @@ const EditMap = (props) => {
       infinite: false,
       orientation: "orthogonal",
       renderorder: "right-down",
-      tileheight: tilesets[0].height,
-      tilewidth: tilesets[0].width,
+      tileheight: tilesets[0].tile_height,
+      tilewidth: tilesets[0].tile_width,
       type: "map",
       version: "1.8",
       tiledversion: "1.8.2",
@@ -163,7 +170,7 @@ const EditMap = (props) => {
     tilesets.map((tileset) => {
       exportTilesetData.push({
         name: tileset.name,
-        image: tileset.name + ".img",
+        image: tileset.name + ".png",
         imageheight: tileset.tileset_height,
         imagewidth: tileset.tileset_width,
         margin: 0,
@@ -441,13 +448,19 @@ const EditMap = (props) => {
   // * Adds a new layer to the map when the button is pressed
   const addNewLayer = () => {
     let newLayer = {
-      name: layers.length + 1,
       data: [],
-      active: true,
-      customProp: { name: "", type: "", value: "" },
+      height: map.height,
       id: layers.length,
+      name: layers.length + 1,
+      opacity: 1,
+      properties: [{ name: "", type: "", value: "" }],
+      type: "tilelayer",
+      active: true,
+      width: map.width,
+      x: 0,
+      y: 0,
     };
-    for (let i = 0; i < 64 * 64; i++) {
+    for (let i = 0; i < map.width * map.height; i++) {
       newLayer.data.push(0);
     }
     setLayers([...layers, newLayer]);
@@ -468,7 +481,7 @@ const EditMap = (props) => {
       if (layer.id === id) {
         return {
           ...layer,
-          customProp: { name: propName, type: propType, value: propVal },
+          properties: [{ name: propName, type: propType, value: propVal }],
         };
       }
       return layer;
