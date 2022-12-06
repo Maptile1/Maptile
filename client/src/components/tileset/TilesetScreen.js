@@ -150,14 +150,16 @@ const TilesetScreen = (props) => {
             <div className="flex flex-row flex-wrap px-5 py-5 pl-10 gap-y-5  ">
               {userSelected ? (
                 userTilesets.length !== 0 ? (
-                  userTilesets.filter(n => n).map((obj, index) => (
-                    <TSSCard
-                      handleDelete={handleDelete}
-                      name={obj.name}
-                      owner={obj.owner}
-                      _id={obj._id}
-                    />
-                  ))
+                  userTilesets
+                    .filter((n) => n)
+                    .map((obj, index) => (
+                      <TSSCard
+                        handleDelete={handleDelete}
+                        name={obj.name}
+                        owner={obj.owner}
+                        _id={obj._id}
+                      />
+                    ))
                 ) : (
                   <div>No Tilesets</div>
                 )

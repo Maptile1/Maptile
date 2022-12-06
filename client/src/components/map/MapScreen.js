@@ -22,6 +22,16 @@ const MapScreen = (props) => {
   const [inputValid, setInputValid] = useState(false);
 
   const getMaps = async () => {
+    const getUser = async () => {
+      await Axios.get(
+        "https://maptile1.herokuapp.com/user/get/" + props.user._id
+      ).then((response) => {
+        var user = response.data.user;
+        props.setTheUser(user);
+      });
+    };
+    getUser();
+
     var userresponse = await Axios.get(
       "https://maptile1.herokuapp.com/user/get/" + props.user._id
     );
@@ -67,15 +77,15 @@ const MapScreen = (props) => {
       await Axios.post("https://maptile1.herokuapp.com/tileset/getBatch", {
         ids: props.user.tilesets.concat(props.user.shared_tilesets),
         page: 0,
-        limit: 9999
+        limit: 9999,
       })
-      .then(response => {
-          console.log("USER TILESETS:", response.data.tilesets)
-          setUserTilesets(response.data.tilesets)
-      })
-      .catch(err => {
+        .then((response) => {
+          console.log("USER TILESETS:", response.data.tilesets);
+          setUserTilesets(response.data.tilesets);
+        })
+        .catch((err) => {
           console.log(err);
-      });
+        });
     };
     getMaps();
   }, []);
@@ -93,7 +103,7 @@ const MapScreen = (props) => {
     const updated = { ...input, [name]: value };
     setInput(updated);
     setInputValid(
-        updated.name !== "" &&
+      updated.name !== "" &&
         updated.tilewidth !== "" &&
         updated.tileheight !== "" &&
         updated.mapwidth !== "" &&
@@ -103,17 +113,22 @@ const MapScreen = (props) => {
   };
 
   const updateSelectedTileset = (tileset_id, tile_width, tile_height) => {
-      const updated = {...input, "tileset": tileset_id, "tilewidth": tile_width, "tileheight": tile_height};
-      setInput(updated);
-      setInputValid(
-          updated.name !== "" &&
-          updated.tilewidth !== "" &&
-          updated.tileheight !== "" &&
-          updated.mapwidth !== "" &&
-          updated.mapheight !== "" &&
-          updated.tileset !== ""
-      );
-  }
+    const updated = {
+      ...input,
+      tileset: tileset_id,
+      tilewidth: tile_width,
+      tileheight: tile_height,
+    };
+    setInput(updated);
+    setInputValid(
+      updated.name !== "" &&
+        updated.tilewidth !== "" &&
+        updated.tileheight !== "" &&
+        updated.mapwidth !== "" &&
+        updated.mapheight !== "" &&
+        updated.tileset !== ""
+    );
+  };
 
   const handleCreate = async (e) => {
     console.log("CREATED MAP: ", input);
@@ -125,7 +140,7 @@ const MapScreen = (props) => {
         width: input.mapwidth,
         height: input.mapheight,
         name: input.name,
-        tilesets: [input.tileset]
+        tilesets: [input.tileset],
       }).then(() => {
         getMaps();
       });
@@ -165,7 +180,6 @@ const MapScreen = (props) => {
   return (
     <div>
       <Sidebar setTheUser={props.setTheUser} />
-
       <main className="mx-auto flex flex-col min-h-screen w-full items-center justify-top bg-maptile-background-dark text-white">
         <div className="pt-5 text-center text-4xl font-bold text-white">
           Maps
