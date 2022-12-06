@@ -155,9 +155,9 @@ const EditMap = (props) => {
       renderorder: "right-down",
       tileheight: tilesets[0].height,
       tilewidth: tilesets[0].width,
-      tiledversion: "1.8.2",
       type: "map",
       version: "1.8",
+      tiledversion: "1.8.2",
     };
     var exportTilesetData = [];
     tilesets.map((tileset) => {
