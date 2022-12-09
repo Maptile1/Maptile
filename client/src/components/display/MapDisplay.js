@@ -91,12 +91,14 @@ const MapDisplay = (props) => {
     })
       .then((response) => {
         console.log("ADD COMMENT RESPONSE:", response.data.payload.comment);
+        var comment = response.data.payload.comment;
+        comment.name = props.user.userName;
+        setComments([comment, ...comments]);
       })
       .catch((err) => {
         console.log(err);
       });
     commentRef.current.value = "";
-    forceUpdate();
   };
 
   //   const getComments = async () => {
@@ -151,63 +153,88 @@ const MapDisplay = (props) => {
 
   const likeComment = async (comment) => {
     let like_status = comment.usersLiked.includes(props.user._id);
-    await Axios.post(
+    Axios.post(
       "https://maptile1.herokuapp.com/comment/like/" + comment._id,
       { like: !like_status }
     )
       .then((response) => {
         console.log(response.data.comment);
+        var newComments = comments.map((comment) => {
+          if (comment._id == response.data.comment._id){
+            response.data.comment.name = comment.name;
+            return response.data.comment;
+          }
+          else{
+            return comment;
+          }
+        })
+        setComments(newComments);
       })
       .catch((err) => {
         console.log(err);
       });
-    forceUpdate();
   };
 
   const dislikeComment = async (comment) => {
     let dislike_status = comment.usersDisliked.includes(props.user._id);
-    await Axios.post(
+    Axios.post(
       "https://maptile1.herokuapp.com/comment/dislike/" + comment._id,
       { dislike: !dislike_status }
     )
       .then((response) => {
         console.log(response.data.comment);
+        var newComments = comments.map((comment) => {
+          if (comment._id == response.data.comment._id){
+            response.data.comment.name = comment.name;
+            return response.data.comment;
+          }
+          else{
+            return comment;
+          }
+        })
+        setComments(newComments);
       })
       .catch((err) => {
         console.log(err);
       });
-    forceUpdate();
   };
 
   useEffect(() => {
     // console.log("TILESET ID: ", id);
-    const getOwner = async () => {
       // console.log("USER ID: ", location.state.owner);
-      await Axios.get(
-        "https://maptile1.herokuapp.com/user/get/" + location.state.owner
-      ).then((response) => {
-        console.log(response.data.user);
-        setOwner(response.data.user);
-        setPfp(
-          "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
-            response.data.user._id
-        );
-      });
-      await Axios.get("https://maptile1.herokuapp.com/map/get/" + id).then(
-        (response) => {
-          // console.log("TILESET:", response.data.tileset);
-          setMap(response.data.map);
-          setLikes(response.data.map.likes);
-          setDislikes(response.data.map.dislikes);
-        }
+    Axios.get(
+      "https://maptile1.herokuapp.com/user/get/" + location.state.owner
+    ).then((response) => {
+      console.log(response.data.user);
+      setOwner(response.data.user);
+      setPfp(
+        "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
+          response.data.user._id
       );
-      await Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
-        (response) => {
-          setComments(response.data.comments);
-        }
-      );
-    };
-    getOwner();
+    });
+    Axios.get("https://maptile1.herokuapp.com/map/get/" + id).then(
+      (response) => {
+        // console.log("TILESET:", response.data.tileset);
+        setMap(response.data.map);
+        setLikes(response.data.map.likes);
+        setDislikes(response.data.map.dislikes);
+      }
+    );
+    Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
+      (response) => {
+        var ids = response.data.comments.map((comment) => {return comment.owner});
+        Axios.post("https://maptile1.herokuapp.com/user/getNames", { ids: ids })
+        .then((res) => {
+          var map = res.data.names;
+          var newComments = response.data.comments.map((comment) => {
+            comment.name = map[comment.owner];
+            return comment;
+          })
+          console.log(newComments);
+          setComments(newComments);
+        });
+      }
+    );
   }, [location.state._id, location.state.owner, id, reducerValue]);
 
   let like_color = "gray";
