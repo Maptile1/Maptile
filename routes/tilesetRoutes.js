@@ -86,7 +86,7 @@ router.post("/tileset/update/:id", async (req, res) => {
   updates.name = req.body.name;
   updates.description = req.body.description;
   updates.public = req.body.public;
-  updates.tags = req.body.tags ? req.body.tags.map((tag) => {tag.toLowerCase()}) : undefined
+  updates.tags = req.body.tags ? req.body.tags.map((tag) => {return tag.toLowerCase()}) : undefined
   updates.timeEdited = Date.now();
   var tileset = await Tileset.findOneAndUpdate(
     {
