@@ -25,7 +25,6 @@ const MapDisplay = (props) => {
   const [likes, setLikes] = useState();
   const [dislikes, setDislikes] = useState();
   const commentRef = useRef(null);
-  const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const handleOtherUserProfile = () => {
     nav("/user/" + location.state.owner, {
@@ -235,7 +234,7 @@ const MapDisplay = (props) => {
         });
       }
     );
-  }, [location.state._id, location.state.owner, id, reducerValue]);
+  }, [location.state._id, location.state.owner, id]);
 
   let like_color = "gray";
   let dislike_color = "gray";
