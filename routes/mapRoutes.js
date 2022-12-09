@@ -102,7 +102,7 @@ router.post("/map/update/:id", async (req, res) => {
   updates.description = req.body.description;
   updates.public = req.body.public;
   updates.layers = req.body.layers;
-  updates.tags = req.body.tags;
+  updates.tags = req.body.tags ? req.body.tags.toLowerCase() : undefined
   updates.timeEdited = Date.now();
   var addTilesets = req.body.tilesetsToAdd || [];
   var removeTilesets = req.body.tilesetsToRemove || [];
@@ -321,7 +321,7 @@ router.post("/map/dislike/:id", async (req, res) => {
 router.post("/map/search", async (req, res) => {
   var tags = req.body.tags
     ? req.body.tags.map((tag) => {
-        return { tags: tag };
+        return { tags: tag.toLowerCase() };
       })
     : undefined;
   var limit = req.body.limit ? req.body.limit : 0;

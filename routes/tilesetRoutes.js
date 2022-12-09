@@ -86,7 +86,7 @@ router.post("/tileset/update/:id", async (req, res) => {
   updates.name = req.body.name;
   updates.description = req.body.description;
   updates.public = req.body.public;
-  updates.tags = req.body.tags;
+  updates.tags = req.body.tags ? req.body.tags.toLowerCase() : undefined
   updates.timeEdited = Date.now();
   var tileset = await Tileset.findOneAndUpdate(
     {
@@ -381,7 +381,7 @@ router.post("/tileset/getBatch", async (req, res) => {
 router.post("/tileset/search", async (req, res) => {
   var tags = req.body.tags
     ? req.body.tags.map((tag) => {
-        return { tags: tag };
+        return { tags: tag.toLowerCase() };
       })
     : undefined;
   var limit = req.body.limit ? req.body.limit : 0;
