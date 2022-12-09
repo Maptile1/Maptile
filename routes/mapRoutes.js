@@ -102,7 +102,7 @@ router.post("/map/update/:id", async (req, res) => {
   updates.description = req.body.description;
   updates.public = req.body.public;
   updates.layers = req.body.layers;
-  updates.tags = req.body.tags ? req.body.tags.toLowerCase() : undefined
+  updates.tags = req.body.tags ? req.body.tags.map((tag) => {tag.toLowerCase()}) : undefined
   updates.timeEdited = Date.now();
   var addTilesets = req.body.tilesetsToAdd || [];
   var removeTilesets = req.body.tilesetsToRemove || [];
