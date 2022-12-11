@@ -85,7 +85,23 @@ const EditMap = (props) => {
             fields:
               "_id name tile_width tile_height tileset_width tileset_height",
           }).then((response) => {
-            setTilesets(response.data.tilesets);
+            var data = {}
+            data.tilesets = response.data.tilesets;
+            data.startIndexes = [1];
+            //hacky below
+            data.map = [-1];
+            for(var i = 0; i < data.tilesets.length; i++){
+              var tileset = data.tilesets[i];
+              var height = tileset.tileset_height / tileset.tile_height;
+              var width = tileset.tileset_width / tileset.tile_width;
+              var count = height * width;
+              data.startIndexes[i + 1] = data.startIndexes[i] + count;
+              for (var j = 0; j < count; j++){
+                data.map.push(i);
+              }
+            }
+            console.log(data)
+            setTilesets(data);
             console.log(response.data.tilesets);
           });
         })
@@ -160,14 +176,14 @@ const EditMap = (props) => {
       infinite: false,
       orientation: "orthogonal",
       renderorder: "right-down",
-      tileheight: tilesets[0].tile_height,
-      tilewidth: tilesets[0].tile_width,
+      tileheight: map.tile_height,
+      tilewidth: map.tile_width,
       type: "map",
       version: "1.8",
       tiledversion: "1.8.2",
     };
     var exportTilesetData = [];
-    tilesets.map((tileset) => {
+    tilesets.tilesets.map((tileset) => {
       exportTilesetData.push({
         name: tileset.name,
         image: tileset.name + ".png",
@@ -225,8 +241,8 @@ const EditMap = (props) => {
     let tilesetImage = document.querySelector("#tileset-source");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     // Change this for multiple tilesets
-    let tilesetwidth = tilesets[currentTileset].tileset_width;
-    let tilesetheight = tilesets[currentTileset].tileset_height;
+    let tilesetwidth = tilesets.tilesets[currentTileset].tileset_width;
+    let tilesetheight = tilesets.tilesets[currentTileset].tileset_height;
     let tilewidth = map.tile_width;
     let tileheight = map.tile_height;
     // ! GIGA HARD CODE -- Replace 16 with Tile Size
@@ -316,7 +332,7 @@ const EditMap = (props) => {
     ) {
       return;
     }
-    let tilesetheight = tilesets[currentTileset].tileset_height;
+    let tilesetheight = tilesets.tilesets[currentTileset].tileset_height;
     // ! GIGA HARD CODE -- Replace 64 with Map Height
     let id = clicked[0] + clicked[1] * map.width;
     // * Erases data if shift is held and you click
@@ -338,7 +354,7 @@ const EditMap = (props) => {
 
   const fill = (mPos) => {
     let cellid = mPos[0] + mPos[1] * map.width;
-    let tilesetheight = tilesets[currentTileset].tileset_height;
+    let tilesetheight = tilesets.tilesets[currentTileset].tileset_height;
     let tile = layers[currentLayer].data[cellid];
     if (
       tile ===
@@ -391,11 +407,11 @@ const EditMap = (props) => {
   const tilesetClick = (e) => {
     let tilesetSelection = document.querySelector(".tile-selector");
     let newCoords = getCoords(e);
-    console.log(tilesets[currentTileset]);
-    let tilesetwidth = tilesets[currentTileset].tileset_width;
-    let tilesetheight = tilesets[currentTileset].tileset_height;
-    let tilewidth = tilesets[currentTileset].tile_width;
-    let tileheight = tilesets[currentTileset].tile_height;
+    console.log(tilesets.tilesets[currentTileset]);
+    let tilesetwidth = tilesets.tilesets[currentTileset].tileset_width;
+    let tilesetheight = tilesets.tilesets[currentTileset].tileset_height;
+    let tilewidth = tilesets.tilesets[currentTileset].tile_width;
+    let tileheight = tilesets.tilesets[currentTileset].tile_height;
 
     // ! GIGA HARD CODE -- Replace 64/16 with MapWidth/TileWidth and MapHeight/TileHeight respectivly
     if (
@@ -692,8 +708,8 @@ const EditMap = (props) => {
                     <div
                       className={`absolute tile-selector left-0 top-0 z-30`}
                       style={{
-                        width: tilesets[currentTileset].tile_width + "px",
-                        height: tilesets[currentTileset].tile_height + "px",
+                        width: tilesets.tilesets[currentTileset].tile_width + "px",
+                        height: tilesets.tilesets[currentTileset].tile_height + "px",
                       }}
                     ></div>
                     {
@@ -717,7 +733,7 @@ const EditMap = (props) => {
                       //   crossOrigin="true"
                       //   alt=""
                       // />;
-                      tilesets.map((tileset, i) => {
+                      tilesets.tilesets.map((tileset, i) => {
                         return <img
                           id={"tileset-source"}
                           style={{ imageRendering: "pixelated", position:"absolute", visibility: i == currentTileset ? "visible" : "hidden"}}
