@@ -36,7 +36,6 @@ const Home = (props) => {
           console.log(err)
         });
       }
-      var user;
       await Axios.get("https://maptile1.herokuapp.com/tileset/top").then(
         (response) => {
           console.log(response.data.tilesets);
@@ -48,14 +47,8 @@ const Home = (props) => {
       ).then((response) => {
         setRecent(response.data.recent);
       });
-      await Axios.get(
-        "https://maptile1.herokuapp.com/user/get/" + props.user._id
-      ).then((response) => {
-        user = response.data.user;
-        props.setTheUser(response.data.user);
-      });
       await Axios.post("https://maptile1.herokuapp.com/tileset/getBatch", {
-        ids: user.liked_tilesets,
+        ids: props.user.liked_tilesets,
         limit: 10,
         page: 0,
         fields: "_id name owner description",
@@ -65,7 +58,7 @@ const Home = (props) => {
       });
     };
     topRes();
-  }, []);
+  }, [props.user]);
 
   console.log(recent);
   useEffect(() => {
