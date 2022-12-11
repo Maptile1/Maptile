@@ -238,11 +238,11 @@ const EditMap = (props) => {
     // * Get the required elements and store them for easy access
     let canvas = document.querySelector("canvas");
     let ctx = canvas.getContext("2d");
-    let tilesetImage = document.querySelector("#tileset-source");
+    let tilesetImages = [];
+    for (let i = 0; i < tilesets.tilesets.length; i++){
+      tilesetImages.push(document.querySelector("#tileset-source-" + i))
+    }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Change this for multiple tilesets
-    let tilesetwidth = tilesets.tilesets[currentTileset].tileset_width;
-    let tilesetheight = tilesets.tilesets[currentTileset].tileset_height;
     let tilewidth = map.tile_width;
     let tileheight = map.tile_height;
     // ! GIGA HARD CODE -- Replace 16 with Tile Size
@@ -258,14 +258,12 @@ const EditMap = (props) => {
           let x = i % map.width;
           let y = Math.floor((i - x) / map.width);
           // ! GIGA HARD CODE -- Replace 64/16 with TilesetWidth/TileWidth or Height, Replace 16 with Tile Size
-          let tileX = tile % (tilesetwidth / tilewidth);
-          let tileY = Math.floor((tile - tileX) / (tilesetheight / tileheight));
           // * 0 case, draws and empty tile
           // ? The empty tile is chosen in a weird way, may break in the future
           if (tile === 0) {
             ctx.globalAlpha = 0;
             ctx.drawImage(
-              tilesetImage,
+              tilesetImages[0],
               1000,
               1000,
               crop_size_x,
@@ -290,12 +288,18 @@ const EditMap = (props) => {
           }
           // * Non-zero case
           else {
+            var tilesetIndex = tilesets.map[tile];
+            let tilesetwidth = tilesets.tilesets[tilesetIndex].tileset_width;
+            let tilesetheight = tilesets.tilesets[tilesetIndex].tileset_height;
+            tile = tile - tilesets.startIndexes[tilesetIndex] + 1
+            let tileX = tile % (tilesetwidth / tilewidth);
+            let tileY = Math.floor((tile - tileX) / (tilesetheight / tileheight));
             tileX = (tile - 1) % (tilesetwidth / tilewidth);
             tileY = Math.floor(
               (tile - 1 - tileX) / (tilesetheight / tileheight)
             );
             ctx.drawImage(
-              tilesetImage,
+              tilesetImages[tilesetIndex],
               tileX * tilewidth,
               tileY * tileheight,
               crop_size_x,
@@ -344,7 +348,7 @@ const EditMap = (props) => {
         layers[currentLayer].data[id] =
           tileSelection[0] +
           (tileSelection[1] * tilesetheight) / map.tile_height +
-          1;
+          tilesets.startIndexes[currentTileset];
       } else if (tool === "fill") {
         fill(clicked);
       }
@@ -359,8 +363,8 @@ const EditMap = (props) => {
     if (
       tile ===
       tileSelection[0] +
-        (tileSelection[1] * tilesetheight) / map.tile_height +
-        1
+          (tileSelection[1] * tilesetheight) / map.tile_height +
+          tilesets.startIndexes[currentTileset]
     ) {
       return;
     }
@@ -380,9 +384,9 @@ const EditMap = (props) => {
     }
 
     screen[id] =
-      tileSelection[0] +
-      (tileSelection[1] * tilesetheight) / map.tile_height +
-      1;
+    tileSelection[0] +
+    (tileSelection[1] * tilesetheight) / map.tile_height +
+    tilesets.startIndexes[currentTileset];
 
     fillUtil(screen, x + 1, y, tile);
     fillUtil(screen, x - 1, y, tile);
@@ -558,6 +562,16 @@ const EditMap = (props) => {
         });
     });
   };
+
+  var loadCount = 0;
+  const loadedImage = () => {
+    loadCount++;
+    console.log(loadCount, tilesets.tilesets.length)
+    if (loadCount == tilesets.tilesets.length){
+      draw();
+    }
+  }
+
   return (
     <div>
       <Sidebar setTheUser={props.setTheUser} />
@@ -735,13 +749,13 @@ const EditMap = (props) => {
                       // />;
                       tilesets.tilesets.map((tileset, i) => {
                         return <img
-                          id={"tileset-source"}
+                          id={"tileset-source-" + i}
                           style={{ imageRendering: "pixelated", position:"absolute", visibility: i == currentTileset ? "visible" : "hidden"}}
                           src={
                             "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
                             tileset._id
                           }
-                          onLoad={() => draw()}
+                          onLoad={() => loadedImage()}
                           crossOrigin="true"
                           alt=""
                         />;
