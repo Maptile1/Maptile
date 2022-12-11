@@ -34,20 +34,6 @@ const ShareModal = (props) => {
           Share Options
         </div>
         <div class="flex flex-col space-y-5 items-left  ">
-          <div class="mt-4">
-            <input
-              id="default-checkbox"
-              type="checkbox"
-              value=""
-              class="w-4 h-4 text-green-100 bg-black rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-            />
-            <label
-              for="default-checkbox"
-              class="text-white h-10 p-2.5 rounded-xl"
-            >
-              Make Public
-            </label>
-          </div>
           <div className="flex flex-col w-full">
             <label
               for="share-email"
