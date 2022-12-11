@@ -11,8 +11,8 @@ const CreateMapModal = (props) => {
     const updateTilesetHeightWidth = (e) => {
         const tileset = props.userTilesets.filter(tileset => e.target.value === tileset._id);
         console.log("TILESET:", tileset[0])
-        tilesetHeightRef.current.value = tileset[0].tile_width;
-        tilesetWidthRef.current.value = tileset[0].tile_height;
+        tilesetWidthRef.current.value = tileset[0].tile_width;
+        tilesetHeightRef.current.value = tileset[0].tile_height;
         setSelectedTileset(true);
         props.updateSelectedTileset(e.target.value, tileset[0].tile_width, tileset[0].tile_height);
     }

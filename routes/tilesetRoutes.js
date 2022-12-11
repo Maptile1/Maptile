@@ -37,6 +37,7 @@ router.post("/tileset/create", async (req, res) => {
     usersLiked: [],
     usersDisliked: [],
     sharedUsers: [],
+    initialized: false
   });
   tileset = await tileset.save();
   var user = await User.findOneAndUpdate(
@@ -147,7 +148,8 @@ router.post("/tileset/image/:id", uploadStrategy, async (req, res) => {
   const options = { blobHTTPHeaders: { blobContentType: req.file.mimetype } };
   blobService
     .uploadStream(stream, streamLength, undefined, options)
-    .then(() => {
+    .then(async () => {
+      await Tileset.findByIdAndUpdate(req.params.id, {$set: {initialized: true}});
       res.json({ message: "successful upload" });
     })
     .catch((err) => {

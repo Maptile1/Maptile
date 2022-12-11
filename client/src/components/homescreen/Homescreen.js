@@ -19,19 +19,19 @@ const Homescreen = (props) => {
   };
 
   useEffect(() => {
-    // var response = Axios.get(
-    //   "https://maptile1.herokuapp.com/user/loggedin"
-    // )
-    // .then((response) => {
-    //   console.log(response.data)
-    //   if (response.data.user !== undefined){
-    //     props.setTheUser(response.data.user)
-    //     nav("/home", { replace: true })
-    //   }
-    // })
-    // .catch((err) => {
-    //   console.log(err)
-    // })
+    var response = Axios.get(
+      "https://maptile1.herokuapp.com/user/loggedin"
+    )
+    .then((response) => {
+      console.log(response.data)
+      if (response.data.user !== undefined){
+        props.setTheUser(response.data.user)
+        nav("/home", { replace: true })
+      }
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   }, []);
 
   const handleLogIn = (user) => {
