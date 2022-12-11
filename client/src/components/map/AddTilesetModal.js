@@ -39,7 +39,7 @@ const AddTilesetModal = (props) => {
               if(props.map.tilesets.includes(tileset._id)){
                 continue;
               }
-              if(tileset.tile_width != props.map.tile_width || tileset.tile_height != props.map.tile_height){
+              if(tileset.tile_width != props.map.tile_width || tileset.tile_height != props.map.tile_height || !tileset.initialized){
                 continue;
               }
               options.push({
