@@ -85,22 +85,22 @@ const EditMap = (props) => {
             fields:
               "_id name tile_width tile_height tileset_width tileset_height",
           }).then((response) => {
-            var data = {}
+            var data = {};
             data.tilesets = response.data.tilesets;
             data.startIndexes = [1];
             //hacky below
             data.map = [-1];
-            for(var i = 0; i < data.tilesets.length; i++){
+            for (var i = 0; i < data.tilesets.length; i++) {
               var tileset = data.tilesets[i];
               var height = tileset.tileset_height / tileset.tile_height;
               var width = tileset.tileset_width / tileset.tile_width;
               var count = height * width;
               data.startIndexes[i + 1] = data.startIndexes[i] + count;
-              for (var j = 0; j < count; j++){
+              for (var j = 0; j < count; j++) {
                 data.map.push(i);
               }
             }
-            console.log(data)
+            console.log(data);
             setTilesets(data);
             console.log(response.data.tilesets);
           });
@@ -183,6 +183,7 @@ const EditMap = (props) => {
       tiledversion: "1.8.2",
     };
     var exportTilesetData = [];
+    var globaltileid = 1;
     tilesets.tilesets.map((tileset) => {
       exportTilesetData.push({
         name: tileset.name,
@@ -193,17 +194,27 @@ const EditMap = (props) => {
         spacing: 0,
         tileheight: tileset.tile_height,
         tilewidth: tileset.tile_width,
-        firstgid: 1,
+        firstgid: globaltileid,
         tilecount:
           (tileset.tileset_width / tileset.tile_width) *
           (tileset.tileset_height / tileset.tile_height),
         columns: tileset.tileset_width / tileset.tile_width,
       });
+      globaltileid +=
+        (tileset.tileset_width / tileset.tile_width) *
+        (tileset.tileset_height / tileset.tile_height);
     });
-    console.log(exportTilesetData);
+    var newlayers = layers.map((item) => {
+      const { active: visible, ...rest } = item;
+      return { visible, ...rest };
+    });
+    newlayers.map((layer) => {
+      layer.id += 1;
+    });
+    console.log(newlayers);
     var both = Object.assign(
       {},
-      { layers: layers },
+      { layers: newlayers },
       { tilesets: exportTilesetData }
     );
     var all = Object.assign({}, both, data);
@@ -239,8 +250,8 @@ const EditMap = (props) => {
     let canvas = document.querySelector("canvas");
     let ctx = canvas.getContext("2d");
     let tilesetImages = [];
-    for (let i = 0; i < tilesets.tilesets.length; i++){
-      tilesetImages.push(document.querySelector("#tileset-source-" + i))
+    for (let i = 0; i < tilesets.tilesets.length; i++) {
+      tilesetImages.push(document.querySelector("#tileset-source-" + i));
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     let tilewidth = map.tile_width;
@@ -291,9 +302,11 @@ const EditMap = (props) => {
             var tilesetIndex = tilesets.map[tile];
             let tilesetwidth = tilesets.tilesets[tilesetIndex].tileset_width;
             let tilesetheight = tilesets.tilesets[tilesetIndex].tileset_height;
-            tile = tile - tilesets.startIndexes[tilesetIndex] + 1
+            tile = tile - tilesets.startIndexes[tilesetIndex] + 1;
             let tileX = tile % (tilesetwidth / tilewidth);
-            let tileY = Math.floor((tile - tileX) / (tilesetheight / tileheight));
+            let tileY = Math.floor(
+              (tile - tileX) / (tilesetheight / tileheight)
+            );
             tileX = (tile - 1) % (tilesetwidth / tilewidth);
             tileY = Math.floor(
               (tile - 1 - tileX) / (tilesetheight / tileheight)
@@ -363,8 +376,8 @@ const EditMap = (props) => {
     if (
       tile ===
       tileSelection[0] +
-          (tileSelection[1] * tilesetheight) / map.tile_height +
-          tilesets.startIndexes[currentTileset]
+        (tileSelection[1] * tilesetheight) / map.tile_height +
+        tilesets.startIndexes[currentTileset]
     ) {
       return;
     }
@@ -384,9 +397,9 @@ const EditMap = (props) => {
     }
 
     screen[id] =
-    tileSelection[0] +
-    (tileSelection[1] * tilesetheight) / map.tile_height +
-    tilesets.startIndexes[currentTileset];
+      tileSelection[0] +
+      (tileSelection[1] * tilesetheight) / map.tile_height +
+      tilesets.startIndexes[currentTileset];
 
     fillUtil(screen, x + 1, y, tile);
     fillUtil(screen, x - 1, y, tile);
@@ -565,11 +578,11 @@ const EditMap = (props) => {
   var loadCount = 0;
   const loadedImage = () => {
     loadCount++;
-    console.log(loadCount, tilesets.tilesets.length)
-    if (loadCount == tilesets.tilesets.length){
+    console.log(loadCount, tilesets.tilesets.length);
+    if (loadCount == tilesets.tilesets.length) {
       draw();
     }
-  }
+  };
 
   return (
     <div>
@@ -721,8 +734,10 @@ const EditMap = (props) => {
                     <div
                       className={`absolute tile-selector left-0 top-0 z-30`}
                       style={{
-                        width: tilesets.tilesets[currentTileset].tile_width + "px",
-                        height: tilesets.tilesets[currentTileset].tile_height + "px",
+                        width:
+                          tilesets.tilesets[currentTileset].tile_width + "px",
+                        height:
+                          tilesets.tilesets[currentTileset].tile_height + "px",
                       }}
                     ></div>
                     {
@@ -747,17 +762,24 @@ const EditMap = (props) => {
                       //   alt=""
                       // />;
                       tilesets.tilesets.map((tileset, i) => {
-                        return <img
-                          id={"tileset-source-" + i}
-                          style={{ imageRendering: "pixelated", position:"absolute", visibility: i == currentTileset ? "visible" : "hidden"}}
-                          src={
-                            "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
-                            tileset._id
-                          }
-                          onLoad={() => loadedImage()}
-                          crossOrigin="true"
-                          alt=""
-                        />;
+                        return (
+                          <img
+                            id={"tileset-source-" + i}
+                            style={{
+                              imageRendering: "pixelated",
+                              position: "absolute",
+                              visibility:
+                                i == currentTileset ? "visible" : "hidden",
+                            }}
+                            src={
+                              "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
+                              tileset._id
+                            }
+                            onLoad={() => loadedImage()}
+                            crossOrigin="true"
+                            alt=""
+                          />
+                        );
                       })
                     }
                     <div className="absolute bottom-2">
