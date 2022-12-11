@@ -416,7 +416,6 @@ const EditMap = (props) => {
     let tilesetheight = tilesets.tilesets[currentTileset].tileset_height;
     let tilewidth = tilesets.tilesets[currentTileset].tile_width;
     let tileheight = tilesets.tilesets[currentTileset].tile_height;
-
     // ! GIGA HARD CODE -- Replace 64/16 with MapWidth/TileWidth and MapHeight/TileHeight respectivly
     if (
       !(newCoords[0] >= tilesetwidth / tilewidth) &&
@@ -426,8 +425,8 @@ const EditMap = (props) => {
       // ! GIGA HARD CODE -- Replace 16 with Tile Size
       tilesetSelection.style.left = newCoords[0] * tilewidth + "px";
       tilesetSelection.style.top = newCoords[1] * tileheight + "px";
-      tilesetSelection.style.paddingTop = tileheight + "px";
-      tilesetSelection.style.paddingLeft = tilewidth + "px";
+      // tilesetSelection.style.paddingTop = tileheight + "px";
+      // tilesetSelection.style.paddingLeft = tilewidth + "px";
     }
   };
 
