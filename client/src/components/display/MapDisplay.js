@@ -33,11 +33,97 @@ const MapDisplay = (props) => {
   };
   const location = useLocation();
 
+  var beautify = require("json-beautify");
+
   const handleDownload = () => {
-    saveAs(
-      "https://maptilefiles.blob.core.windows.net/maptile-map-image/" + map._id,
-      map.name + ".jpg"
-    );
+    Axios.post("https://maptile1.herokuapp.com/tileset/getBatch", {
+      ids: map.tilesets,
+      limit: 999,
+      page: 0,
+      nosort: "nosort",
+      fields:
+        "_id name tile_width tile_height tileset_width tileset_height",
+    }).then((response) => {
+      var tilesets = {};
+      tilesets.tilesets = response.data.tilesets;
+      const fileName = map.name;
+      var data = {
+        compressionLevel: -1,
+        height: map.height,
+        width: map.width,
+        infinite: false,
+        orientation: "orthogonal",
+        renderorder: "right-down",
+        tileheight: map.tile_height,
+        tilewidth: map.tile_width,
+        type: "map",
+        version: "1.8",
+        tiledversion: "1.8.2",
+      };
+      var exportTilesetData = [];
+      var globaltileid = 1;
+      tilesets.tilesets.map((tileset) => {
+        exportTilesetData.push({
+          name: tileset.name,
+          image: tileset.name + ".png",
+          imageheight: tileset.tileset_height,
+          imagewidth: tileset.tileset_width,
+          margin: 0,
+          spacing: 0,
+          tileheight: tileset.tile_height,
+          tilewidth: tileset.tile_width,
+          firstgid: globaltileid,
+          tilecount:
+            (tileset.tileset_width / tileset.tile_width) *
+            (tileset.tileset_height / tileset.tile_height),
+          columns: tileset.tileset_width / tileset.tile_width,
+        });
+        globaltileid +=
+          (tileset.tileset_width / tileset.tile_width) *
+          (tileset.tileset_height / tileset.tile_height);
+      });
+      var newlayers = map.layers.map((item) => {
+        const { active: visible, ...rest } = item;
+        return { visible, ...rest };
+      });
+      newlayers = newlayers.map((layer) => {
+        layer.id = layer.id + 1;
+        layer.height = map.height;
+        layer.width = map.width;
+        return layer;
+      });
+      console.log(newlayers);
+      var both = Object.assign(
+        {},
+        { layers: newlayers },
+        { tilesets: exportTilesetData }
+      );
+      var all = Object.assign({}, both, data);
+      var exportData = beautify(
+        all,
+        function (k, v) {
+          if (v instanceof Array) return JSON.stringify(v);
+          return v;
+        },
+        2
+      )
+        .replace(/\\/g, "")
+        .replace(/\"\[/g, "[")
+        .replace(/\]\"/g, "]")
+        .replace(/\"\{/g, "{")
+        .replace(/\}\"/g, "}");
+      const blob = new Blob([exportData], { type: "application/json" });
+      const href = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = href;
+      link.download = fileName + ".json";
+      document.body.appendChild(link);
+      link.click();
+
+      document.body.removeChild(link);
+      URL.revokeObjectURL(href);
+    });
   };
   //   const addThenEdit = async () => {
   //     await Axios.post(
@@ -363,7 +449,7 @@ const MapDisplay = (props) => {
                         <Menu.Item>
                           {({ active }) => (
                             <button
-                              //   onClick={() => handleDownload()}
+                              onClick={() => handleDownload()}
                               className={`${
                                 active
                                   ? "bg-violet-500 text-white"
