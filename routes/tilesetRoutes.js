@@ -37,6 +37,7 @@ router.post("/tileset/create", async (req, res) => {
     usersLiked: [],
     usersDisliked: [],
     sharedUsers: [],
+    initialized: false
   });
   tileset = await tileset.save();
   var user = await User.findOneAndUpdate(
@@ -86,7 +87,7 @@ router.post("/tileset/update/:id", async (req, res) => {
   updates.name = req.body.name;
   updates.description = req.body.description;
   updates.public = req.body.public;
-  updates.tags = req.body.tags;
+  updates.tags = req.body.tags ? req.body.tags.filter((tag) => {return tag}).map((tag) => {return tag.toLowerCase()}) : undefined
   updates.timeEdited = Date.now();
   var tileset = await Tileset.findOneAndUpdate(
     {
@@ -146,7 +147,8 @@ router.post("/tileset/image/:id", uploadStrategy, async (req, res) => {
   const options = { blobHTTPHeaders: { blobContentType: req.file.mimetype } };
   blobService
     .uploadStream(stream, streamLength, undefined, options)
-    .then(() => {
+    .then(async () => {
+      await Tileset.findByIdAndUpdate(req.params.id, {$set: {initialized: true}});
       res.json({ message: "successful upload" });
     })
     .catch((err) => {
@@ -381,7 +383,7 @@ router.post("/tileset/getBatch", async (req, res) => {
 router.post("/tileset/search", async (req, res) => {
   var tags = req.body.tags
     ? req.body.tags.map((tag) => {
-        return { tags: tag };
+        return { tags: tag.toLowerCase() };
       })
     : undefined;
   var limit = req.body.limit ? req.body.limit : 0;

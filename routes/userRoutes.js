@@ -369,4 +369,26 @@ userRouter.post("/user/deleteshared", async (req, res) => {
   }
 });
 
+userRouter.post("/user/getNames", async (req, res) => {
+  if (req.body.ids == undefined) {
+    res.json({ names: {} });
+    return;
+  }
+  var ids = req.body.ids.map((id) => {
+    return { _id: id };
+  });
+  if (ids == undefined || ids.length == 0) {
+    res.json({ names: {} });
+    return;
+  }
+  var users = await User.find({ $or: ids }, "_id userName")
+  console.log(users)
+  names = {}
+  for (var i = 0; i < users.length; i++){
+    var user = users[i]
+    names[user._id] = user.userName;
+  }
+  res.json({ names: names });
+});
+
 module.exports = userRouter;

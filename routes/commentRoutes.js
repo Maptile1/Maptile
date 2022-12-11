@@ -54,7 +54,7 @@ router.get("/comment/:id", async (req, res) => {
     res.status(400).json({errorMessage: 'Not logged in'})
     return;
   }
-  let comments = await Comment.find({post: req.params.id})
+  let comments = await Comment.find({post: req.params.id}).sort({ comment_date: -1, _id: 1 })
   res.json({comments: comments})
 });
 

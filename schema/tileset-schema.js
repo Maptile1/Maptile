@@ -77,6 +77,10 @@ const tilesetSchema = new Schema(
         shared_users:{
             type: [ObjectId],
             required: true
+        },
+        initialized:{
+            type: Boolean,
+            required: true
         }
     }
 )
