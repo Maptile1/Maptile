@@ -44,7 +44,7 @@ const CreateMapModal = (props) => {
             <select name="tileset" className="w-full p-2.5 text-gray-500 bg-white border rounded-md shadow-sm outline-none appearance-none focus:border-indigo-600" onChange={updateTilesetHeightWidth}>
                 <option value="" disabled selected>Select your tileset</option>
                 {
-                    props.userTilesets.map(obj => <option value={obj._id}>{obj.name}</option>)
+                    props.userTilesets.filter((tileset) => {return tileset.initialized}).map(obj => <option value={obj._id}>{obj.name}</option>)
                 }
             </select>
             </div>

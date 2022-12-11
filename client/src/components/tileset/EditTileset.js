@@ -72,7 +72,7 @@ const EditTileset = (props) => {
         i += tileset.tile_width
       ) {
         var points = [i, 0, i, tileset.tileset_height];
-        console.log(points)
+        console.log(points);
         newdividers.push(
           <Line stroke="red" points={points} strokeWidth="0.05"></Line>
         );
@@ -83,7 +83,7 @@ const EditTileset = (props) => {
         j += tileset.tile_height
       ) {
         var points2 = [0, j, tileset.tileset_width, j];
-        console.log(points2)
+        console.log(points2);
         newdividers.push(
           <Line stroke="red" points={points2} strokeWidth="0.05"></Line>
         );
@@ -95,7 +95,7 @@ const EditTileset = (props) => {
   useEffect(() => {
     if (zoomLevel === 1 && showDividers === false && download) {
       var dataURL = stageRef.current.toDataURL();
-      downloadURI(dataURL, "maptile_tileset.png");
+      downloadURI(dataURL, tileset.name + ".png");
       setDownload(false);
       setZoomLevel(15);
       setShowDividers(true);
