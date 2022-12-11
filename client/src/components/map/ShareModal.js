@@ -72,10 +72,6 @@ const ShareModal = (props) => {
               </button>
             </div>
           </div>
-          <div className="text-white pt-6">
-            <BsClipboard className="cursor-pointer " />
-            <label className="cursor-pointer">Copy Link</label>
-          </div>
         </div>
       </div>
     </Modal>
