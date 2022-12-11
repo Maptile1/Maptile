@@ -4,6 +4,7 @@ import { React, useState, useEffect, useRef } from "react";
 import TopPostCard from "../card/TopPostCard";
 import RecentCard from "../card/RecentCard";
 import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Home = (props) => {
   //const nav = useNavigate();
@@ -12,6 +13,7 @@ const Home = (props) => {
   const [topSlideIndex, setTopSlideIndex] = useState(0);
   const timeoutRef = useRef(null);
   const [likedTilesets, setLikedTilesets] = useState(null);
+  const nav = useNavigate();
 
   const resetTimeout = () => {
     if (timeoutRef.current) {
@@ -30,6 +32,9 @@ const Home = (props) => {
           console.log("LOGGED IN USER:", response.data)
           if (response.data.user !== undefined){
             props.setTheUser(response.data.user)
+          }
+          else{
+            nav("/", { replace: true })
           }
         })
         .catch((err) => {

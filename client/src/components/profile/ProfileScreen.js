@@ -39,7 +39,7 @@ const ProfileScreen = (props) => {
             props.setTheUser(response.data.user)
           }
           else{
-            // nav("/home", { replace: true })
+            nav("/", { replace: true })
           }
         })
         .catch((err) => {

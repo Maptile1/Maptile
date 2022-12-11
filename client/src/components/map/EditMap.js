@@ -7,6 +7,7 @@ import EditMapGridCell from "./EditMapGridCell";
 import LayerCard from "../card/LayerCard";
 import MapPropModal from "./MapPropModal";
 import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import { useLocation } from "react-router-dom";
 import { AiFillForward, AiFillBackward } from "react-icons/ai";
@@ -32,7 +33,7 @@ const EditMap = (props) => {
   const [map, setMap] = useState(null);
   const [gridSize, setGridSize] = useState({ x: 20, y: 20 });
   const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
-
+  const nav = useNavigate();
   // ! Layer Formating
   // * Name: Name of the Layer
   // ? Name todo: Implement Name Change Function
@@ -81,6 +82,9 @@ const EditMap = (props) => {
           console.log("LOGGED IN USER:", response.data)
           if (response.data.user !== undefined){
             props.setTheUser(response.data.user)
+          }
+          else{
+            nav("/", { replace: true })
           }
         })
         .catch((err) => {
