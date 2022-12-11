@@ -706,18 +706,30 @@ const EditMap = (props) => {
                         NOTE: Tile data is off set by 1 to account for blank spaces. This means tile ID 0 is ID 1 in the data, because 0 is an empty space.
                         I am 99% sure this is how it should be, this slight difference is already accounted for in the code for getting the tile.
                         */
-
-                      <img
-                        id="tileset-source"
-                        style={{ imageRendering: "pixelated" }}
-                        src={
-                          "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
-                          map.tilesets[currentTileset]
-                        }
-                        onLoad={() => draw()}
-                        crossOrigin="true"
-                        alt=""
-                      />
+                      //   <img
+                      //   id={"tileset-source-" + i }
+                      //   style={{ imageRendering: "pixelated" }}
+                      //   src={
+                      //     "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
+                      //     map.tilesets[currentTileset]
+                      //   }
+                      //   onLoad={() => draw()}
+                      //   crossOrigin="true"
+                      //   alt=""
+                      // />;
+                      tilesets.map((tileset, i) => {
+                        return <img
+                          id={"tileset-source"}
+                          style={{ imageRendering: "pixelated", position:"absolute", visibility: i == currentTileset ? "visible" : "hidden"}}
+                          src={
+                            "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
+                            tileset._id
+                          }
+                          onLoad={() => draw()}
+                          crossOrigin="true"
+                          alt=""
+                        />;
+                      })
                     }
                     <div className="absolute bottom-2">
                       <button
