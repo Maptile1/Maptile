@@ -70,7 +70,23 @@ const EditMap = (props) => {
 
   // * This fetches the map data from the DB when first loading the page.
   useEffect(() => {
+    
     const getMap = async () => {
+      if(props.user == null){
+        console.log("NULL PROPS USER")
+        await Axios.get(
+          "https://maptile1.herokuapp.com/user/loggedin"
+        )
+        .then((response) => {
+          console.log("LOGGED IN USER:", response.data)
+          if (response.data.user !== undefined){
+            props.setTheUser(response.data.user)
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+      }
       await Axios.get(
         "https://maptile1.herokuapp.com/map/get/" + location.state._id
       )

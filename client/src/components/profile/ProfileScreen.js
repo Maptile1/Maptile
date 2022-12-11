@@ -5,7 +5,7 @@ import Sidebar from "../sidebar/Sidebar";
 import MapCard from "../card/MapCard";
 import { React, useState, useEffect } from "react";
 import ProfileEditModal from "./ProfileEditModal";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate} from "react-router-dom";
 // import { isRouteErrorResponse } from "react-router-dom";
 import Axios from "axios";
 
@@ -21,6 +21,7 @@ const ProfileScreen = (props) => {
 
 
   const [userPfp, setPfp] = useState(null);
+  const nav = useNavigate();
 
   const updatePfp = (newImage) => {
     setPfp(newImage + "?=" + Math.random().toString().substring(2));
@@ -28,6 +29,23 @@ const ProfileScreen = (props) => {
 
   useEffect(() => {
     const getData = async () => {
+      if(props.user == null){
+        await Axios.get(
+          "https://maptile1.herokuapp.com/user/loggedin"
+        )
+        .then((response) => {
+          console.log("LOGGED IN USER:", response.data)
+          if (response.data.user !== undefined){
+            props.setTheUser(response.data.user)
+          }
+          else{
+            // nav("/home", { replace: true })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+      }
       await Axios.get(
         "https://maptile1.herokuapp.com/tileset/getUser/" + props.user._id)
       .then(response => {
@@ -54,11 +72,11 @@ const ProfileScreen = (props) => {
       .catch(err => console.log(err))
     };
     getData();
-  }, []);
+  }, [props.user]);
 
-  if(!props.user){
-    return <Navigate to="/" replace state={{ from: location }} />
-  }
+  // if(!props.user){
+  //   return <Navigate to="/" replace state={{ from: location }} />
+  // }
   return user && userTilesets && userMaps ? (
         <div class="grid grid-cols-12 grid-rows-10 gap-4 ">
           <Sidebar setTheUser={props.setTheUser} />

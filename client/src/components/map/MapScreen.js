@@ -4,6 +4,8 @@ import CreateMapModal from "./CreateMapModal";
 import MSCard from "../card/MSCard";
 import ShareModal from "./ShareModal";
 import Axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 const MapScreen = (props) => {
   const [userSelected, updateUserSelected] = useState(true);
   const [modalOpen, setModal] = useState(false);
@@ -20,6 +22,7 @@ const MapScreen = (props) => {
     tileset: "",
   });
   const [inputValid, setInputValid] = useState(false);
+  const nav = useNavigate();
 
   const getMaps = async () => {
     const getUser = async () => {
@@ -31,7 +34,6 @@ const MapScreen = (props) => {
       });
     };
     getUser();
-
     var userresponse = await Axios.get(
       "https://maptile1.herokuapp.com/user/get/" + props.user._id
     );
@@ -58,6 +60,23 @@ const MapScreen = (props) => {
 
   useEffect(() => {
     const getMaps = async () => {
+      if(props.user == null){
+        await Axios.get(
+          "https://maptile1.herokuapp.com/user/loggedin"
+        )
+        .then((response) => {
+          console.log("LOGGED IN USER:", response.data)
+          if (response.data.user !== undefined){
+            props.setTheUser(response.data.user)
+          }
+          else{
+            nav("/home", { replace: true })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+      }
       await Axios.post("https://maptile1.herokuapp.com/map/getBatch", {
         ids: props.user.maps,
         page: 0,
@@ -88,10 +107,7 @@ const MapScreen = (props) => {
         });
     };
     getMaps();
-  }, []);
-  console.log(props.user.maps);
-  console.log(userSharedMaps);
-  console.log(userMaps);
+  }, [props.user]);
 
   let tab_selected =
     "bg-maptile-background-mid text-center rounded-t-xl cursor-pointer  mt-[10px] duration-300";

@@ -196,6 +196,23 @@ const TilesetDisplay = (props) => {
     console.log("USE EFFECT");
     // console.log("TILESET ID: ", id);
     // console.log("USER ID: ", location.state.owner);
+    if(props.user == null){
+      Axios.get(
+        "https://maptile1.herokuapp.com/user/loggedin"
+      )
+      .then((response) => {
+        console.log("LOGGED IN USER:", response.data)
+        if (response.data.user !== undefined){
+          props.setTheUser(response.data.user)
+        }
+        else{
+          nav("/home", { replace: true })
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      });
+    }
     Axios.get(
       "https://maptile1.herokuapp.com/user/get/" + location.state.owner
     ).then((response) => {

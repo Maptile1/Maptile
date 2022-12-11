@@ -11,7 +11,6 @@ const Home = (props) => {
   const [topTilesets, setTopTilesets] = useState(null); // gonna have to be changed to maps as well in the future
   const [topSlideIndex, setTopSlideIndex] = useState(0);
   const timeoutRef = useRef(null);
-  const [loading, setloading] = useState(true);
   const [likedTilesets, setLikedTilesets] = useState(null);
 
   const resetTimeout = () => {
@@ -22,7 +21,21 @@ const Home = (props) => {
 
   useEffect(() => {
     const topRes = async () => {
-      setloading(true);
+      if(props.user == null){
+        console.log("NULL PROPS USER")
+        await Axios.get(
+          "https://maptile1.herokuapp.com/user/loggedin"
+        )
+        .then((response) => {
+          console.log("LOGGED IN USER:", response.data)
+          if (response.data.user !== undefined){
+            props.setTheUser(response.data.user)
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+      }
       var user;
       await Axios.get("https://maptile1.herokuapp.com/tileset/top").then(
         (response) => {
@@ -50,10 +63,10 @@ const Home = (props) => {
         console.log(response.data.tilesets);
         setLikedTilesets(response.data.tilesets);
       });
-      setloading(false);
     };
     topRes();
   }, []);
+
   console.log(recent);
   useEffect(() => {
     resetTimeout();
@@ -69,7 +82,8 @@ const Home = (props) => {
 
   return (
     <div>
-      {!loading && (
+      {topTilesets && likedTilesets ? 
+      (
         <div className="circles">
           <li></li>
           <li></li>
@@ -194,8 +208,8 @@ const Home = (props) => {
               </div>
             </div>
           </div>
-        </div>
-      )}
+        </div>) : null
+      }
     </div>
   );
 };

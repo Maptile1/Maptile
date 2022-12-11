@@ -16,6 +16,7 @@ import {
   BsEyedropper,
 } from "react-icons/bs";
 import { FiSave } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 Axios.defaults.withCredentials = true;
 
@@ -35,9 +36,28 @@ const EditTileset = (props) => {
   const [download, setDownload] = useState(false);
   const [mouseDown, setMouseDown] = useState(0);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const nav = useNavigate();
 
   useEffect(() => {
     const getTileset = async () => {
+      if(props.user == null){
+        console.log("NULL PROPS USER")
+        await Axios.get(
+          "https://maptile1.herokuapp.com/user/loggedin"
+        )
+        .then((response) => {
+          console.log("LOGGED IN USER:", response.data)
+          if (response.data.user !== undefined){
+            props.setTheUser(response.data.user)
+          }
+          else{
+            nav("/home", { replace: true })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+      }
       let tilesetdata = await Axios.get(
         "https://maptile1.herokuapp.com/tileset/get/" + location.state._id
       );

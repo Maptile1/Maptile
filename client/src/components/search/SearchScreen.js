@@ -2,7 +2,7 @@ import Sidebar from "../sidebar/Sidebar";
 import React, { useState, useEffect, useRef } from "react";
 import SearchCard from "../card/SearchCard";
 import Axios from "axios";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineDoubleRight, AiOutlineDoubleLeft } from "react-icons/ai";
 Axios.defaults.withCredentials = true;
 
@@ -23,8 +23,27 @@ const SearchScreen = (props) => {
   const [resultCount, setResultCount] = useState(0);
   const didMount = useRef(false);
   const [loading, setLoading] = useState(true);
+  const nav = useNavigate();
+
   console.log(searchResults);
   useEffect(() => {
+    if(props.user == null){
+      Axios.get(
+        "https://maptile1.herokuapp.com/user/loggedin"
+      )
+      .then((response) => {
+        console.log("LOGGED IN USER:", response.data)
+        if (response.data.user !== undefined){
+          props.setTheUser(response.data.user)
+        }
+        else{
+          nav("/home", { replace: true })
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      });
+    }
     let selectedTags = [];
     let tagChoices = document.getElementsByName("tagBox");
     for (let i = 0; tagChoices[i]; i++) {

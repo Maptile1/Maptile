@@ -4,6 +4,7 @@ import CreateTilesetModal from "./CreateTilesetModal";
 import TSSCard from "../card/TSSCard";
 import ShareModal from "../map/ShareModal";
 import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 Axios.defaults.withCredentials = true;
 
@@ -12,6 +13,7 @@ const TilesetScreen = (props) => {
   const [modalOpen, setModal] = useState(false);
   var [userTilesets, setUserTilesets] = useState([]);
   var [sharedTilesets, setSharedTilesets] = useState([]);
+  const nav = useNavigate();
   const [input, setInput] = useState({
     name: "",
     tilewidth: "",
@@ -29,6 +31,23 @@ const TilesetScreen = (props) => {
 
   useEffect(() => {
     const getTilesets = async () => {
+      if(props.user == null){
+        await Axios.get(
+          "https://maptile1.herokuapp.com/user/loggedin"
+        )
+        .then((response) => {
+          console.log("LOGGED IN USER:", response.data)
+          if (response.data.user !== undefined){
+            props.setTheUser(response.data.user)
+          }
+          else{
+            nav("/home", { replace: true })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+      }
       var response = await Axios.get(
         "https://maptile1.herokuapp.com/tileset/getUser/" + user._id
       );
