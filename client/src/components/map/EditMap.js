@@ -424,8 +424,8 @@ const EditMap = (props) => {
     ) {
       setTileSelection(newCoords);
       // ! GIGA HARD CODE -- Replace 16 with Tile Size
-      tilesetSelection.style.left = newCoords[0] * tileheight + "px";
-      tilesetSelection.style.top = newCoords[1] * tilewidth + "px";
+      tilesetSelection.style.left = newCoords[0] * tilewidth + "px";
+      tilesetSelection.style.top = newCoords[1] * tileheight + "px";
       tilesetSelection.style.paddingTop = tileheight + "px";
       tilesetSelection.style.paddingLeft = tilewidth + "px";
     }
