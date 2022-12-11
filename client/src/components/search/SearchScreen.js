@@ -52,10 +52,11 @@ const SearchScreen = (props) => {
       }
     }
     if (userSelected) {
+      let searchReference = searchRef.current == null ? "" : searchRef.current.value;
       var response = Axios.post(
         "https://maptile1.herokuapp.com/tileset/search",
         {
-          search: searchRef.current.value,
+          search: searchReference,
           limit: itemsPerPage,
           page: currentPage,
           tags: selectedTags,
@@ -163,7 +164,7 @@ const SearchScreen = (props) => {
     tagRef.current.value = "";
   };
 
-  return user ? (
+  return props.user ? (
     <div>
       <div>
         <Sidebar setTheUser={props.setTheUser} s />
@@ -300,8 +301,8 @@ const SearchScreen = (props) => {
         </main>
       </div>
     </div>
-  ) : (
-    <Navigate to="/" replace state={{ from: location }} />
+  ) : (null
+    // <Navigate to="/" replace state={{ from: location }} />
   );
 };
 
