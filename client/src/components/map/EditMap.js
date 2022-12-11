@@ -93,9 +93,9 @@ const EditMap = (props) => {
         .then(async (response) => {
           setMap(response.data.map);
           console.log(response.data.map.tilesets);
-          await Axios.post("https://maptile1.herokuapp.com/tileset/getBatch", {
+          Axios.post("https://maptile1.herokuapp.com/tileset/getBatch", {
             ids: response.data.map.tilesets,
-            limit: 10,
+            limit: 999,
             page: 0,
             nosort: "nosort",
             fields:
