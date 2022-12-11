@@ -18,12 +18,7 @@ const OtherUserProfile = (props) => {
     const [user, setUser] = useState(null);
     var [userTilesets, setUserTilesets] = useState([]);
     const [userMaps, setUserMaps] = useState([]);
-    const [userPfp, setPfp] = useState(
-        "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
-        location.state.owner +
-        "?=" +
-        Math.random().toString().substring(2)
-    );
+    const [userPfp, setPfp] = useState("");
     const nav = useNavigate();
 
     const updatePfp = (newImage) => {
@@ -61,6 +56,10 @@ const OtherUserProfile = (props) => {
             await Axios.get("https://maptile1.herokuapp.com/tileset/getUser/" + id)
             .then(response => {
                 setUserTilesets(response.data.usertilesets);
+                setPfp("https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
+                id +
+                "?=" +
+                Math.random().toString().substring(2))
                 console.log(response.data.usertilesets)
             });
         }
@@ -73,12 +72,12 @@ const OtherUserProfile = (props) => {
       .catch(err => console.log(err))
        }
        getMaps();
-    }, [location.state.owner, id]);
+    }, [id]);
 
-    if(!location.state.owner){
-        return <Navigate to="/" replace state={{ from: location }} />
-    }
-    return location.state.owner && user && userTilesets && userMaps ? (
+    // if(!location.state.owner){
+    //     return <Navigate to="/" replace state={{ from: location }} />
+    // }
+    return user && userTilesets && userMaps ? (
         <div>
             <div class="grid grid-cols-12 grid-rows-10 gap-4 ">
                 <Sidebar setTheUser={props.setTheUser} />
