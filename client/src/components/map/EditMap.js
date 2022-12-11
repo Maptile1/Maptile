@@ -377,7 +377,7 @@ const EditMap = (props) => {
     if (x < 0 || x >= map.width || y < 0 || y >= map.height) {
       return;
     }
-    let tilesetheight = tilesets[currentTileset].tileset_height;
+    let tilesetheight = tilesets.tilesets[currentTileset].tileset_height;
     let id = x + y * map.width;
     if (screen[id] !== tile) {
       return;
