@@ -26,7 +26,7 @@ const Homescreen = (props) => {
       console.log(response.data)
       if (response.data.user !== undefined){
         props.setTheUser(response.data.user)
-        nav("/home", { replace: true })
+        nav("/", { replace: true })
       }
     })
     .catch((err) => {
