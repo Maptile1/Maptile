@@ -39,6 +39,9 @@ const AddTilesetModal = (props) => {
               if(props.map.tilesets.includes(tileset._id)){
                 continue;
               }
+              if(tileset.tile_width != props.map.tile_width || tileset.tile_height != props.map.tile_height){
+                continue;
+              }
               options.push({
                   value: tileset._id,
                   label: tileset.name
