@@ -8,6 +8,8 @@ const inMemoryStorage = multer.memoryStorage();
 const uploadStrategy = multer({ storage: inMemoryStorage }).single("image");
 const { BlockBlobClient } = require("@azure/storage-blob");
 const getStream = require("into-stream");
+
+// CREATE: creates a new map
 router.post("/map/create", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
@@ -45,7 +47,7 @@ router.post("/map/create", async (req, res) => {
   res.json({ map: map, user: user });
 });
 
-// Get map
+// GET: retrieves a map based on id
 router.get("/map/get/:id", async (req, res) => {
   var map = await Map.findById(req.params.id);
   if (map != null) {
@@ -55,14 +57,14 @@ router.get("/map/get/:id", async (req, res) => {
   }
 });
 
-// Get all maps
+// GET: all maps 
 router.get("/map/getall", async (req, res) => {
   Map.find()
     .then((maps) => res.json(maps))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-//Delete Map
+// DELETE: deletes a map by id
 router.post("/map/delete/:id", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
@@ -87,7 +89,7 @@ router.post("/map/delete/:id", async (req, res) => {
     });
 });
 
-// Update Map
+// UPDATE: updates a map based on id
 router.post("/map/update/:id", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
@@ -139,7 +141,7 @@ router.post("/map/update/:id", async (req, res) => {
   }
 });
 
-///Get all maps of user
+// GET: retrieves all maps from a user
 router.get("/map/getUser/:id", async (req, res) => {
   if (req.session._id == undefined){
     res.status(400).json({errorMessage: 'Not logged in'})
@@ -150,6 +152,7 @@ router.get("/map/getUser/:id", async (req, res) => {
   res.json({userMaps: userMaps, sharedMaps: sharedMaps})
 });
 
+// POST: retrieves maps based on a set of ids
 router.post("/map/getBatch", async (req, res) => {
   var limit = req.body.limit ? req.body.limit : 0;
   if (limit <= 0) {
@@ -177,6 +180,7 @@ router.post("/map/getBatch", async (req, res) => {
   res.json({ maps: maps });
 });
 
+// LIKE: likes/unlikes a map based on id
 router.post("/map/like/:id", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
@@ -245,6 +249,7 @@ router.post("/map/like/:id", async (req, res) => {
   }
 });
 
+// DISLIKE: Dislikes/undislikes a map based on id
 router.post("/map/dislike/:id", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
@@ -318,6 +323,7 @@ router.post("/map/dislike/:id", async (req, res) => {
   }
 });
 
+// POST: performs a search for certain maps
 router.post("/map/search", async (req, res) => {
   var tags = req.body.tags
     ? req.body.tags.map((tag) => {
@@ -370,6 +376,7 @@ router.post("/map/search", async (req, res) => {
   res.json({ maps: documents[0].maps, count: count });
 });
 
+// UPDATES MAP PREVIEW IMAGE
 router.post("/map/image/:id", uploadStrategy, async (req, res) => {
   const blobName = req.params.id;
   const blobService = new BlockBlobClient(

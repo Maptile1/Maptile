@@ -10,7 +10,7 @@ const { BlockBlobClient } = require("@azure/storage-blob");
 const getStream = require("into-stream");
 require("dotenv").config();
 
-// Create Tileset
+// Creates a new tileset 
 router.post("/tileset/create", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
@@ -47,7 +47,7 @@ router.post("/tileset/create", async (req, res) => {
   res.json({ tileset: tileset, user: user });
 });
 
-// Delete Tileset
+// Deletes a tileset by id
 router.post("/tileset/delete/:id", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
@@ -75,7 +75,7 @@ router.post("/tileset/delete/:id", async (req, res) => {
     });
 });
 
-// Update tileset
+// Updates a tileset by id
 router.post("/tileset/update/:id", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
@@ -109,7 +109,7 @@ router.post("/tileset/update/:id", async (req, res) => {
   }
 });
 
-// Get Tileset
+// GET: retrieves a certain tileset by id
 router.get("/tileset/get/:id", async (req, res) => {
   var tileset = await Tileset.findById(req.params.id).catch((err) => {});
   if (tileset != null) {
@@ -119,7 +119,7 @@ router.get("/tileset/get/:id", async (req, res) => {
   }
 });
 
-///Get all tilesets of user
+// GET: retrieves all tilesets owned by a certain user by id
 router.get("/tileset/getUser/:id", async (req, res) => {
   var user = await User.findById(req.params.id);
   let usertilesets = await Tileset.find({owner: req.params.id}).sort({timeEdited: -1, _id: 1})
@@ -134,6 +134,7 @@ router.get("/tileset", async (req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
+// Updates the image of a tileset preview
 router.post("/tileset/image/:id", uploadStrategy, async (req, res) => {
   const blobName = req.params.id;
   const blobService = new BlockBlobClient(
@@ -154,7 +155,7 @@ router.post("/tileset/image/:id", uploadStrategy, async (req, res) => {
     });
 });
 
-///add to shared
+// Adds a tileset to a user's shared tilesets
 router.post("/tileset/addshared/:id", async (req, res) => {
   var user = await User.findById(req.params.id);
   var tileset = await Tileset.findById(req.body.tilesetid);
@@ -173,6 +174,7 @@ router.post("/tileset/addshared/:id", async (req, res) => {
   }
 });
 
+// Removes a tileset from a user's shared tilesets
 router.post("/tileset/deleteshared/:id", async (req, res) => {
   var user = await User.findOneAndUpdate(
     { _id: req.params.id },
@@ -182,6 +184,7 @@ router.post("/tileset/deleteshared/:id", async (req, res) => {
   res.json({ sharedtilesets: user.shared_tilesets });
 });
 
+// GET: retrieves the top tilesets 
 router.get("/tileset/top", async (req, res) => {
   var tilesets = await Tileset.aggregate([
     { $match: {} },
@@ -204,6 +207,7 @@ router.get("/tileset/top", async (req, res) => {
   res.json({ tilesets: tilesets });
 });
 
+// Likes/unlikes a tileset by id
 router.post("/tileset/like/:id", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
@@ -274,6 +278,7 @@ router.post("/tileset/like/:id", async (req, res) => {
   }
 });
 
+// Dislikes/undislikes a tileset by id 
 router.post("/tileset/dislike/:id", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
@@ -343,6 +348,7 @@ router.post("/tileset/dislike/:id", async (req, res) => {
   }
 });
 
+// GET: retrieves tilesets based on a set of ids
 router.post("/tileset/getBatch", async (req, res) => {
   var limit = req.body.limit ? req.body.limit : 0;
   if (limit <= 0) {
@@ -378,6 +384,7 @@ router.post("/tileset/getBatch", async (req, res) => {
   }
 });
 
+// Performs a search for tilesets. 
 router.post("/tileset/search", async (req, res) => {
   var tags = req.body.tags
     ? req.body.tags.map((tag) => {

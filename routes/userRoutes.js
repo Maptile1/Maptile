@@ -13,7 +13,7 @@ const { BlockBlobClient } = require("@azure/storage-blob");
 const getStream = require("into-stream");
 require("dotenv").config();
 
-// NODE MAILER
+// NODE MAILER SETUP
 const nodeMailer = require("nodemailer");
 let mailTransporter = nodeMailer.createTransport({
   service: "gmail",
@@ -32,6 +32,7 @@ const sendEmail = (details) => {
   });
 };
 
+// REGISTER USER ROUTE
 userRouter.route("/user/register").post(async (req, res) => {
   bcrypt.hash(req.body.password, saltRounds, async (err, hash) => {
     var user = new User({
@@ -63,6 +64,7 @@ userRouter.route("/user/register").post(async (req, res) => {
   });
 });
 
+// LOGIN ROUTE
 userRouter.route("/user/login").post(async (req, res) => {
   var user = await User.findOne({ userName: req.body.userName });
   if (user == null) {
@@ -83,6 +85,7 @@ userRouter.route("/user/login").post(async (req, res) => {
   }
 });
 
+// LOGOUT ROUTE
 userRouter.route("/user/logout").post(async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
@@ -92,6 +95,7 @@ userRouter.route("/user/logout").post(async (req, res) => {
   }
 });
 
+// CHECK IF USER IS LOGGED IN ROUTE
 userRouter.route("/user/loggedin").get(async (req, res) => {
   if (req.session._id == undefined) {
     res.json({ loggedIn: false });
@@ -106,6 +110,7 @@ userRouter.route("/user/loggedin").get(async (req, res) => {
   }
 });
 
+// GETS A USER BASED ON ID
 userRouter.route("/user/get/:id").get(async (req, res) => {
   if (req.session._id == undefined) {
     res.json({ loggedIn: false });
@@ -120,6 +125,7 @@ userRouter.route("/user/get/:id").get(async (req, res) => {
   }
 });
 
+// Retrieves user data based on email
 userRouter.route("/user/email/:email").get(async (req, res) => {
   var user = await User.find({
     email: req.params.email,
@@ -132,13 +138,13 @@ userRouter.route("/user/email/:email").get(async (req, res) => {
   }
 });
 
+// Route to generate and send email to user to recover their password
 userRouter.route("/user/recover/:email").post(async (req, res) => {
   // GENERATE CODE AND SAVE TO DB
   let code = Math.floor(Math.random() * 90000) + 10000;
   let updates = {
     recoveryCode: code,
   };
-  // UPDATE USER
   var user = await User.findOneAndUpdate(
     { email: req.params.email }, //temp
     { $set: updates },
@@ -158,6 +164,7 @@ userRouter.route("/user/recover/:email").post(async (req, res) => {
   sendEmail(details);
 });
 
+// UPDATE USER INFORMATION ROUTE
 userRouter.post("/user/update", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
@@ -205,6 +212,7 @@ userRouter.post("/user/update", async (req, res) => {
   }
 });
 
+// RESET PASSWORD ROUTE
 userRouter.post("/user/reset", async (req, res) => {
   var updates = {};
   if (req.body.password == undefined) {
@@ -230,6 +238,7 @@ userRouter.post("/user/reset", async (req, res) => {
   });
 });
 
+// UPDATES USER PROFILE PICTURE ROUTE
 userRouter.post("/user/image", uploadStrategy, async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
@@ -274,6 +283,7 @@ userRouter.get("/user/getRecent/:id", async (req, res) => {
   res.json({ recent: tilesets });
 });
 
+// SHARING TILESETS/MAPS ROUTE
 userRouter.post("/user/share", async (req, res) => {
   var sharedUserEmail = req.body.email;
   var sharedAssetID = req.body.id;
@@ -322,6 +332,7 @@ userRouter.post("/user/share", async (req, res) => {
   }
 });
 
+// REMOVING FROM SHARED TILESETS/MAPS
 userRouter.post("/user/deleteshared", async (req, res) => {
   var userID = req.body._id;
   var assetID = req.body.asset_id;
@@ -369,6 +380,8 @@ userRouter.post("/user/deleteshared", async (req, res) => {
   }
 });
 
+// USED TO GET NAMES OF USERS BASED ON A SET OF IDs
+// USED FOR EFFICIENTLY RETRIEVING COMMENT DATA
 userRouter.post("/user/getNames", async (req, res) => {
   if (req.body.ids == undefined) {
     res.json({ names: {} });

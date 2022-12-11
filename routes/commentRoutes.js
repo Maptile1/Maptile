@@ -4,15 +4,12 @@ const Comment = require("../schema/comment-schema.js");
 const ObjectId = require("mongodb").ObjectId;
 const Tileset = require("../schema/tileset-schema");
 
-// Comment Create
+// CREATING NEW COMMENT ROUTE
 router.post("/comment/create", async (req, res) => {
   if (req.session._id == undefined){
     res.status(400).json({errorMessage: 'Not logged in'})
     return;
   }
-  // let date = new Date()
-  // let dateString = date.toLocaleDateString()
-  // dateString += " " + date.toLocaleTimeString()
   var comment = new Comment({
     _id: new ObjectId(),
     owner: req.session._id, 
@@ -33,7 +30,7 @@ router.post("/comment/create", async (req, res) => {
   res.json({ payload: { comment: comment, tileset: tileset } });
 });
 
-// Comment update
+// UPDATING COMMENT ROUTE
 router.post("/comment/update/:id", async (req, res) => {
   Comment.findById(req.params.id)
     .then((comment) => {
@@ -48,7 +45,7 @@ router.post("/comment/update/:id", async (req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-// Get all comments from Tileset/Map
+// GET ROUTE: retrieves all comments from a tileset/map
 router.get("/comment/:id", async (req, res) => {
   if (req.session._id == undefined){
     res.status(400).json({errorMessage: 'Not logged in'})
@@ -58,27 +55,14 @@ router.get("/comment/:id", async (req, res) => {
   res.json({comments: comments})
 });
 
-// Get Comment
-// router.get("/comment/:id", async (req, res) => {
-//   Comment.findById(req.params.id)
-//     .then((comments) => res.json(comments))
-//     .catch((err) => res.status(400).json("Error: " + err));
-// });
-
-// Get all comments
-// router.get("/comment", async (req, res) => {
-//   Comment.find()
-//     .then((comments) => res.json(comments))
-//     .catch((err) => res.status(400).json("Error: " + err));
-// });
-
-// Delete comment
+// DELETE: Deletes a particular comment by id
 router.post("/comment/delete/:id", async (req, res) => {
   Comment.findByIdAndDelete(req.params.id)
     .then(() => res.json("Comment deleted."))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
+// LIKE: Likes/unlikes a comment
 router.post("/comment/like/:id", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
@@ -117,6 +101,7 @@ router.post("/comment/like/:id", async (req, res) => {
   }
 })
 
+// DISLIKE: Dislikes/undislikes a comment
 router.post("/comment/dislike/:id", async (req, res) => {
   if (req.session._id == undefined) {
     res.status(400).json({ errorMessage: "Not logged in" });
@@ -154,6 +139,5 @@ router.post("/comment/dislike/:id", async (req, res) => {
     }
   }
 })
-
 
 module.exports = router;
