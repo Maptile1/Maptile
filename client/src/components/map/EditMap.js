@@ -208,8 +208,11 @@ const EditMap = (props) => {
       const { active: visible, ...rest } = item;
       return { visible, ...rest };
     });
-    newlayers.map((layer) => {
-      layer.id += 1;
+    newlayers = newlayers.map((layer) => {
+      layer.id = layer.id + 1;
+      layer.height = map.height;
+      layer.width = map.width;
+      return layer;
     });
     console.log(newlayers);
     var both = Object.assign(
