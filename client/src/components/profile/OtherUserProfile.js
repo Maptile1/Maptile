@@ -4,7 +4,7 @@ import TilesetCard from "../card/TilesetCard";
 import Sidebar from "../sidebar/Sidebar";
 // import MapCard from "../card/MapCard";
 import { React, useState, useEffect } from "react";
-import { Navigate, useLocation, useParams } from "react-router-dom";
+import { Navigate, useLocation, useParams, useNavigate } from "react-router-dom";
 // import { isRouteErrorResponse } from "react-router-dom";
 import Axios from "axios";
 import MapCard from "../card/MapCard";
@@ -24,6 +24,7 @@ const OtherUserProfile = (props) => {
         "?=" +
         Math.random().toString().substring(2)
     );
+    const nav = useNavigate();
 
     const updatePfp = (newImage) => {
         console.log(newImage);
@@ -31,6 +32,23 @@ const OtherUserProfile = (props) => {
     };
 
     useEffect(() => {
+        if(props.user == null){
+            Axios.get(
+              "https://maptile1.herokuapp.com/user/loggedin"
+            )
+            .then((response) => {
+              console.log("LOGGED IN USER:", response.data)
+              if (response.data.user !== undefined){
+                props.setTheUser(response.data.user)
+              }
+              else{
+                nav("/home", { replace: true })
+              }
+            })
+            .catch((err) => {
+              console.log(err)
+            });
+          }
         const getUser = async () => {
             await Axios.get("https://maptile1.herokuapp.com/user/get/" + id)
             .then(response => {
