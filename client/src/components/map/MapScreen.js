@@ -93,14 +93,12 @@ const MapScreen = (props) => {
       }).then((response) => {
         setUserSharedMaps(response.data.maps);
       });
-      await Axios.post("https://maptile1.herokuapp.com/tileset/getBatch", {
-        ids: props.user.tilesets.concat(props.user.shared_tilesets),
-        page: 0,
-        limit: 9999,
-      })
+      await Axios.get(
+        "https://maptile1.herokuapp.com/tileset/getUser/" + props.user._id
+      )
         .then((response) => {
-          console.log("USER TILESETS:", response.data.tilesets);
-          setUserTilesets(response.data.tilesets);
+          console.log("USER TILESETS:", response.data.usertilesets.concat(response.data.sharedtilesets));
+          setUserTilesets(response.data.usertilesets.concat(response.data.sharedtilesets));
         })
         .catch((err) => {
           console.log(err);
