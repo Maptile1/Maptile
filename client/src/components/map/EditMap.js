@@ -184,10 +184,17 @@ const EditMap = (props) => {
         columns: tileset.tileset_width / tileset.tile_width,
       });
     });
-    console.log(exportTilesetData);
+    var newlayers = layers.map((item) => {
+      const { active: visible, ...rest } = item;
+      return { visible, ...rest };
+    });
+    newlayers.map((layer) => {
+      layer.id += 1;
+    });
+    console.log(newlayers);
     var both = Object.assign(
       {},
-      { layers: layers },
+      { layers: newlayers },
       { tilesets: exportTilesetData }
     );
     var all = Object.assign({}, both, data);
