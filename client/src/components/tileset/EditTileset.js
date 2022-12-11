@@ -71,7 +71,8 @@ const EditTileset = (props) => {
         i < tileset.tileset_width;
         i += tileset.tile_width
       ) {
-        var points = [0, i, tileset.tileset_height, i];
+        var points = [i, 0, i, tileset.tileset_height];
+        console.log(points)
         newdividers.push(
           <Line stroke="red" points={points} strokeWidth="0.05"></Line>
         );
@@ -81,7 +82,8 @@ const EditTileset = (props) => {
         j < tileset.tileset_height;
         j += tileset.tile_height
       ) {
-        var points2 = [j, 0, j, tileset.tileset_width];
+        var points2 = [0, j, tileset.tileset_width, j];
+        console.log(points2)
         newdividers.push(
           <Line stroke="red" points={points2} strokeWidth="0.05"></Line>
         );
