@@ -69,7 +69,9 @@ const TilesetScreen = (props) => {
         updated.tilewidth !== "" &&
         updated.tileheight !== "" &&
         updated.tilesetwidth !== "" &&
-        updated.tilesetheight !== ""
+        updated.tilesetheight !== "" && 
+        updated.tilesetwidth % updated.tilewidth === 0 &&
+        updated.tilesetheight % updated.tileheight === 0
     );
   };
   const handleDelete = async (id) => {
