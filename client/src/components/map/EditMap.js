@@ -730,8 +730,8 @@ const EditMap = (props) => {
                 <div className="flex flex-wrap overflow-auto">
                   <canvas
                     id="my-canvas"
-                    width={16 * 64}
-                    height={16 * 64}
+                    width={map.width * map.tile_width}
+                    height={map.height * map.tile_height}
                     onMouseDown={canvasMouseDown}
                     onMouseUp={canvasMouseUp}
                     onMouseMove={canvasMouseMove}
