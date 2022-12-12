@@ -124,7 +124,7 @@ router.get("/tileset/get/:id", async (req, res) => {
 router.get("/tileset/getUser/:id", async (req, res) => {
   var user = await User.findById(req.params.id);
   let usertilesets = await Tileset.find({owner: req.params.id}).sort({timeEdited: -1, _id: 1})
-  let usersharedtilesets = await Tileset.find({shared_users: {$in: [req.session._id]}}).sort({timeEdited: -1, _id: 1})
+  let usersharedtilesets = await Tileset.find({shared_users: req.params._id}).sort({timeEdited: -1, _id: 1})
   res.json({ usertilesets: usertilesets, sharedtilesets: usersharedtilesets });
 });
 

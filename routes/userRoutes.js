@@ -298,7 +298,7 @@ userRouter.post("/user/share", async (req, res) => {
         if (user != null) {
           Tileset.findOneAndUpdate(
             { _id: req.body.id },
-            { $addToSet: { shared_users: sharedUserEmail } }
+            { $addToSet: { shared_users: user._id } }
           );
           res.json({ user: user });
         } else {
@@ -318,7 +318,7 @@ userRouter.post("/user/share", async (req, res) => {
         if (user != null) {
           Map.findOneAndUpdate(
             { _id: req.body.id },
-            { $addToSet: { shared_users: sharedUserEmail } }
+            { $addToSet: { shared_users: user._id } }
           );
           res.json({ user: user });
         } else {
