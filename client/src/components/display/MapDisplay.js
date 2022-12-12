@@ -27,8 +27,8 @@ const MapDisplay = (props) => {
   const commentRef = useRef(null);
 
   const handleOtherUserProfile = () => {
-    nav("/user/" + location.state.owner, {
-      state: { owner: location.state.owner },
+    nav("/user/" + owner._id, {
+      state: { owner: owner },
     });
   };
   const location = useLocation();
@@ -304,24 +304,22 @@ const MapDisplay = (props) => {
           console.log(err)
         });
       }
-      if(props.user != null){
-        Axios.get(
-          "https://maptile1.herokuapp.com/user/get/" + props.user._id
-        ).then((response) => {
-          console.log(response.data.user);
-          setOwner(response.data.user);
-          setPfp(
-            "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
-              response.data.user._id
-          );
-        }); 
-      }
     Axios.get("https://maptile1.herokuapp.com/map/get/" + id).then(
       (response) => {
         // console.log("TILESET:", response.data.tileset);
         setMap(response.data.map);
         setLikes(response.data.map.likes);
         setDislikes(response.data.map.dislikes);
+        setPfp(
+          "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
+            response.data.map.owner
+        );
+        Axios.get(
+          "https://maptile1.herokuapp.com/user/get/" + response.data.map.owner
+        ).then((response) => {
+          console.log(response.data.user);
+          setOwner(response.data.user);
+        }); 
       }
     );
     Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
