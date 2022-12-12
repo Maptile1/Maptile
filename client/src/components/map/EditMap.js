@@ -33,6 +33,8 @@ const EditMap = (props) => {
   const [map, setMap] = useState(null);
   const [gridSize, setGridSize] = useState({ x: 20, y: 20 });
   const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
+  const [undoStack, setUndoStack] = useState([])
+  const [redoStack, setRedoStack] = useState([])
   const nav = useNavigate();
   // ! Layer Formating
   // * Name: Name of the Layer
@@ -129,6 +131,10 @@ const EditMap = (props) => {
     };
     getMap();
   }, [reducerValue]);
+
+  useEffect(()=>{
+    clearStacks()
+  },[currentLayer])
 
   const canvasRef = React.useRef(null);
 
@@ -377,10 +383,16 @@ const EditMap = (props) => {
     let id = clicked[0] + clicked[1] * map.width;
     // * Erases data if shift is held and you click
     if (e.shiftKey || tool === "eraser") {
+      if(layers[currentLayer].data[id] !== 0){
+        addUndoAction(id, 0 ,layers[currentLayer].data[id])
+      }
       layers[currentLayer].data[id] = 0;
     } else {
       if (tool === "brush") {
         // ! GIGA HARD CODE -- Replace 64/16 with TilesetHeight/TileHeight
+        if(tileSelection[0] + (tileSelection[1] * tilesetheight) / map.tile_height + tilesets.startIndexes[currentTileset] !== layers[currentLayer].data[id]){
+          addUndoAction(id, tileSelection[0] + (tileSelection[1] * tilesetheight) / map.tile_height + tilesets.startIndexes[currentTileset], layers[currentLayer].data[id])
+        }
         layers[currentLayer].data[id] =
           tileSelection[0] +
           (tileSelection[1] * tilesetheight) / map.tile_height +
@@ -391,6 +403,33 @@ const EditMap = (props) => {
     }
     draw();
   };
+
+  const addUndoAction = (id, newTile, oldTile) => {
+    undoStack.push({id: id, newTile: newTile, oldTile: oldTile})
+  }
+
+  const undoAction = () => {
+    if (undoStack.length !== 0) {
+      let action = undoStack.pop();
+      layers[currentLayer].data[action.id] = action.oldTile
+      redoStack.push(action);
+      draw()
+    }
+  }
+
+  const redoAction = () => {
+    if (redoStack.length !== 0) {
+      let action = redoStack.pop();
+      layers[currentLayer].data[action.id] = action.newTile
+      undoStack.push(action);
+      draw()
+    }
+  }
+
+  const clearStacks = () => {
+    setUndoStack([])
+    setRedoStack([])
+  }
 
   const fill = (mPos) => {
     let cellid = mPos[0] + mPos[1] * map.width;
@@ -617,7 +656,7 @@ const EditMap = (props) => {
           </div>
           <div className="flex flex-col h-[53rem] w-5/6 items-left justify-top ml-20 mt-10">
             <div className="grid grid-cols-10 w-full justify-items-end select-none">
-              <div className="col-start-1 justify-items-start flex flex-row">
+              <div className="col-start-1 justify-items-start flex flex-row mb-1 mr-5">
                 <BsFillBrushFill
                   className={`${
                     tool === "brush"
@@ -645,16 +684,16 @@ const EditMap = (props) => {
               </div>
               <div className="col-start-2 justify-items-start flex flex-row">
                 <BsArrowCounterclockwise
-                  className="mr-2 h-5 w-5 cursor-pointer mt-[15px]"
-                  // onClick={() => undoAction()}
+                  className={`mr-2 h-5 w-5 cursor-pointer mt-[15px] `}
+                  onClick={() => undoAction()}
                 />
                 <BsArrowClockwise
-                  className="mr-2 h-5 w-5 cursor-pointer mt-[15px] mr-[140px]"
-                  // onClick={() => redoAction()}
+                  className={`mr-2 h-5 w-5 cursor-pointer mt-[15px] mr-[140px] `}
+                  onClick={() => redoAction()}
                 />
               </div>
               <div className="col-start-8 justify-items-start flex flex-row">
-                <button
+                {/* <button
                   className="text-4xl text-maptile-green cursor-pointer"
                   // onClick={() => updateZoom(-1)}
                 >
@@ -665,7 +704,7 @@ const EditMap = (props) => {
                   // onClick={() => updateZoom(1)}
                 >
                   +
-                </button>
+                </button> */}
               </div>
 
               <div className="col-start-10 flex flex-row ">

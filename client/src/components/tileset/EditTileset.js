@@ -325,7 +325,6 @@ const EditTileset = (props) => {
       prevColor: prevColor,
       newColor: newColor,
     });
-    console.log(undoStack);
   };
 
   const undoAction = () => {
