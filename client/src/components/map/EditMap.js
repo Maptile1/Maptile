@@ -21,6 +21,7 @@ import {
 import { FiSave } from "react-icons/fi";
 import AddTilesetModal from "./AddTilesetModal";
 import { MdMap } from "react-icons/md";
+import { saveAs } from "file-saver";
 
 const EditMap = (props) => {
   var beautify = require("json-beautify");
@@ -272,6 +273,14 @@ const EditMap = (props) => {
 
     document.body.removeChild(link);
     URL.revokeObjectURL(href);
+
+    for (var i = 0; i < tilesets.tilesets.length; i++) {
+      saveAs(
+        "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
+        tilesets.tilesets[i]._id,
+        tilesets.tilesets[i].name + ".jpg"
+      );
+    }
   };
 
   // * Main drawing method, rerenders whole screen.

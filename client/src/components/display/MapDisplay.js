@@ -123,6 +123,14 @@ const MapDisplay = (props) => {
 
       document.body.removeChild(link);
       URL.revokeObjectURL(href);
+
+      for (var i = 0; i < tilesets.tilesets.length; i++) {
+        saveAs(
+          "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
+          tilesets.tilesets[i]._id,
+          tilesets.tilesets[i].name + ".jpg"
+        );
+      }
     });
   };
   //   const addThenEdit = async () => {
