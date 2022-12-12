@@ -27,8 +27,8 @@ const TilesetDisplay = (props) => {
   const commentRef = useRef(null);
 
   const handleOtherUserProfile = () => {
-    nav("/user/" + location.state.owner, {
-      state: { owner: location.state.owner },
+    nav("/user/" + owner._id, {
+      state: { owner: owner },
     });
   };
   const location = useLocation();
