@@ -247,7 +247,7 @@ const TilesetDisplay = (props) => {
         });
       }
     );
-  }, [location.state._id, location.state.owner, id, reducerValue]);
+  }, [id, reducerValue]);
 
   let like_color = "gray";
   let dislike_color = "gray";
