@@ -37,7 +37,8 @@ router.post("/tileset/create", async (req, res) => {
     usersLiked: [],
     usersDisliked: [],
     sharedUsers: [],
-    initialized: false
+    initialized: false,
+    deleted: false
   });
   tileset = await tileset.save();
   var user = await User.findOneAndUpdate(
@@ -69,7 +70,7 @@ router.post("/tileset/delete/:id", async (req, res) => {
     { _id: user_id },
     { $pullAll: { tilesets: [req.params.id] } }
   );
-  await Tileset.findOneAndRemove({ _id: req.params.id })
+  await Tileset.findOneAndUpdate({ _id: req.params.id }, {$set: {deleted: true}})
     .then((tileset) => res.json({ message: "Tileset deleted" }))
     .catch((err) => {
       res.status(400).json({ errorMessage: err });
@@ -123,14 +124,14 @@ router.get("/tileset/get/:id", async (req, res) => {
 // GET: retrieves all tilesets owned by a certain user by id
 router.get("/tileset/getUser/:id", async (req, res) => {
   var user = await User.findById(req.params.id);
-  let usertilesets = await Tileset.find({owner: req.params.id}).sort({timeEdited: -1, _id: 1})
-  let usersharedtilesets = await Tileset.find({shared_users: new ObjectId(req.params.id)}).sort({timeEdited: -1, _id: 1})
+  let usertilesets = await Tileset.find({owner: req.params.id, deleted: false}).sort({timeEdited: -1, _id: 1})
+  let usersharedtilesets = await Tileset.find({shared_users: new ObjectId(req.params.id), deleted: false}).sort({timeEdited: -1, _id: 1})
   res.json({ usertilesets: usertilesets, sharedtilesets: usersharedtilesets });
 });
 
 // Get all tilesets
 router.get("/tileset", async (req, res) => {
-  Tileset.find()
+  Tileset.find({deleted: false})
     .then((tilesets) => res.json(tilesets))
     .catch((err) => res.status(400).json("Error: " + err));
 });
@@ -189,7 +190,7 @@ router.post("/tileset/deleteshared/:id", async (req, res) => {
 // GET: retrieves the top tilesets 
 router.get("/tileset/top", async (req, res) => {
   var tilesets = await Tileset.aggregate([
-    { $match: {} },
+    { $match: {deleted: false} },
     {
       $project: {
         name: 1,
@@ -371,14 +372,16 @@ router.post("/tileset/getBatch", async (req, res) => {
     res.json({ tilesets: [] });
     return;
   }
+  var deleted = req.body.deleted ? true : false
   if (req.body.nosort == "nosort") {
-    var tilesets = await Tileset.find({ $or: ids }, req.body.fields);
+    var tilesets = deleted ? await Tileset.find({ $or: ids }, req.body.fields) :
+    await Tileset.find({ $or: ids, deleted: false}, req.body.fields)
     let obj = {};
     tilesets.forEach((x) => (obj[x._id] = x));
     const ordered = req.body.ids.map((key) => obj[key]);
     res.json({ tilesets: ordered });
   } else {
-    var tilesets = await Tileset.find({ $or: ids }, req.body.fields)
+    var tilesets = await Tileset.find({ $or: ids, deleted: false }, req.body.fields)
       .sort({ timeEdited: -1, _id: 1 })
       .skip(page)
       .limit(limit);
@@ -401,7 +404,7 @@ router.post("/tileset/search", async (req, res) => {
   if (page < 0) {
     page = 0;
   }
-  var query = {};
+  var query = { deleted: false };
   if (req.body.search != undefined && req.body.search != "") {
     query.$text = { $search: req.body.search };
   }

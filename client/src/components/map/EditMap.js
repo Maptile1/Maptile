@@ -106,6 +106,7 @@ const EditMap = (props) => {
             nosort: "nosort",
             fields:
               "_id name tile_width tile_height tileset_width tileset_height",
+            deleted: true
           }).then((response) => {
             var data = {};
             data.tilesets = response.data.tilesets;

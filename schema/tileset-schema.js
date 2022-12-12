@@ -81,6 +81,10 @@ const tilesetSchema = new Schema(
         initialized:{
             type: Boolean,
             required: true
+        },
+        deleted:{
+            type: Boolean,
+            required: true
         }
     }
 )
