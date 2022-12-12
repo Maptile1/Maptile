@@ -111,7 +111,7 @@ router.post("/map/update/:id", async (req, res) => {
   var map = await Map.findOneAndUpdate(
     {
       $or: [
-        { _id: req.params.id, shared_users: { $in: [req.session._id] } },
+        { _id: req.params.id, shared_users: new ObjectId(req.session._id) },
         { _id: req.params.id, owner: req.session._id },
       ],
     },
@@ -122,7 +122,7 @@ router.post("/map/update/:id", async (req, res) => {
     map = await Map.findOneAndUpdate(
       {
         $or: [
-          { _id: req.params.id, shared_users: { $in: [req.session._id] } },
+          { _id: req.params.id, shared_users: new ObjectId(req.session._id) },
           { _id: req.params.id, owner: req.session._id },
         ],
       },

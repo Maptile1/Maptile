@@ -289,46 +289,36 @@ userRouter.post("/user/share", async (req, res) => {
   var sharedAssetID = req.body.id;
   var type = req.body.type;
   if (type == "tileset") {
-    User.findOneAndUpdate(
+    var user = await User.findOneAndUpdate(
       { email: sharedUserEmail },
       { $addToSet: { shared_tilesets: sharedAssetID } },
       { new: true }
     )
-      .then((user) => {
-        if (user != null) {
-          Tileset.findOneAndUpdate(
-            { _id: req.body.id },
-            { $addToSet: { shared_users: user._id } }
-          );
-          res.json({ user: user });
-        } else {
-          res.status(400).json({ errorMessage: "User doesn't exist" });
-        }
-      })
-      .catch((err) => {
-        res.status(400).json({ errorMessage: err });
-      });
-  } else {
-    User.findOneAndUpdate(
+    if (user != null) {
+      await Tileset.findOneAndUpdate(
+        { _id: req.body.id },
+        { $addToSet: { shared_users: user._id } }
+      );
+      res.json({ user: user });
+    } else {
+      res.status(400).json({ errorMessage: "User doesn't exist" });
+    }
+  } 
+  else {
+    var user = await User.findOneAndUpdate(
       { email: sharedUserEmail },
       { $addToSet: { shared_maps: sharedAssetID } },
       { new: true }
     )
-      .then((user) => {
-        if (user != null) {
-          Map.findOneAndUpdate(
-            { _id: req.body.id },
-            { $addToSet: { shared_users: user._id } }
-          );
-          res.json({ user: user });
-        } else {
-          res.status(400).json({ errorMessage: "User doesn't exist" });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(400).json({ errorMessage: err });
-      });
+    if (user != null) {
+      await Map.findOneAndUpdate(
+        { _id: req.body.id },
+        { $addToSet: { shared_users: user._id } }
+      );
+      res.json({ user: user });
+    } else {
+      res.status(400).json({ errorMessage: "User doesn't exist" });
+    }
   }
 });
 

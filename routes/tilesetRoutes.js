@@ -93,7 +93,7 @@ router.post("/tileset/update/:id", async (req, res) => {
   var tileset = await Tileset.findOneAndUpdate(
     {
       $or: [
-        { _id: req.params.id, shared_users: { $in: [req.session._id] } },
+        { _id: req.params.id, shared_users: new ObjectId(req.session._id) },
         { _id: req.params.id, owner: req.session._id },
       ],
     },
