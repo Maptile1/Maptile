@@ -37,7 +37,7 @@ const TilesetDisplay = (props) => {
     saveAs(
       "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
         tileset._id,
-      tileset.name + ".jpg"
+      tileset.name + ".png"
     );
   };
   const addThenEdit = async () => {

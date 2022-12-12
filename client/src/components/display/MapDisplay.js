@@ -128,7 +128,7 @@ const MapDisplay = (props) => {
         saveAs(
           "https://maptilefiles.blob.core.windows.net/maptile-tileset-image/" +
           tilesets.tilesets[i]._id,
-          tilesets.tilesets[i].name + ".jpg"
+          tilesets.tilesets[i].name + ".png"
         );
       }
     });
