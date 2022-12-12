@@ -304,16 +304,18 @@ const MapDisplay = (props) => {
           console.log(err)
         });
       }
-    Axios.get(
-      "https://maptile1.herokuapp.com/user/get/" + location.state.owner
-    ).then((response) => {
-      console.log(response.data.user);
-      setOwner(response.data.user);
-      setPfp(
-        "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
-          response.data.user._id
-      );
-    });
+      if(props.user != null){
+        Axios.get(
+          "https://maptile1.herokuapp.com/user/get/" + props.user._id
+        ).then((response) => {
+          console.log(response.data.user);
+          setOwner(response.data.user);
+          setPfp(
+            "https://maptilefiles.blob.core.windows.net/maptile-profile-images/" +
+              response.data.user._id
+          );
+        }); 
+      }
     Axios.get("https://maptile1.herokuapp.com/map/get/" + id).then(
       (response) => {
         // console.log("TILESET:", response.data.tileset);
@@ -337,7 +339,7 @@ const MapDisplay = (props) => {
         });
       }
     );
-  }, [location.state._id, location.state.owner, id]);
+  }, [props.user, id]);
 
   let like_color = "gray";
   let dislike_color = "gray";
