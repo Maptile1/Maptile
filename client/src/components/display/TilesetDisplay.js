@@ -213,9 +213,14 @@ const TilesetDisplay = (props) => {
         console.log(err)
       });
     }
-    if(props.user != null){
+    Axios.get("https://maptile1.herokuapp.com/tileset/get/" + id).then(
+      (response) => {
+        // console.log("TILESET:", response.data.tileset);
+        setTileset(response.data.tileset);
+        setLikes(response.data.tileset.likes);
+        setDislikes(response.data.tileset.dislikes);
         Axios.get(
-          "https://maptile1.herokuapp.com/user/get/" + props.user._id
+          "https://maptile1.herokuapp.com/user/get/" + response.data.tileset.owner
         ).then((response) => {
           console.log(response.data.user);
           setOwner(response.data.user);
@@ -224,13 +229,6 @@ const TilesetDisplay = (props) => {
               response.data.user._id
           );
       });
-    }
-    Axios.get("https://maptile1.herokuapp.com/tileset/get/" + id).then(
-      (response) => {
-        // console.log("TILESET:", response.data.tileset);
-        setTileset(response.data.tileset);
-        setLikes(response.data.tileset.likes);
-        setDislikes(response.data.tileset.dislikes);
       }
     );
     Axios.get("https://maptile1.herokuapp.com/comment/" + id).then(
