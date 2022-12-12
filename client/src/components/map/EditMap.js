@@ -142,7 +142,7 @@ const EditMap = (props) => {
   // * When the map loads and the state changes, this runs to render the inital data
   // ? TODO: Not actually tested with incoming data, so far only tested with no data and creating a new map.
   useEffect(() => {
-    if (map !== null) {
+    if (map !== null && layers[0].data.length === 0) {
       if (map.layers.length === 0) {
         initMap();
       } else {

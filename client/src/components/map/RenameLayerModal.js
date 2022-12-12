@@ -38,7 +38,7 @@ const RenameLayerModal = (props) => {
                 for="share-email"
                 class="text-white h-14 p-2.5 rounded-xl underline"
                 >
-                Search for a Tileset
+                Name
                 </label>
                 <div className="flex flex-row w-[580px]">
                 <input
