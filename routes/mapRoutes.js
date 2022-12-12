@@ -148,7 +148,7 @@ router.get("/map/getUser/:id", async (req, res) => {
     return;
   }
   let userMaps = await Map.find({owner: req.params.id}).sort({timeEdited: -1, _id: 1})
-  let sharedMaps = await Map.find({shared_users: req.params._id}).sort({timeEdited: -1, _id: 1})
+  let sharedMaps = await Map.find({shared_users: new ObjectId(req.params.id)}).sort({timeEdited: -1, _id: 1})
   res.json({userMaps: userMaps, sharedMaps: sharedMaps})
 });
 
